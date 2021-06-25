@@ -9,11 +9,15 @@ public class GridSystem : MonoBehaviour
     public Transform floorPrefab;
 
     private Grid<int> _grid;
+    private GridSelectionMap _selectionMap;
     private readonly List<Transform> _tiles = new List<Transform>();
-    
+
     private void Start()
     {
-        _grid = new Grid<int>(width, height, 1.0f, transform.position, (grid, x, y) => 0);
+        var position = transform.position;
+        _grid = new Grid<int>(width, height, 1.0f, position, (grid, x, y) => 0);
+        _selectionMap = GetComponent<GridSelectionMap>();
+        _selectionMap.InitGrid(width, height, 1.0f, position);
         _grid.OnGridChanged += (sender, args) => RebuildGrid();
         RebuildGrid();
     }
@@ -24,7 +28,14 @@ public class GridSystem : MonoBehaviour
         {
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out var hit))
             {
-                _grid.SetValue(hit.point, 1);
+                if (!_selectionMap.IsHighlighted(hit.point))
+                {
+                    _selectionMap.SetHighlight(hit.point, true);
+                }
+                else
+                {
+                    _selectionMap.SetHighlight(hit.point, false);
+                }
             }
         }
     }
