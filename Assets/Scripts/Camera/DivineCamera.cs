@@ -1,9 +1,9 @@
 using System;
 using UnityEngine;
 
-namespace RTSCamera
+namespace Camera
 {
-    public class CameraController : MonoBehaviour
+    public class DivineCamera : MonoBehaviour
     {
         public float turnMod = 0.3f;
         public float speed = 15.0f;
