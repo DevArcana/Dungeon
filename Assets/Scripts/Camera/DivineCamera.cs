@@ -10,6 +10,7 @@ namespace Camera
         public float smoothing = 0.05f;
         public float minDistance = 1.0f;
         public float maxDistance = 15.0f;
+        public float groundOffset = 1.0f;
 
         private float _distanceSmooth;
         private float _distanceVelocity = 0.0f;
@@ -41,7 +42,7 @@ namespace Camera
         {
             if (Physics.Raycast(new Ray(_origin, Vector3.down), out var hit))
             {
-                _origin = hit.point;
+                _origin = hit.point + Vector3.up * groundOffset;
             }
         }
 
