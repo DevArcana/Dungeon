@@ -32,7 +32,7 @@ namespace WorldGeneration
                 triangles = _triangles.ToArray(),
                 uv = _uv.ToArray()
             };
-
+            
             mesh.RecalculateNormals();
 
             return mesh;
