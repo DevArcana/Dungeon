@@ -32,7 +32,7 @@ namespace World.Mesh
             var v4 = _mesh.AddVertex(to - dh, new Vector2(d, 0));
 
             _mesh.AddTriangle(v1, v2, v3);
-            _mesh.AddTriangle(v3, v4, v1);
+            _mesh.AddTriangle(v1, v3, v4);
         }
 
         public void AddFloor(Vector3 from, Vector3 to)
@@ -48,7 +48,7 @@ namespace World.Mesh
             var v4 = _mesh.AddVertex(from + dx, new Vector2(from.x + x, from.z));
 
             _mesh.AddTriangle(v1, v2, v3);
-            _mesh.AddTriangle(v3, v4, v1);
+            _mesh.AddTriangle(v1, v3, v4);
         }
     }
 }

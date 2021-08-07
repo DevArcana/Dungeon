@@ -48,6 +48,9 @@ namespace World.Mesh
             };
             
             mesh.RecalculateNormals();
+            mesh.RecalculateBounds();
+            mesh.RecalculateTangents();
+            
             mesh.Optimize();
 
             return mesh;
