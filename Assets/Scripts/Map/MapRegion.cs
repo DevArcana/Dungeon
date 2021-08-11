@@ -9,6 +9,23 @@ namespace Map
     public readonly List<MapPos> cells = new List<MapPos>();
     public readonly List<MapRegion> connectedRegions = new List<MapRegion>();
 
+    private bool _isConnectedToRoot;
+
+    public bool IsConnectedToRoot => _isConnectedToRoot;
+
+    public void ConnectToRoot()
+    {
+      _isConnectedToRoot = true;
+
+      foreach (var region in connectedRegions)
+      {
+        if (!region._isConnectedToRoot)
+        {
+          region.ConnectToRoot();
+        }
+      }
+    }
+
     public int Size => cells.Count;
 
     public MapRegion(MapPos start, int[,] map, int[,] mask, int tile)

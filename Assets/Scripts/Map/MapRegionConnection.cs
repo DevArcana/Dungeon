@@ -18,6 +18,16 @@
 
       regionA.connectedRegions.Add(regionB);
       regionB.connectedRegions.Add(regionA);
+
+      if (regionA.IsConnectedToRoot && !regionB.IsConnectedToRoot)
+      {
+        regionB.ConnectToRoot();
+      }
+      
+      if (!regionA.IsConnectedToRoot && regionB.IsConnectedToRoot)
+      {
+        regionA.ConnectToRoot();
+      }
     }
   }
 }

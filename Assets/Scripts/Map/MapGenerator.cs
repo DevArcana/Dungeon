@@ -47,7 +47,14 @@ namespace Map
       
       ScanRegions();
       FillSmallRegions();
+      
+      _regions.Sort();
+      _regions[0].ConnectToRoot();
+
       ConnectRegionsWithClosest();
+      ConnectRegionsToRoot();
+      
+      CarvePassages();
     }
 
     private void Init()
@@ -72,6 +79,16 @@ namespace Map
       }
     }
 
+    private bool IsOutsideGrid(int x, int y)
+    {
+      return x < 0 || y < 0 || x >= width || y >= height;
+    }
+    
+    private bool IsWithinGrid(int x, int y)
+    {
+      return !IsOutsideGrid(x, y);
+    }
+
     private int CountWalls(int cellX, int cellY)
     {
       var count = 0;
@@ -80,7 +97,7 @@ namespace Map
       {
         for (var x = cellX - 1; x <= cellX + 1; x++)
         {
-          if (x < 0 || y < 0 || x >= width || y >= height || _map[x, y] == 1)
+          if (IsOutsideGrid(x, y) || _map[x, y] == 1)
           {
             count++;
           }
@@ -136,8 +153,6 @@ namespace Map
           }
         }
       }
-
-      _regions.Sort();
     }
 
     private void FillSmallRegions()
@@ -196,6 +211,137 @@ namespace Map
             _regionConnections.Add(new MapRegionConnection(regionA, bestTileA, bestRegionB, bestTileB));
           }
         }
+      }
+    }
+
+    private void ConnectRegionsToRoot()
+    {
+      while (true)
+      {
+        var connectedRegions = new List<MapRegion>();
+        var disconnectedRegions = new List<MapRegion>();
+
+        foreach (var region in _regions)
+        {
+          if (region.IsConnectedToRoot)
+          {
+            connectedRegions.Add(region);
+          }
+          else
+          {
+            disconnectedRegions.Add(region);
+          }
+        }
+
+        var bestTileA = MapPos.At(0, 0);
+        var bestTileB = MapPos.At(0, 0);
+        var distance = int.MaxValue;
+        MapRegion bestRegionA = null;
+        MapRegion bestRegionB = null;
+
+        foreach (var disconnectedRegion in disconnectedRegions)
+        {
+          foreach (var connectedRegion in connectedRegions)
+          {
+            foreach (var outlineCellA in disconnectedRegion.outline)
+            {
+              foreach (var outlineCellB in connectedRegion.outline)
+              {
+                var dx = outlineCellB.x - outlineCellA.x;
+                var dy = outlineCellB.y - outlineCellA.y;
+                var d = dx * dx + dy * dy;
+
+                if (d < distance)
+                {
+                  distance = d;
+                  bestTileA = outlineCellA;
+                  bestTileB = outlineCellB;
+                  bestRegionA = disconnectedRegion;
+                  bestRegionB = connectedRegion;
+                }
+              }
+            }
+          }
+        }
+
+        if (bestRegionB != null)
+        {
+          _regionConnections.Add(new MapRegionConnection(bestRegionA, bestTileA, bestRegionB, bestTileB));
+          continue;
+        }
+
+        break;
+      }
+    }
+
+    private List<MapPos> GetLine(MapPos from, MapPos to)
+    {
+      var dx = from.x - to.x;
+      var dy = from.y - to.y;
+      
+      var absX = Math.Abs(dx);
+      var absY = Math.Abs(dy);
+      
+      var signX = Math.Sign(dx);
+      var signY = Math.Sign(dy);
+
+      var x = to.x;
+      var y = to.y;
+      
+      var cells = new List<MapPos>() { MapPos.At(x, y) };
+      
+      for (int i = 0, j = 0; i < absX || j < absY;) {
+        var decision = (1 + 2*i) * absY - (1 + 2*j) * absX;
+        if (decision == 0) {
+          x += signX;
+          y += signY;
+          i++;
+          j++;
+        } else if (decision < 0) {
+          x += signX;
+          i++;
+        } else {
+          y += signY;
+          j++;
+        }
+        cells.Add(MapPos.At(x, y));
+      }
+
+      return cells;
+    }
+
+    private void Carve(MapPos pos)
+    {
+      for (var y = pos.y - 1; y <= pos.y + 1; y++)
+      {
+        for (var x = pos.x - 1; x <= pos.x + 1; x++)
+        {
+          if (IsWithinGrid(x, y))
+          {
+            _map[x, y] = 0;
+          }
+        }
+      }
+    }
+    
+    private void CarvePassage(MapPos from, MapPos to)
+    {
+      var cells = GetLine(from, to);
+
+      foreach (var cell in cells)
+      {
+        Carve(cell);
+      }
+    }
+    
+    private void CarvePassages()
+    {
+      foreach (var connection in _regionConnections)
+      {
+        var from = connection.PosA;
+        var to = connection.PosB;
+        
+        CarvePassage(from, to);
       }
     }
 
