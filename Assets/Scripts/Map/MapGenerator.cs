@@ -29,6 +29,9 @@ namespace Map
     [Header("Processing")]
     public int minimumRegionSize = 20;
 
+    [Header("Gizmos")]
+    public bool drawMetadataGizmos = true;
+
     private int[,] _map;
     private int[,] _buffer;
     private Random _random;
@@ -369,24 +372,27 @@ namespace Map
         }
       }
 
-      for (var i = 0; i < _regions.Count; i++)
+      if (drawMetadataGizmos)
       {
-        var region = _regions[i];
-        var outline = region.outline;
-
-        Gizmos.color = Colors[i % Colors.Length];
-        foreach (var tile in outline)
+        for (var i = 0; i < _regions.Count; i++)
         {
-          Gizmos.DrawCube(new Vector3(tile.x + 0.5f, 1.0f, tile.y + 0.5f), Vector3.one);
-        }
-      }
+          var region = _regions[i];
+          var outline = region.outline;
 
-      Gizmos.color = Color.green;
-      foreach (var connection in _regionConnections)
-      {
-        var from = connection.PosA;
-        var to = connection.PosB;
-        Gizmos.DrawLine(new Vector3(from.x + 0.5f, 1.0f, from.y + 0.5f), new Vector3(to.x + 0.5f, 1.0f, to.y + 0.5f));
+          Gizmos.color = Colors[i % Colors.Length];
+          foreach (var tile in outline)
+          {
+            Gizmos.DrawCube(new Vector3(tile.x + 0.5f, 1.0f, tile.y + 0.5f), Vector3.one);
+          }
+        }
+
+        Gizmos.color = Color.green;
+        foreach (var connection in _regionConnections)
+        {
+          var from = connection.PosA;
+          var to = connection.PosB;
+          Gizmos.DrawLine(new Vector3(from.x + 0.5f, 1.0f, from.y + 0.5f), new Vector3(to.x + 0.5f, 1.0f, to.y + 0.5f));
+        }
       }
     }
   }

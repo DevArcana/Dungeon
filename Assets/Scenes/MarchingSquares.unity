@@ -166,15 +166,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2fe801eb444471da557fa00ba1ff8af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 64
-  height: 32
-  fillChance: 0.4399999976158142
+  width: 128
+  height: 64
+  fillChance: 0.5
   seed: -1566712741
   randomizeSeed: 0
   lowerThreshold: 4
   upperThreshold: 4
   passes: 5
-  minimumRegionSize: 40
+  minimumRegionSize: 30
+  drawMetadataGizmos: 0
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
