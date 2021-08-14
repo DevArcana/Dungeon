@@ -1,4 +1,4 @@
-﻿namespace Map
+﻿namespace Map.Generation
 {
   public class MapRegionConnection
   {

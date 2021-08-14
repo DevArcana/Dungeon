@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Map
+namespace Map.Generation
 {
   public class MapRegion : IComparable<MapRegion>
   {

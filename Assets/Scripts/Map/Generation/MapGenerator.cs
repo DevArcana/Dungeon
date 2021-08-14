@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using Random = System.Random;
 
-namespace Map
+namespace Map.Generation
 {
   public class MapGenerator : MonoBehaviour
   {
@@ -41,6 +40,26 @@ namespace Map
 
     private void Start()
     {
+      Generate();
+    }
+
+    public int[,] GetMapData()
+    {
+      if (_map == null)
+      {
+        Generate();
+      }
+
+      return _map;
+    }
+
+    private void Generate()
+    {
+      if (_map != null)
+      {
+        return;
+      }
+      
       Init();
       
       for (var i = 0; i < passes; i++)
