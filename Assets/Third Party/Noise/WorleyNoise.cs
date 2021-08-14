@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace ProceduralNoiseProject
+namespace Third_Party.Noise
 {
     public class WorleyNoise : Noise
     {

@@ -1,8 +1,7 @@
 using System;
-using System.Collections;
 using UnityEngine;
 
-namespace ProceduralNoiseProject
+namespace Third_Party.Noise
 {
 
     public enum VORONOI_DISTANCE { EUCLIDIAN, MANHATTAN, CHEBYSHEV };

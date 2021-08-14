@@ -236,6 +236,12 @@ namespace Map.Mesh
           }
         }
       }
+      
+      // boundary walls
+      AddWall(_voxels[0, 0].corner, _voxels[_width - 1, 0].corner);
+      AddWall(_voxels[_width - 1, 0].corner, _voxels[_width - 1, _height - 1].corner);
+      AddWall(_voxels[_width - 1, _height - 1].corner, _voxels[0, _height - 1].corner);
+      AddWall(_voxels[0, _height - 1].corner, _voxels[0, 0].corner);
 
       var mesh = new UnityEngine.Mesh
       {

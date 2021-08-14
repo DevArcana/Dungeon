@@ -1,7 +1,6 @@
-using System;
 using UnityEngine;
 
-namespace ProceduralNoiseProject
+namespace Third_Party.Noise
 {
 
 	public class PerlinNoise : Noise

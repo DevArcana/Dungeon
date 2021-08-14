@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace ProceduralNoiseProject
+namespace Third_Party.Noise
 {
 
     /// <summary>

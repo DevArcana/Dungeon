@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace ProceduralNoiseProject
+namespace Third_Party.Noise
 {
     internal class PermutationTable
     {
