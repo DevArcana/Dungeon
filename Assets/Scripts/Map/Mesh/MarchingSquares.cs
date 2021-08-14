@@ -8,6 +8,7 @@ namespace Map.Mesh
   public class MarchingSquares : MonoBehaviour
   {
     public int height;
+    public bool generateWalls = true;
     public MapGenerator map;
     private MeshFilter _meshFilter;
 
@@ -105,6 +106,36 @@ namespace Map.Mesh
       }
     }
 
+    private int AddVertex(Vector3 position, Vector2 uv)
+    {
+      _vertices.Add(position);
+      _uvs.Add(uv);
+      return _vertices.Count - 1;
+    }
+
+    private void AddWall(VoxelNode from, VoxelNode to)
+    {
+      if (!generateWalls)
+      {
+        return;
+      }
+      
+      var dir = (to.position - from.position).normalized;
+
+      var topLeft = AddVertex(from.position, new Vector2(dir.x * from.position.x + dir.z * from.position.z, 1.0f));
+      var topRight = AddVertex(to.position, new Vector2(dir.x * to.position.x + dir.z * to.position.z, 1.0f));
+      var bottomRight = AddVertex(to.position + Vector3.down, new Vector2(dir.x * (to.position + Vector3.down).x + dir.z * (to.position + Vector3.down).z, 0.0f));
+      var bottomLeft = AddVertex(from.position + Vector3.down, new Vector2(dir.x * (from.position + Vector3.down).x + dir.z * (from.position + Vector3.down).z, 0.0f));
+      
+      _triangles.Add(topLeft);
+      _triangles.Add(topRight);
+      _triangles.Add(bottomRight);
+      
+      _triangles.Add(topLeft);
+      _triangles.Add(bottomRight);
+      _triangles.Add(bottomLeft);
+    }
+
     #endregion
 
     private void Start()
@@ -137,49 +168,65 @@ namespace Map.Mesh
           switch (voxel)
           {
             case 1:
+              AddWall(bottomLeft.right, bottomLeft.up);
               Fill(bottomLeft.corner, bottomLeft.up, bottomLeft.right);
               break;
             case 2:
+              AddWall(bottomLeft.up, topLeft.right);
               Fill(bottomLeft.up, topLeft.corner, topLeft.right);
               break;
             case 4:
+              AddWall(topLeft.right, bottomRight.up);
               Fill(topLeft.right, topRight.corner, bottomRight.up);
               break;
             case 8:
+              AddWall(bottomRight.up, bottomLeft.right);
               Fill(bottomRight.up, bottomRight.corner, bottomLeft.right);
               break;
             
             case 3:
+              AddWall(bottomLeft.right, topLeft.right);
               Fill(bottomLeft.corner, topLeft.corner, topLeft.right, bottomLeft.right);
               break;
             case 6:
+              AddWall(bottomLeft.up, bottomRight.up);
               Fill(topLeft.corner, topRight.corner, bottomRight.up, bottomLeft.up);
               break;
             case 12:
+              AddWall(topLeft.right, bottomLeft.right);
               Fill(topRight.corner, bottomRight.corner, bottomLeft.right, topLeft.right);
               break;
             case 9:
+              AddWall(bottomRight.up, bottomLeft.up);
               Fill(bottomLeft.corner, bottomLeft.up, bottomRight.up, bottomRight.corner);
               break;
             
             case 14:
+              AddWall(bottomLeft.up, bottomLeft.right);
               Fill(topRight.corner, bottomRight.corner, bottomLeft.right, bottomLeft.up, topLeft.corner);
               break;
             case 13:
+              AddWall(topLeft.right, bottomLeft.up);
               Fill(bottomRight.corner, bottomLeft.corner, bottomLeft.up, topLeft.right, topRight.corner);
               break;
             case 11:
+              AddWall(bottomRight.up, topLeft.right);
               Fill(bottomLeft.corner, topLeft.corner, topLeft.right, bottomRight.up, bottomRight.corner);
               break;
             case 7:
+              AddWall(bottomLeft.right, bottomRight.up);
               Fill(topLeft.corner, topRight.corner, bottomRight.up, bottomLeft.right, bottomLeft.corner);
               break;
             
             case 5:
+              AddWall(topLeft.right, bottomLeft.up);
+              AddWall(bottomLeft.right, bottomRight.up);
               Fill(bottomLeft.corner, bottomLeft.up, topLeft.right, topRight.corner, bottomRight.up, bottomLeft.right);
               break;
             
             case 10:
+              AddWall(bottomLeft.up, bottomLeft.right);
+              AddWall(bottomRight.up, topLeft.right);
               Fill(bottomRight.corner, bottomLeft.right, bottomLeft.up, topLeft.corner, topLeft.right, bottomRight.up);
               break;
 

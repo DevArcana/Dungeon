@@ -452,6 +452,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   height: 1
+  generateWalls: 1
   map: {fileID: 218745921}
 --- !u!33 &1115894200
 MeshFilter:
@@ -578,6 +579,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   height: 0
+  generateWalls: 0
   map: {fileID: 218745921}
 --- !u!33 &1876366441
 MeshFilter:
