@@ -13,11 +13,13 @@ namespace UI
     {
       Destroy(transform.GetChild(0).gameObject);
       TurnManager.Instance.TurnEntityAdded += OnTurnEntityAdded;
+      TurnManager.Instance.TurnChanged += OnTurnChanged;
     }
 
     private void OnDestroy()
     {
       TurnManager.Instance.TurnEntityAdded -= OnTurnEntityAdded;
+      TurnManager.Instance.TurnChanged -= OnTurnChanged;
     }
 
     private void Rebuild()
@@ -38,6 +40,11 @@ namespace UI
     }
     
     private void OnTurnEntityAdded(object sender, TurnManager.TurnEventArgs args)
+    {
+      Rebuild();
+    }
+    
+    private void OnTurnChanged(object sender, TurnManager.TurnEventArgs args)
     {
       Rebuild();
     }

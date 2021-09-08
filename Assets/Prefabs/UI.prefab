@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2917437805941431216}
   - component: {fileID: 3583925324228721387}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: Turns
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -86,7 +86,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   portraitPrefab: {fileID: 2639981303428706248, guid: 800e27fd0576aeb40ad3ccd32671ef77, type: 3}
-  queueSize: 7
+  queueSize: 14
 --- !u!1 &5408622199340426879
 GameObject:
   m_ObjectHideFlags: 0

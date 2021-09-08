@@ -29,10 +29,16 @@ namespace TurnSystem
     }
 
     public event EventHandler<TurnEventArgs> TurnEntityAdded;
+    public event EventHandler<TurnEventArgs> TurnChanged;
 
     private void OnTurnEntityAdded(TurnBasedEntity entity)
     {
       TurnEntityAdded?.Invoke(this, new TurnEventArgs {Entity = entity});
+    }
+    
+    private void OnTurnChanged(TurnBasedEntity entity)
+    {
+      TurnChanged?.Invoke(this, new TurnEventArgs {Entity = entity});
     }
 
     public IEnumerable<TurnBasedEntity> PeekQueue(int count)
@@ -51,8 +57,9 @@ namespace TurnSystem
     public void RegisterTurnBasedEntity(TurnBasedEntity entity)
     {
       var inserted = false;
+      var current = CurrentTurnTaker;
       
-      for (var i = 0; i < _entities.Count; i++)
+      for (var i = 1; i < _entities.Count; i++)
       {
         if (entity.initiative >= _entities[i].initiative)
         {
@@ -67,6 +74,11 @@ namespace TurnSystem
         _entities.Add(entity);
       }
 
+      if (current != CurrentTurnTaker)
+      {
+        OnTurnChanged(CurrentTurnTaker);
+      }
+
       OnTurnEntityAdded(entity);
     }
 
@@ -79,6 +91,8 @@ namespace TurnSystem
         _entities.Add(current);
         _entities.RemoveAt(0);
       }
+      
+      OnTurnChanged(CurrentTurnTaker);
     }
 
     private void Update()
