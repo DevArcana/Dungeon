@@ -1,5 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.PlayerLoop;
+using Random = System.Random;
 
 namespace TurnSystem
 {
@@ -11,6 +13,8 @@ namespace TurnSystem
       {
         if (Input.GetButtonDown("Jump"))
         {
+          Move(transform.position + new Vector3(1, 0, 0));
+          
           TurnManager.Instance.NextTurn();
         }
       }

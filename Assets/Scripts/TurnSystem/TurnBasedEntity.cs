@@ -1,4 +1,5 @@
 ﻿using System;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace TurnSystem
@@ -21,6 +22,11 @@ namespace TurnSystem
     public void Highlighted(bool active)
     {
       highlight.SetActive(active);
+    }
+
+    protected void Move(Vector3 point)
+    {
+      transform.position = new Vector3(math.floor(point.x) + 0.5f, 0, math.floor(point.z) + 0.5f);
     }
   }
 }

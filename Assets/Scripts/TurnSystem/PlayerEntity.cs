@@ -23,10 +23,7 @@ namespace TurnSystem
         {
           if (Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out var hit))
           {
-            var x = math.floor(hit.point.x) + 0.5f;
-            var z = math.floor(hit.point.z) + 0.5f;
-
-            transform.position = new Vector3(x, 0, z);
+            Move(hit.point);
             
             TurnManager.Instance.NextTurn();
           }
