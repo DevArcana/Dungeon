@@ -25,11 +25,7 @@ namespace TurnSystem
 
     protected void Move(Vector3 point)
     {
-      var pos = MapUtils.ToWorldPos(MapUtils.ToMapPos(point));
-      if (pos != null)
-      {
-        transform.position = pos.Value;
-      }
+      transform.position = MapUtils.ToWorldPos(MapUtils.ToMapPos(point));
     }
   }
 }

@@ -387,7 +387,7 @@ namespace Map.Generation
         for (var x = 0; x < width; x++)
         {
           Gizmos.color = _map[x, y] == 1 ? Color.black : Color.white;
-          Gizmos.DrawCube(new Vector3(x + 0.5f, 0.0f, y + 0.5f), Vector3.one);
+          Gizmos.DrawCube(new Vector3(x + 0.5f, 0.5f, y + 0.5f), Vector3.one * 0.5f);
         }
       }
 
@@ -401,7 +401,7 @@ namespace Map.Generation
           Gizmos.color = Colors[i % Colors.Length];
           foreach (var tile in outline)
           {
-            Gizmos.DrawCube(new Vector3(tile.x + 0.5f, 1.0f, tile.y + 0.5f), Vector3.one);
+            Gizmos.DrawCube(new Vector3(tile.x + 0.5f, 1.0f, tile.y + 0.5f), Vector3.one * 0.45f);
           }
         }
 

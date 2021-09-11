@@ -1,4 +1,6 @@
 ﻿using System;
+using Map;
+using Map.Utilities;
 using TurnSystem;
 using Unity.Mathematics;
 using UnityEngine;
@@ -12,7 +14,7 @@ namespace DefaultNamespace
 
     private void Awake()
     {
-      _tile = transform.Find("Tile").gameObject;
+      _tile = transform.GetChild(0).gameObject;
       _camera = UnityEngine.Camera.main;
       Highlighted(false);
     }
@@ -25,9 +27,16 @@ namespace DefaultNamespace
         if (Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out var hit))
         {
           var x = math.floor(hit.point.x) + 0.5f;
+          var y = hit.point.y;
           var z = math.floor(hit.point.z) + 0.5f;
 
-          transform.position = new Vector3(x, 0, z);
+          var map = WorldDataProvider.Instance;
+          if (map != null)
+          {
+            y = map.GetHeightAt(MapUtils.ToMapPos(hit.point));
+          }
+
+          transform.position = new Vector3(x, y, z);
         }
         else
         {
