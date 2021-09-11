@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using Map.Generation;
+using Unity.Mathematics;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Map.Mesh
 {
@@ -81,12 +83,9 @@ namespace Map.Mesh
       {
         return;
       }
-      
+
       var position = node.position;
-      
-      node.vertexIndex = _vertices.Count;
-      _vertices.Add(position);
-      _uvs.Add(new Vector2(position.x, position.z));
+      node.vertexIndex = AddVertex(position, new Vector2(position.x, position.z));
     }
 
     private void Fill(params VoxelNode[] nodes)
@@ -110,7 +109,7 @@ namespace Map.Mesh
 
     private int AddVertex(Vector3 position, Vector2 uv)
     {
-      _vertices.Add(position);
+      _vertices.Add(SpaceDistortion.Distort(position, transform.position));
       _uvs.Add(uv);
       return _vertices.Count - 1;
     }
@@ -241,6 +240,7 @@ namespace Map.Mesh
       }
       
       // boundary walls
+      // TODO: fix seams
       AddWall(_voxels[0, 0].corner, _voxels[_width - 1, 0].corner);
       AddWall(_voxels[_width - 1, 0].corner, _voxels[_width - 1, _height - 1].corner);
       AddWall(_voxels[_width - 1, _height - 1].corner, _voxels[0, _height - 1].corner);
