@@ -88,19 +88,13 @@ namespace TurnSystem
 
       if (current != null)
       {
+        current.Highlighted(false);
         _entities.Add(current);
         _entities.RemoveAt(0);
+        CurrentTurnTaker.Highlighted(true);
       }
       
       OnTurnChanged(CurrentTurnTaker);
-    }
-
-    private void Update()
-    {
-      if (Input.GetButtonDown("Jump"))
-      {
-        NextTurn();
-      }
     }
   }
 }
