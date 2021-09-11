@@ -1,5 +1,4 @@
-﻿using System;
-using Unity.Mathematics;
+﻿using Map.Utilities;
 using UnityEngine;
 
 namespace TurnSystem
@@ -26,7 +25,11 @@ namespace TurnSystem
 
     protected void Move(Vector3 point)
     {
-      transform.position = new Vector3(math.floor(point.x) + 0.5f, 0, math.floor(point.z) + 0.5f);
+      var pos = MapUtils.ToWorldPos(MapUtils.ToMapPos(point));
+      if (pos != null)
+      {
+        transform.position = pos.Value;
+      }
     }
   }
 }

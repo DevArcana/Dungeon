@@ -1,4 +1,4 @@
-﻿namespace Map.Generation
+﻿namespace Map
 {
   public struct MapPos
   {
@@ -12,5 +12,9 @@
     }
 
     public static MapPos At(int x, int y) => new MapPos(x, y);
+    public MapPos North => At(x, y + 1);
+    public MapPos East => At(x + 1, y );
+    public MapPos South => At(x, y - 1);
+    public MapPos West => At(x - 1, y);
   }
 }

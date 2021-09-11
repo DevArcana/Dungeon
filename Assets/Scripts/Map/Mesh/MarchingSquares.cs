@@ -5,13 +5,15 @@ using UnityEngine;
 namespace Map.Mesh
 {
   [RequireComponent(typeof(MeshFilter))]
+  [RequireComponent(typeof(MeshCollider))]
   public class MarchingSquares : MonoBehaviour
   {
     public int height;
     public bool generateWalls = true;
     public MapGenerator map;
     private MeshFilter _meshFilter;
-
+    private MeshCollider _collider;
+    
     private readonly List<Vector3> _vertices = new List<Vector3>();
     private readonly List<Vector2> _uvs = new List<Vector2>();
     private readonly List<int> _triangles = new List<int>();
@@ -141,6 +143,7 @@ namespace Map.Mesh
     private void Start()
     {
       _meshFilter = GetComponent<MeshFilter>();
+      _collider = GetComponent<MeshCollider>();
 
       Rebuild();
     }
@@ -255,6 +258,7 @@ namespace Map.Mesh
       mesh.Optimize();
 
       _meshFilter.mesh = mesh;
+      _collider.sharedMesh = mesh;
     }
   }
 }

@@ -11,12 +11,8 @@ namespace TurnSystem
     {
       if (TurnManager.Instance.CurrentTurnTaker == this)
       {
-        if (Input.GetButtonDown("Jump"))
-        {
-          Move(transform.position + new Vector3(1, 0, 0));
-          
-          TurnManager.Instance.NextTurn();
-        }
+        Move(transform.position + new Vector3(1, 0, 0));
+        TurnManager.Instance.NextTurn();
       }
     }
   }
