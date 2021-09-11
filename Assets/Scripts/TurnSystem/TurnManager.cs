@@ -59,7 +59,7 @@ namespace TurnSystem
       var inserted = false;
       var current = CurrentTurnTaker;
       
-      for (var i = 1; i < _entities.Count; i++)
+      for (var i = 0; i < _entities.Count; i++)
       {
         if (entity.initiative >= _entities[i].initiative)
         {
