@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: hoveroid_enemy
-  m_Shader: {fileID: -6465566751694194690, guid: 1b815dfa8601f9e44b55318ba25575e6, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 224047a872b18dc478519dbe41b6b2e4, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -86,6 +86,8 @@ Material:
     m_Floats:
     - Vector1_1b65981cf9b8412db141866505d70ef6: 0.1
     - Vector1_217e87bb99fa49c1892441f4c146c3e3: 0.92
+    - Vector1_32f0a641ab854240bdebeab859cf7967: 3.7
+    - Vector1_4457a1b980824ab2b0484543dc5a3f42: 5
     - Vector1_84a6ecd3dacd4df392b9be42e74fcfd9: 0.75
     - Vector1_e1447ace66fd4ab99d24dba1a4fbc621: 0.3
     - _AlphaClip: 0
