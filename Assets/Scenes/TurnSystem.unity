@@ -264,6 +264,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5478405870823937462, guid: 92469319e31587947b51a37175a6460f, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5478405870823937462, guid: 92469319e31587947b51a37175a6460f, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5478405870823937462, guid: 92469319e31587947b51a37175a6460f, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5478405870823937462, guid: 92469319e31587947b51a37175a6460f, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5986466953887968386, guid: 92469319e31587947b51a37175a6460f, type: 3}
       propertyPath: m_Name
       value: UI
@@ -1261,6 +1277,10 @@ PrefabInstance:
     - target: {fileID: 5310981250749942266, guid: 025735189dfe6e84191b296516562c1d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5310981250749942267, guid: 025735189dfe6e84191b296516562c1d, type: 3}
+      propertyPath: m_Antialiasing
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5310981250749942269, guid: 025735189dfe6e84191b296516562c1d, type: 3}
       propertyPath: m_BackGroundColor.b

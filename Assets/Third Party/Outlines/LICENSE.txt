@@ -1,3 +1,0 @@
-﻿This code belongs to Alexander Ameye and is available publicly here:
-
-https://alexanderameye.github.io/notes/edge-detection-outlines/

@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Lighting Test Material
-  m_Shader: {fileID: -6465566751694194690, guid: 3a2b908b1d222604f825ec47105b7e6b, type: 3}
+  m_Name: Pencil
+  m_Shader: {fileID: -6465566751694194690, guid: 1b815dfa8601f9e44b55318ba25575e6, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -19,11 +19,11 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _SampleTexture2D_212c9d851e394a2fb5b2e7686ba3a078_Texture_1:
+    - _Hatching_89880292a42a440cb8dcdd6800d258ea_Texture2D07652bffed2e4c229ce9c02c66055c79_3999276463:
         m_Texture: {fileID: 2800000, guid: f81033fe2df2eb04a8c7275273e81a21, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _SampleTexture2D_cddc452d9b6f42c7b5f4e1b9908ccf8b_Texture_1:
+    - _Hatching_89880292a42a440cb8dcdd6800d258ea_Texture2Decf7e5003b164637af031dfb6f86597f_2527742764:
         m_Texture: {fileID: 2800000, guid: 77f8b03a3982f544dbc762f5ca364e3a, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -40,8 +40,9 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Vector1_1c4c47663e374e778ebe4a204943e7b9: 0.1
-    - Vector1_8503dc6645ab49c3b6a1e50eaafbbab9: 1
-    m_Colors:
-    - Vector3_ca7c0b5887cd4e2c86c544cf81761fee: {r: 0.5, g: -1, b: 0.79, a: 0}
+    - Vector1_1b65981cf9b8412db141866505d70ef6: 0.1
+    - Vector1_217e87bb99fa49c1892441f4c146c3e3: 0.9
+    - Vector1_84a6ecd3dacd4df392b9be42e74fcfd9: 0.75
+    - Vector1_e1447ace66fd4ab99d24dba1a4fbc621: 0.3
+    m_Colors: []
   m_BuildTextureStacks: []
