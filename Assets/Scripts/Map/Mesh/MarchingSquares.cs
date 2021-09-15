@@ -72,7 +72,7 @@ namespace Map.Mesh
       {
         for (var x = 0; x < _width; x++)
         {
-          _voxels[x, y] = new Voxel(new Vector3(x, 0.0f, y), data[x, y] == height);
+          _voxels[x, y] = new Voxel(new Vector3(x, 0.0f, y), data[x, y] >= height);
         }
       }
     }

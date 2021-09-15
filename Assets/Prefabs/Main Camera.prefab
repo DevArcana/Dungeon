@@ -130,8 +130,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   turnMod: 0.3
-  speed: 1
+  speed: 2
   smoothing: 0.05
   minDistance: 1
-  maxDistance: 15
-  groundOffset: 0.25
+  maxDistance: 30
+  groundOffset: 3

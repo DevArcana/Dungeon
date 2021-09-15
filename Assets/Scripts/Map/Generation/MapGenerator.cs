@@ -20,6 +20,8 @@ namespace Map.Generation
     public int seed = 0;
     public bool randomizeSeed = false;
 
+    public MapGenerator previous;
+
     [Header("Cellular Automata")]
     public int lowerThreshold = 4;
     public int upperThreshold = 4;
@@ -61,17 +63,20 @@ namespace Map.Generation
       }
       
       Init();
-      
+
       for (var i = 0; i < passes; i++)
       {
         Simulate();
       }
-      
+
       ScanRegions();
       FillSmallRegions();
-      
-      _regions.Sort();
-      _regions[0].ConnectToRoot();
+
+      if (_regions.Count > 0)
+      {
+        _regions.Sort();
+        _regions[0].ConnectToRoot();
+      }
 
       ConnectRegionsWithClosest();
       ConnectRegionsToRoot();
@@ -87,16 +92,38 @@ namespace Map.Generation
       }
       
       _random = new Random(seed);
-      _map = new int[width, height];
       _buffer = new int[width, height];
       _regions = new List<MapRegion>();
       _regionConnections = new List<MapRegionConnection>();
 
+      if (previous != null)
+      {
+        _map = previous.GetMapData();
+        
+        for (var y = 0; y < height; y++)
+        {
+          for (var x = 0; x < width; x++)
+          {
+            if (_map[x, y] > 0)
+            {
+              _map[x, y]++;
+            }
+          }
+        }
+      }
+      else
+      {
+        _map = new int[width, height];
+      }
+      
       for (var y = 0; y < height; y++)
       {
         for (var x = 0; x < width; x++)
         {
-          _map[x, y] = x == 0 || y == 0 || x == width - 1 || y == height - 1 || _random.NextDouble() < fillChance ? 1 : 0;
+          if (_map[x, y] == 1 || _map[x, y] == 0)
+          {
+            _map[x, y] = x == 0 || y == 0 || x == width - 1 || y == height - 1 || _random.NextDouble() < fillChance ? 1 : 0;
+          }
         }
       }
     }
@@ -119,7 +146,7 @@ namespace Map.Generation
       {
         for (var x = cellX - 1; x <= cellX + 1; x++)
         {
-          if (IsOutsideGrid(x, y) || _map[x, y] == 1)
+          if (IsOutsideGrid(x, y) || _map[x, y] >= 1)
           {
             count++;
           }
@@ -138,14 +165,17 @@ namespace Map.Generation
           var wallCount = CountWalls(x, y);
 
           var tile = _map[x, y];
-          
-          if (wallCount < lowerThreshold)
+
+          if (tile == 1 || tile == 0)
           {
-            tile = 0;
-          }
-          else if (wallCount > upperThreshold)
-          {
-            tile = 1;
+            if (wallCount < lowerThreshold)
+            {
+              tile = 0;
+            }
+            else if (wallCount > upperThreshold)
+            {
+              tile = 1;
+            }
           }
 
           _buffer[x, y] = tile;
