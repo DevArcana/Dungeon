@@ -19,15 +19,21 @@ namespace TurnSystem.Transactions
 
     protected override void Process()
     {
-      var position = _targetEntity.transform.position;
-      var distance = (position - _targetPosition).sqrMagnitude;
-
+      var transform = _targetEntity.transform;
+      var position = transform.position;
+      var difference = _targetPosition - position;
+      var distance = difference.sqrMagnitude;
+      
       if (distance > 0.01f)
       {
-        _targetEntity.transform.position = Vector3.SmoothDamp(position, _targetPosition, ref _velocity, 0.15f, 100.0f);
+        transform.position = Vector3.SmoothDamp(position, _targetPosition, ref _velocity, 0.15f, 100.0f);
+        transform.rotation = Quaternion.LookRotation(difference.normalized);
       }
       else
       {
+        var forward = transform.forward;
+        forward.y = 0;
+        transform.rotation = Quaternion.LookRotation(forward.normalized);
         Finish();
       }
     }
