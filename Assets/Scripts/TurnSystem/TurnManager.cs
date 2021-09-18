@@ -77,7 +77,7 @@ namespace TurnSystem
 
       if (current != CurrentTurnTaker)
       {
-        ActionPoints = 5;
+        ActionPoints.ActionPoints = ActionPointsHolder.MaxActionPoints;
         OnTurnChanged(CurrentTurnTaker);
       }
 
@@ -96,7 +96,7 @@ namespace TurnSystem
         CurrentTurnTaker.Highlighted(true);
       }
 
-      ActionPoints = 5;
+      ActionPoints.ActionPoints = ActionPointsHolder.MaxActionPoints;
       OnTurnChanged(CurrentTurnTaker);
     }
 
@@ -105,19 +105,9 @@ namespace TurnSystem
     private readonly Queue<TransactionBase> _transactionQueue = new Queue<TransactionBase>();
 
     /// <summary>
-    /// Current actual amount of action points still left.
+    /// Holder for all action points related functionalities
     /// </summary>
-    public int ActionPoints { get; private set; }
-    
-    /// <summary>
-    /// Amount of action points reserved by transactions.
-    /// </summary>
-    public int ReservedActionPoints { get; private set; }
-
-    /// <summary>
-    /// Available unallocated action points still remaining.
-    /// </summary>
-    public int RemainingActionPoints => ActionPoints - ReservedActionPoints;
+    public ActionPointsHolder ActionPoints { get; } = new ActionPointsHolder();
 
     /// <summary>
     /// Indicates whether there are any queued up transactions being processed.
@@ -132,7 +122,7 @@ namespace TurnSystem
     /// <returns>Boolean indicating whether processing is possible.</returns>
     public bool CanProcessTransaction(TransactionBase transaction)
     {
-      return RemainingActionPoints >= transaction.Cost && (transaction.Owner == CurrentTurnTaker || transaction.Owner == null);
+      return ActionPoints.RemainingActionPoints >= transaction.Cost && (transaction.Owner == CurrentTurnTaker || transaction.Owner == null);
     }
 
     /// <summary>
@@ -148,7 +138,7 @@ namespace TurnSystem
         return false;
       }
 
-      ReservedActionPoints += transaction.Cost;
+      ActionPoints.ReservedActionPoints += transaction.Cost;
       _transactionQueue.Enqueue(transaction);
       
       return true;
@@ -164,11 +154,11 @@ namespace TurnSystem
       var transaction = _transactionQueue.Peek();
       if (transaction.Run())
       {
-        ReservedActionPoints -= transaction.Cost;
-        ActionPoints -= transaction.Cost;
+        ActionPoints.ReservedActionPoints -= transaction.Cost;
+        ActionPoints.ActionPoints -= transaction.Cost;
         _transactionQueue.Dequeue();
         
-        if (_transactionQueue.Count == 0 && ActionPoints == 0)
+        if (_transactionQueue.Count == 0 && ActionPoints.ActionPoints == 0)
         {
           NextTurn();
         }

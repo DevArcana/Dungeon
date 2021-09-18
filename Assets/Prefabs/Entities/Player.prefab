@@ -129,7 +129,7 @@ MonoBehaviour:
   entityName: Player
   portrait: {fileID: 21300000, guid: 6eca0410d08f5c3469c6ee763edc9a6e, type: 3}
   highlight: {fileID: 0}
-  initiative: 0
+  initiative: 10
 --- !u!1001 &8738411132719200329
 PrefabInstance:
   m_ObjectHideFlags: 0

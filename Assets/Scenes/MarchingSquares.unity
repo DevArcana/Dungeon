@@ -220,6 +220,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3693724348735888838, guid: 92469319e31587947b51a37175a6460f, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3693724348735888838, guid: 92469319e31587947b51a37175a6460f, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3693724348735888838, guid: 92469319e31587947b51a37175a6460f, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3693724348735888838, guid: 92469319e31587947b51a37175a6460f, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4447847248530538230, guid: 92469319e31587947b51a37175a6460f, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -292,7 +308,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh24912
+  m_Name: pb_Mesh19362
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1116,10 +1132,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1687080857, guid: ea9606cd225c235449bebd1807c35f68, type: 3}
-      propertyPath: initiative
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 168577634632048304, guid: ea9606cd225c235449bebd1807c35f68, type: 3}
       propertyPath: m_RootOrder
       value: 12
@@ -1281,18 +1293,6 @@ PrefabInstance:
     - target: {fileID: 5310981250749942266, guid: 025735189dfe6e84191b296516562c1d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5310981250749942269, guid: 025735189dfe6e84191b296516562c1d, type: 3}
-      propertyPath: m_BackGroundColor.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5310981250749942269, guid: 025735189dfe6e84191b296516562c1d, type: 3}
-      propertyPath: m_BackGroundColor.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5310981250749942269, guid: 025735189dfe6e84191b296516562c1d, type: 3}
-      propertyPath: m_BackGroundColor.r
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5310981250749942271, guid: 025735189dfe6e84191b296516562c1d, type: 3}
       propertyPath: m_Name
