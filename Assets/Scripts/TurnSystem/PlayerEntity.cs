@@ -1,6 +1,6 @@
-﻿using Unity.Mathematics;
+﻿using Map.Utilities;
+using TurnSystem.Transactions;
 using UnityEngine;
-using UnityEngine.ProBuilder;
 
 namespace TurnSystem
 {
@@ -17,17 +17,10 @@ namespace TurnSystem
     
     private void Update()
     {
-      if (TurnManager.Instance.CurrentTurnTaker == this)
+      if (Input.GetMouseButtonDown(0) && Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out var hit))
       {
-        if (Input.GetMouseButtonDown(0))
-        {
-          if (Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out var hit))
-          {
-            Move(hit.point);
-            
-            TurnManager.Instance.NextTurn();
-          }
-        }
+        var transaction = new MoveTransaction(this, MapUtils.ToWorldPos(MapUtils.ToMapPos(hit.point)));
+        TurnManager.Instance.EnqueueTransaction(transaction);
       }
     }
   }
