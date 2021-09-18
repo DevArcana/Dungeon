@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Grid;
 using UnityEngine;
 using Random = System.Random;
 
@@ -201,7 +202,7 @@ namespace Map.Generation
         {
           if (_buffer[x, y] == 0 && _map[x, y] == 0)
           {
-            _regions.Add(new MapRegion(MapPos.At(x, y), _map, _buffer, 0));
+            _regions.Add(new MapRegion(GridPos.At(x, y), _map, _buffer, 0));
           }
         }
       }
@@ -229,8 +230,8 @@ namespace Map.Generation
       {
         if (regionA.connectedRegions.Count == 0)
         {
-          var bestTileA = MapPos.At(0, 0);
-          var bestTileB = MapPos.At(0, 0);
+          var bestTileA = GridPos.At(0, 0);
+          var bestTileB = GridPos.At(0, 0);
           var distance = int.MaxValue;
           MapRegion bestRegionB = null;
 
@@ -285,8 +286,8 @@ namespace Map.Generation
           }
         }
 
-        var bestTileA = MapPos.At(0, 0);
-        var bestTileB = MapPos.At(0, 0);
+        var bestTileA = GridPos.At(0, 0);
+        var bestTileB = GridPos.At(0, 0);
         var distance = int.MaxValue;
         MapRegion bestRegionA = null;
         MapRegion bestRegionB = null;
@@ -326,7 +327,7 @@ namespace Map.Generation
       }
     }
 
-    private List<MapPos> GetLine(MapPos from, MapPos to)
+    private List<GridPos> GetLine(GridPos from, GridPos to)
     {
       var dx = from.x - to.x;
       var dy = from.y - to.y;
@@ -340,7 +341,7 @@ namespace Map.Generation
       var x = to.x;
       var y = to.y;
       
-      var cells = new List<MapPos>() { MapPos.At(x, y) };
+      var cells = new List<GridPos>() { GridPos.At(x, y) };
       
       for (int i = 0, j = 0; i < absX || j < absY;) {
         var decision = (1 + 2*i) * absY - (1 + 2*j) * absX;
@@ -356,13 +357,13 @@ namespace Map.Generation
           y += signY;
           j++;
         }
-        cells.Add(MapPos.At(x, y));
+        cells.Add(GridPos.At(x, y));
       }
 
       return cells;
     }
 
-    private void Carve(MapPos pos)
+    private void Carve(GridPos pos)
     {
       for (var y = pos.y - 1; y <= pos.y + 1; y++)
       {
@@ -376,7 +377,7 @@ namespace Map.Generation
       }
     }
     
-    private void CarvePassage(MapPos from, MapPos to)
+    private void CarvePassage(GridPos from, GridPos to)
     {
       var cells = GetLine(from, to);
 

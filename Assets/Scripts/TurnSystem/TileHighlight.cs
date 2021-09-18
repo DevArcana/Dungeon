@@ -1,11 +1,9 @@
-﻿using System;
-using Map;
-using Map.Utilities;
-using TurnSystem;
+﻿using Map;
 using Unity.Mathematics;
 using UnityEngine;
+using Utils;
 
-namespace DefaultNamespace
+namespace TurnSystem
 {
   public class TileHighlight : MonoBehaviour
   {
@@ -26,9 +24,9 @@ namespace DefaultNamespace
         Highlighted(true);
         if (Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out var hit))
         {
-          var x = math.floor(hit.point.x) + 0.5f;
+          var x = math.round(hit.point.x);
           var y = hit.point.y;
-          var z = math.floor(hit.point.z) + 0.5f;
+          var z = math.round(hit.point.z);
 
           var map = WorldDataProvider.Instance;
           if (map != null)

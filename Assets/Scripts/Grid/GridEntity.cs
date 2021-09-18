@@ -1,9 +1,11 @@
-﻿using Map.Utilities;
+﻿using Map;
+using TurnSystem;
 using UnityEngine;
+using Utils;
 
-namespace TurnSystem
+namespace Grid
 {
-  public class TurnBasedEntity : MonoBehaviour
+  public abstract class GridEntity : MonoBehaviour
   {
     public string entityName = "Unnamed";
     public Sprite portrait;
@@ -11,11 +13,20 @@ namespace TurnSystem
     
     public int initiative = 0;
 
+    public GridPos GridPos => MapUtils.ToMapPos(transform.position);
+
     protected virtual void Start()
     {
       highlight = transform.Find("Highlight").gameObject;
       Highlighted(false);
+      
+      // register
       TurnManager.Instance.RegisterTurnBasedEntity(this);
+      var data = WorldDataProvider.Instance.GetData(GridPos);
+      if (data != null)
+      {
+        data.occupant = this;
+      }
     }
 
     public void Highlighted(bool active)

@@ -1,9 +1,10 @@
-﻿using TurnSystem.Transactions;
+﻿using Grid;
+using TurnSystem.Transactions;
 using UnityEngine;
 
 namespace TurnSystem
 {
-  public class EnemyEntity : TurnBasedEntity
+  public class EnemyEntity : GridEntity
   {
     private void Update()
     {

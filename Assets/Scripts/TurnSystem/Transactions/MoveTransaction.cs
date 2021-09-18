@@ -1,16 +1,17 @@
-﻿using Unity.Mathematics;
+﻿using Grid;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace TurnSystem.Transactions
 {
   public class MoveTransaction : TransactionBase
   {
-    private readonly TurnBasedEntity _targetEntity;
+    private readonly GridEntity _targetEntity;
     private readonly Vector3 _targetPosition;
 
     private Vector3 _velocity;
     
-    public MoveTransaction(TurnBasedEntity movedEntity, Vector3 targetPosition) : base((int) math.round((movedEntity.transform.position - targetPosition).magnitude), movedEntity)
+    public MoveTransaction(GridEntity movedEntity, Vector3 targetPosition) : base((int) math.round((movedEntity.transform.position - targetPosition).magnitude), movedEntity)
     {
       _targetEntity = movedEntity;
       _targetPosition = targetPosition;

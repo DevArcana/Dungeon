@@ -1,10 +1,11 @@
-﻿using Map.Utilities;
+﻿using Grid;
 using TurnSystem.Transactions;
 using UnityEngine;
+using Utils;
 
 namespace TurnSystem
 {
-  public class PlayerEntity : TurnBasedEntity
+  public class PlayerEntity : GridEntity
   {
     private UnityEngine.Camera _camera;
 

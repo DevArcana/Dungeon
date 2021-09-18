@@ -1,14 +1,16 @@
-﻿namespace Map.Generation
+﻿using Grid;
+
+namespace Map.Generation
 {
   public class MapRegionConnection
   {
     public MapRegion RegionA { get; }
     public MapRegion RegionB { get; }
     
-    public MapPos PosA { get; }
-    public MapPos PosB { get; }
+    public GridPos PosA { get; }
+    public GridPos PosB { get; }
 
-    public MapRegionConnection(MapRegion regionA, MapPos posA, MapRegion regionB, MapPos posB)
+    public MapRegionConnection(MapRegion regionA, GridPos posA, MapRegion regionB, GridPos posB)
     {
       RegionA = regionA;
       RegionB = regionB;

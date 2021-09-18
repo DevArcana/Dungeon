@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Grid;
 using TurnSystem.Transactions;
 using UnityEngine;
 
@@ -20,29 +21,29 @@ namespace TurnSystem
       DontDestroyOnLoad(gameObject);
     }
 
-    private readonly List<TurnBasedEntity> _entities = new List<TurnBasedEntity>();
+    private readonly List<GridEntity> _entities = new List<GridEntity>();
 
-    public TurnBasedEntity CurrentTurnTaker => _entities.Count > 0 ? _entities[0] : null;
+    public GridEntity CurrentTurnTaker => _entities.Count > 0 ? _entities[0] : null;
 
     public class TurnEventArgs : EventArgs
     {
-      public TurnBasedEntity Entity { get; set; }
+      public GridEntity Entity { get; set; }
     }
 
     public event EventHandler<TurnEventArgs> TurnEntityAdded;
     public event EventHandler<TurnEventArgs> TurnChanged;
 
-    private void OnTurnEntityAdded(TurnBasedEntity entity)
+    private void OnTurnEntityAdded(GridEntity entity)
     {
       TurnEntityAdded?.Invoke(this, new TurnEventArgs {Entity = entity});
     }
     
-    private void OnTurnChanged(TurnBasedEntity entity)
+    private void OnTurnChanged(GridEntity entity)
     {
       TurnChanged?.Invoke(this, new TurnEventArgs {Entity = entity});
     }
 
-    public IEnumerable<TurnBasedEntity> PeekQueue(int count)
+    public IEnumerable<GridEntity> PeekQueue(int count)
     {
       if (_entities.Count == 0)
       {
@@ -55,7 +56,7 @@ namespace TurnSystem
       }
     }
 
-    public void RegisterTurnBasedEntity(TurnBasedEntity entity)
+    public void RegisterTurnBasedEntity(GridEntity entity)
     {
       var inserted = false;
       var current = CurrentTurnTaker;

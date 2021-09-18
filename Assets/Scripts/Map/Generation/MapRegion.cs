@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using Grid;
 
 namespace Map.Generation
 {
   public class MapRegion : IComparable<MapRegion>
   {
-    public readonly List<MapPos> outline = new List<MapPos>();
-    public readonly List<MapPos> cells = new List<MapPos>();
+    public readonly List<GridPos> outline = new List<GridPos>();
+    public readonly List<GridPos> cells = new List<GridPos>();
     public readonly List<MapRegion> connectedRegions = new List<MapRegion>();
 
     private bool _isConnectedToRoot;
@@ -28,15 +29,15 @@ namespace Map.Generation
 
     public int Size => cells.Count;
 
-    public MapRegion(MapPos start, int[,] map, int[,] mask, int tile)
+    public MapRegion(GridPos start, int[,] map, int[,] mask, int tile)
     {
       var width = map.GetLength(0);
       var height = map.GetLength(1);
 
-      var queue = new Queue<MapPos>();
+      var queue = new Queue<GridPos>();
       queue.Enqueue(start);
 
-      bool IsDifferentTile(MapPos pos)
+      bool IsDifferentTile(GridPos pos)
       {
         var x = pos.x;
         var y = pos.y;
@@ -53,10 +54,10 @@ namespace Map.Generation
         {
           mask[x, y] = 1;
 
-          var left = MapPos.At(x - 1, y);
-          var right = MapPos.At(x + 1, y);
-          var up = MapPos.At(x, y + 1);
-          var down = MapPos.At(x, y - 1);
+          var left = GridPos.At(x - 1, y);
+          var right = GridPos.At(x + 1, y);
+          var up = GridPos.At(x, y + 1);
+          var down = GridPos.At(x, y - 1);
           
           queue.Enqueue(left);
           queue.Enqueue(up);

@@ -1,4 +1,6 @@
-﻿namespace TurnSystem.Transactions
+﻿using Grid;
+
+namespace TurnSystem.Transactions
 {
   /// <summary>
   /// Transaction base class. All transactions must inherit from it.
@@ -18,9 +20,9 @@
     /// The owner of a transaction used to check whether a transaction can be performed during their turn.
     /// </summary>
     /// <remarks>Can be null for entity invariant transactions such as global events.</remarks>
-    public TurnBasedEntity Owner { get; }
+    public GridEntity Owner { get; }
 
-    protected TransactionBase(int cost, TurnBasedEntity owner = null)
+    protected TransactionBase(int cost, GridEntity owner = null)
     {
       Cost = cost;
       Owner = owner;
