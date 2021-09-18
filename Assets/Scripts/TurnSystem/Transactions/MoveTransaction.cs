@@ -1,6 +1,8 @@
 ﻿using Grid;
+using Map;
 using Unity.Mathematics;
 using UnityEngine;
+using Utils;
 
 namespace TurnSystem.Transactions
 {
@@ -16,6 +18,20 @@ namespace TurnSystem.Transactions
       _targetEntity = movedEntity;
       _targetPosition = targetPosition;
       _velocity = Vector3.zero;
+    }
+
+    public override bool CanExecute()
+    {
+      return WorldDataProvider.Instance.GetData(MapUtils.ToMapPos(_targetPosition))?.occupant == null;
+    }
+
+    protected override void Start()
+    {
+      var tile = WorldDataProvider.Instance.GetData(_targetEntity.GridPos);
+      if (tile != null)
+      {
+        tile.occupant = null;
+      }
     }
 
     protected override void Process()
@@ -36,6 +52,15 @@ namespace TurnSystem.Transactions
         forward.y = 0;
         transform.rotation = Quaternion.LookRotation(forward.normalized);
         Finish();
+      }
+    }
+
+    protected override void End()
+    {
+      var tile = WorldDataProvider.Instance.GetData(MapUtils.ToMapPos(_targetPosition));
+      if (tile != null)
+      {
+        tile.occupant = _targetEntity;
       }
     }
   }

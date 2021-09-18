@@ -9,9 +9,11 @@ namespace Map
   {
     public static WorldDataProvider Instance { get; private set; }
 
+    public Transform playerSpawnPrefab;
+    public Transform enemySpawnPrefab;
+    
     public MapGenerator generator;
 
-    private bool _initialized;
     private WorldData[,] _data;
     private int _width, _height;
 
@@ -63,6 +65,26 @@ namespace Map
         for (var x = 0; x < _width; x++)
         {
           _data[x, y] = new WorldData(x, y, map[x, y]);
+        }
+      }
+
+      var regions = generator.GetRegionData();
+
+      var spawnRegion = Random.Range(0, regions.Count);
+
+      for (var regionIndex = 0; regionIndex < regions.Count; regionIndex++)
+      {
+        var region = regions[regionIndex];
+        foreach (var cell in region.cells)
+        {
+          _data[cell.x, cell.y].regionIndex = regionIndex;
+        }
+
+        if (regionIndex == spawnRegion)
+        {
+          var spawnCell = region.cells[Random.Range(0, region.cells.Count)];
+          var pos = MapUtils.ToWorldPos(spawnCell);
+          Instantiate(playerSpawnPrefab, pos, Quaternion.identity);
         }
       }
     }

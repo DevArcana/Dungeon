@@ -45,6 +45,16 @@ namespace Map.Generation
     {
       Generate();
     }
+    
+    public List<MapRegion> GetRegionData()
+    {
+      if (_map == null)
+      {
+        Generate();
+      }
+
+      return _regions;
+    }
 
     public int[,] GetMapData()
     {

@@ -36,6 +36,14 @@ namespace Camera
             AdjustOriginToGround();
             _smoothOrigin = _origin;
             LookAtOrigin();
+
+            var player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null)
+            {
+                var pos = player.transform.position;
+                _origin.x = pos.x;
+                _origin.z = pos.z;
+            }
         }
 
         private void AdjustOriginToGround()

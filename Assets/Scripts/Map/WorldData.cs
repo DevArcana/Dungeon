@@ -12,6 +12,8 @@ namespace Map
 
     public GridEntity occupant;
 
+    public int regionIndex = -1;
+
     public WorldData(int x, int y, int height)
     {
       this.x = x;

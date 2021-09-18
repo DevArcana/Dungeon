@@ -29,6 +29,15 @@ namespace TurnSystem.Transactions
     }
 
     /// <summary>
+    /// Called directly before enqueuing the transaction to determine whether it's possible to execute it and also before execution.
+    /// </summary>
+    /// <returns>A boolean determining whether a transaction can be executed.</returns>
+    public virtual bool CanExecute()
+    {
+      return true;
+    }
+
+    /// <summary>
     /// This method is called once at the beginning before processing the transaction.
     /// </summary>
     protected virtual void Start()

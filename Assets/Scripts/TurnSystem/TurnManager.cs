@@ -103,6 +103,7 @@ namespace TurnSystem
 
     #region Transactions
 
+    private TransactionBase _transaction;
     private readonly Queue<TransactionBase> _transactionQueue = new Queue<TransactionBase>();
 
     /// <summary>
@@ -114,7 +115,7 @@ namespace TurnSystem
     /// Indicates whether there are any queued up transactions being processed.
     /// </summary>
     /// <remarks>Can be used to gray out UI or block adding new transactions before previous ones finished.</remarks>
-    public bool TransactionPending => _transactionQueue.Count > 0;
+    public bool TransactionPending => _transaction != null;
 
     /// <summary>
     /// Checks whether there are enough action points to process the transaction and whether it is the owner's turn (if owner is provided).
@@ -123,7 +124,7 @@ namespace TurnSystem
     /// <returns>Boolean indicating whether processing is possible.</returns>
     public bool CanProcessTransaction(TransactionBase transaction)
     {
-      return ActionPoints.RemainingActionPoints >= transaction.Cost && (transaction.Owner == CurrentTurnTaker || transaction.Owner == null);
+      return transaction.CanExecute() && ActionPoints.RemainingActionPoints >= transaction.Cost && (transaction.Owner == CurrentTurnTaker || transaction.Owner == null);
     }
 
     /// <summary>
@@ -147,21 +148,28 @@ namespace TurnSystem
 
     private void Update()
     {
-      if (_transactionQueue.Count == 0)
+      if (_transaction == null && _transactionQueue.Count > 0)
       {
-        return;
-      }
-      // process all transactions until none are left
-      var transaction = _transactionQueue.Peek();
-      if (transaction.Run())
-      {
-        ActionPoints.ReservedActionPoints -= transaction.Cost;
-        ActionPoints.ActionPoints -= transaction.Cost;
-        _transactionQueue.Dequeue();
-        
-        if (_transactionQueue.Count == 0 && ActionPoints.ActionPoints == 0)
+        _transaction = _transactionQueue.Dequeue();
+        if (!_transaction.CanExecute())
         {
-          NextTurn();
+          ActionPoints.ReservedActionPoints -= _transaction.Cost;
+          _transaction = null;
+        }
+      }
+
+      if (_transaction != null)
+      {
+        if (_transaction.Run())
+        {
+          ActionPoints.ActionPoints -= _transaction.Cost;
+          ActionPoints.ReservedActionPoints -= _transaction.Cost;
+          _transaction = null;
+
+          if (_transactionQueue.Count == 0 && ActionPoints.ActionPoints == 0)
+          {
+            NextTurn();
+          }
         }
       }
     }
