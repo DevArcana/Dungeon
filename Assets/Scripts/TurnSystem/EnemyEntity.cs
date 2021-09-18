@@ -1,7 +1,5 @@
-﻿using System;
+﻿using TurnSystem.Transactions;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
-using Random = System.Random;
 
 namespace TurnSystem
 {
@@ -9,10 +7,10 @@ namespace TurnSystem
   {
     private void Update()
     {
-      if (TurnManager.Instance.CurrentTurnTaker == this)
+      if (TurnManager.Instance.CurrentTurnTaker == this && !TurnManager.Instance.TransactionPending)
       {
-        Move(transform.position + new Vector3(1, 0, 0));
-        TurnManager.Instance.NextTurn();
+        var transaction = new MoveTransaction(this, transform.position + new Vector3(1, 0, 0));
+        TurnManager.Instance.EnqueueTransaction(transaction);
       }
     }
   }

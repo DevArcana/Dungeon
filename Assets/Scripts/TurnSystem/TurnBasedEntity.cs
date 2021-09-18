@@ -22,10 +22,5 @@ namespace TurnSystem
     {
       highlight.SetActive(active);
     }
-
-    protected void Move(Vector3 point)
-    {
-      transform.position = MapUtils.ToWorldPos(MapUtils.ToMapPos(point));
-    }
   }
 }

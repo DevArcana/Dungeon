@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using TurnSystem.Transactions;
 using UnityEngine;
 
 namespace TurnSystem
@@ -76,6 +77,7 @@ namespace TurnSystem
 
       if (current != CurrentTurnTaker)
       {
+        ActionPoints = 5;
         OnTurnChanged(CurrentTurnTaker);
       }
 
@@ -93,8 +95,86 @@ namespace TurnSystem
         _entities.RemoveAt(0);
         CurrentTurnTaker.Highlighted(true);
       }
-      
+
+      ActionPoints = 5;
       OnTurnChanged(CurrentTurnTaker);
     }
+
+    #region Transactions
+
+    private readonly Queue<TransactionBase> _transactionQueue = new Queue<TransactionBase>();
+
+    /// <summary>
+    /// Current actual amount of action points still left.
+    /// </summary>
+    public int ActionPoints { get; private set; }
+    
+    /// <summary>
+    /// Amount of action points reserved by transactions.
+    /// </summary>
+    public int ReservedActionPoints { get; private set; }
+
+    /// <summary>
+    /// Available unallocated action points still remaining.
+    /// </summary>
+    public int RemainingActionPoints => ActionPoints - ReservedActionPoints;
+
+    /// <summary>
+    /// Indicates whether there are any queued up transactions being processed.
+    /// </summary>
+    /// <remarks>Can be used to gray out UI or block adding new transactions before previous ones finished.</remarks>
+    public bool TransactionPending => _transactionQueue.Count > 0;
+
+    /// <summary>
+    /// Checks whether there are enough action points to process the transaction and whether it is the owner's turn (if owner is provided).
+    /// </summary>
+    /// <param name="transaction">Transaction to be processed.</param>
+    /// <returns>Boolean indicating whether processing is possible.</returns>
+    public bool CanProcessTransaction(TransactionBase transaction)
+    {
+      return RemainingActionPoints >= transaction.Cost && (transaction.Owner == CurrentTurnTaker || transaction.Owner == null);
+    }
+
+    /// <summary>
+    /// Pushes the transaction to the queue of pending transactions.
+    /// </summary>
+    /// <param name="transaction">Transaction to be queued and processed.</param>
+    /// <returns>Boolean indicating whether transaction was put in the queue.</returns>
+    /// <remarks>Also checks whether the transaction can be performed.</remarks>
+    public bool EnqueueTransaction(TransactionBase transaction)
+    {
+      if (!CanProcessTransaction(transaction))
+      {
+        return false;
+      }
+
+      ReservedActionPoints += transaction.Cost;
+      _transactionQueue.Enqueue(transaction);
+      
+      return true;
+    }
+
+    private void Update()
+    {
+      if (_transactionQueue.Count == 0)
+      {
+        return;
+      }
+      // process all transactions until none are left
+      var transaction = _transactionQueue.Peek();
+      if (transaction.Run())
+      {
+        ReservedActionPoints -= transaction.Cost;
+        ActionPoints -= transaction.Cost;
+        _transactionQueue.Dequeue();
+        
+        if (_transactionQueue.Count == 0 && ActionPoints == 0)
+        {
+          NextTurn();
+        }
+      }
+    }
+
+    #endregion
   }
 }
