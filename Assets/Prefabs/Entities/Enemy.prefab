@@ -10,7 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4016761921896502214}
   - component: {fileID: 826060875}
-  m_Layer: 0
+  - component: {fileID: 527564245098237591}
+  m_Layer: 3
   m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -49,6 +50,20 @@ MonoBehaviour:
   portrait: {fileID: 21300000, guid: 94af4a52ecadefc4eb0ab04710b72f2d, type: 3}
   highlight: {fileID: 0}
   initiative: 0
+--- !u!136 &527564245098237591
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7704167482467389149}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.26
+  m_Height: 1.0181148
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.35639787, z: 0}
 --- !u!1 &8387361508847544691
 GameObject:
   m_ObjectHideFlags: 0
@@ -60,7 +75,7 @@ GameObject:
   - component: {fileID: 1488403708285157123}
   - component: {fileID: 4107705133585480403}
   - component: {fileID: 2530324049733729159}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Highlight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -188,6 +203,10 @@ PrefabInstance:
     - target: {fileID: 6861735139374745379, guid: a8cd22adf1bd6094eb4832b03a475bb8, type: 3}
       propertyPath: m_Name
       value: Hoveroid
+      objectReference: {fileID: 0}
+    - target: {fileID: 6861735139374745379, guid: a8cd22adf1bd6094eb4832b03a475bb8, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a8cd22adf1bd6094eb4832b03a475bb8, type: 3}
