@@ -1,6 +1,6 @@
 ﻿using Grid;
 
-namespace TurnSystem.Transactions
+namespace Transactions
 {
   /// <summary>
   /// Transaction base class. All transactions must inherit from it.

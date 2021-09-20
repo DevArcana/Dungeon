@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Grid;
-using TurnSystem.Transactions;
+using Transactions;
 using UnityEngine;
 
 namespace TurnSystem

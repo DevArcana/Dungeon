@@ -4,7 +4,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using Utils;
 
-namespace TurnSystem.Transactions
+namespace Transactions
 {
   public class MoveTransaction : TransactionBase
   {
