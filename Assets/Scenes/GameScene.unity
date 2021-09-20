@@ -471,6 +471,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1848182132837006854, guid: a39f37bf1d1075e41970472e3164397d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4926177481454998299, guid: a39f37bf1d1075e41970472e3164397d, type: 3}
       propertyPath: m_Name
       value: Tile Highlight
