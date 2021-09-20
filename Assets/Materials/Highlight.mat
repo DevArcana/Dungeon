@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Selection
+  m_Name: Highlight
   m_Shader: {fileID: -6465566751694194690, guid: 592071da9affb5e4cada9bbf6bb7d656, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -31,6 +31,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    m_Floats: []
-    m_Colors: []
+    m_Floats:
+    - Vector1_143376d56b3e4da1a8e90956acef9162: 2
+    - Vector1_267e6862551047a1a1df6918dee38c4f: 1
+    - Vector1_837561b8f9e54cdc84a04f3f95500b2f: 1
+    m_Colors:
+    - Color_bbc161e4896a4fb884128c82c99d3046: {r: 0.9749273, g: 1, b: 0, a: 0.32941177}
   m_BuildTextureStacks: []

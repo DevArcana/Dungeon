@@ -41,7 +41,7 @@ namespace TurnSystem.Transactions
       var difference = _targetPosition - position;
       var distance = difference.sqrMagnitude;
       
-      if (distance > 0.01f)
+      if (distance > 0.0001f)
       {
         transform.position = Vector3.SmoothDamp(position, _targetPosition, ref _velocity, 0.15f, 100.0f);
         transform.rotation = Quaternion.LookRotation(difference.normalized);

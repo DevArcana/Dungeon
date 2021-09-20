@@ -20,7 +20,9 @@ namespace TurnSystem
     {
       if (Input.GetMouseButtonDown(0) && Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out var hit))
       {
-        var transaction = new MoveTransaction(this, MapUtils.ToWorldPos(MapUtils.ToMapPos(hit.point)));
+        var mapPos = MapUtils.ToMapPos(hit.point);
+        SelectionManager.Instance.Highlight(mapPos);
+        var transaction = new MoveTransaction(this, MapUtils.ToWorldPos(mapPos));
         TurnManager.Instance.EnqueueTransaction(transaction);
       }
     }
