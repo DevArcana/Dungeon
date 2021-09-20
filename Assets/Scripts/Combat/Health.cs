@@ -1,5 +1,7 @@
 ﻿using System;
+using Unity.Mathematics;
 using UnityEngine;
+using Math = UnityEngine.ProBuilder.Math;
 
 namespace Combat
 {
@@ -8,11 +10,11 @@ namespace Combat
     public int maxHealth = 100;
     public int health;
 
-    public class HealthChangedEventArgs : EventArgs
+    public class OnHealthChangedEventArgs : EventArgs
     {
       public readonly int health;
       
-      public HealthChangedEventArgs(int health)
+      public OnHealthChangedEventArgs(int health)
       {
         this.health = health;
       }
@@ -21,7 +23,25 @@ namespace Combat
     /// <summary>
     /// Fired every time the health changes.
     /// </summary>
-    public event EventHandler<HealthChangedEventArgs> HealthChanged;
+    public event EventHandler<OnHealthChangedEventArgs> OnHealthChanged;
+
+    /// <summary>
+    /// Causes the entity to suffer damage.
+    /// </summary>
+    /// <param name="damage">The amount of damage dealt to the entity.</param>
+    public void SufferDamage(int damage)
+    {
+      SetHealth(math.max(health - damage, 0));
+    }
+
+    /// <summary>
+    /// Causes the entity to restore health. Entity's health cannot exceed their maximum health.
+    /// </summary>
+    /// <param name="heal">The amount of health restored by the entity.</param>
+    public void Heal(int heal)
+    {
+      SetHealth(math.min(health + heal, maxHealth));
+    }
 
     /// <summary>
     /// Sets the health of an entity and notifes the game via an event.
@@ -30,7 +50,7 @@ namespace Combat
     public void SetHealth(int amount)
     {
       health = amount;
-      HealthChanged?.Invoke(this, new HealthChangedEventArgs(health));
+      OnHealthChanged?.Invoke(this, new OnHealthChangedEventArgs(health));
     }
 
     private void Start()
