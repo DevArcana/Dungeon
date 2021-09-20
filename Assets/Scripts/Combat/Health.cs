@@ -10,11 +10,11 @@ namespace Combat
     public int maxHealth = 100;
     public int health;
 
-    public class OnHealthChangedEventArgs : EventArgs
+    public class HealthChangedEventArgs : EventArgs
     {
       public readonly int health;
       
-      public OnHealthChangedEventArgs(int health)
+      public HealthChangedEventArgs(int health)
       {
         this.health = health;
       }
@@ -23,7 +23,7 @@ namespace Combat
     /// <summary>
     /// Fired every time the health changes.
     /// </summary>
-    public event EventHandler<OnHealthChangedEventArgs> OnHealthChanged;
+    public event EventHandler<HealthChangedEventArgs> HealthChanged;
 
     /// <summary>
     /// Causes the entity to suffer damage.
@@ -50,7 +50,7 @@ namespace Combat
     public void SetHealth(int amount)
     {
       health = amount;
-      OnHealthChanged?.Invoke(this, new OnHealthChangedEventArgs(health));
+      HealthChanged?.Invoke(this, new HealthChangedEventArgs(health));
     }
 
     private void Start()

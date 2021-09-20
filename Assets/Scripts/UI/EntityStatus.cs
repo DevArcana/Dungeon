@@ -14,11 +14,11 @@ namespace UI
     private void Start()
     {
       _tmp = GetComponent<TextMeshProUGUI>();
-      health.HealthChanged += OnHealthChange;
+      health.HealthChanged += OnHealthChanged;
       _tmp.text = $"Health: {health.health}/{health.maxHealth}";
     }
 
-    private void OnHealthChange(object sender, Health.HealthChangedEventArgs e)
+    private void OnHealthChanged(object sender, Health.HealthChangedEventArgs e)
     {
       _tmp.text = $"Health: {e.health}/{health.maxHealth}";
     }

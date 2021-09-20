@@ -1,4 +1,5 @@
 ﻿using Grid;
+using Map;
 using Transactions;
 using UnityEngine;
 using Utils;
@@ -21,9 +22,18 @@ namespace TurnSystem
       if (Input.GetMouseButtonDown(0) && Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out var hit))
       {
         var mapPos = MapUtils.ToMapPos(hit.point);
-        SelectionManager.Instance.Highlight(mapPos);
-        var transaction = new MoveTransaction(this, mapPos);
-        TurnManager.Instance.EnqueueTransaction(transaction);
+        var occupant = WorldDataProvider.Instance.GetData(mapPos)?.occupant;
+
+        if (occupant != null && occupant is EnemyEntity enemy)
+        {
+          var transaction = new AttackTransaction(this, enemy, 20);
+          TurnManager.Instance.EnqueueTransaction(transaction);
+        }
+        else
+        {
+          var transaction = new MoveTransaction(this, mapPos);
+          TurnManager.Instance.EnqueueTransaction(transaction);
+        }
       }
     }
   }

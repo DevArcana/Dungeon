@@ -13,6 +13,8 @@ namespace Grid
     
     public int initiative = 0;
 
+    public int range = 20;
+
     public GridPos GridPos => MapUtils.ToMapPos(transform.position);
 
     protected virtual void Start()
