@@ -8,6 +8,9 @@ namespace TurnSystem
 {
   public class PlayerEntity : GridEntity
   {
+    public GameObject projectilePrefab;
+    public GameObject impactPrefab;
+    
     private UnityEngine.Camera _camera;
 
     protected override void Start()
@@ -26,8 +29,15 @@ namespace TurnSystem
 
         if (occupant != null && occupant is EnemyEntity enemy)
         {
-          var transaction = new AttackTransaction(this, enemy, 20);
-          TurnManager.Instance.EnqueueTransaction(transaction);
+          var turnManager = TurnManager.Instance;
+          TransactionBase transaction = new AttackTransaction(this, enemy, 20);
+
+          if (!turnManager.CanProcessTransaction(transaction))
+          {
+            transaction = new RangedAttackTransaction(this, 2, 15, projectilePrefab, enemy, range, impactPrefab);
+          }
+          
+          turnManager.EnqueueTransaction(transaction);
         }
         else
         {

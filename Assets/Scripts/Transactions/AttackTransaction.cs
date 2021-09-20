@@ -23,7 +23,7 @@ namespace Transactions
       var difference = offenderPosition - victimPosition;
       var distance = difference.magnitude;
 
-      return distance <= _attackingEntity.range;
+      return distance <= 1.0f;
     }
 
     protected override void Process()
