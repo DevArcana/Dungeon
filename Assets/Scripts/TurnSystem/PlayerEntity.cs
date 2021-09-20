@@ -22,7 +22,7 @@ namespace TurnSystem
       {
         var mapPos = MapUtils.ToMapPos(hit.point);
         SelectionManager.Instance.Highlight(mapPos);
-        var transaction = new MoveTransaction(this, MapUtils.ToWorldPos(mapPos));
+        var transaction = new MoveTransaction(this, mapPos);
         TurnManager.Instance.EnqueueTransaction(transaction);
       }
     }

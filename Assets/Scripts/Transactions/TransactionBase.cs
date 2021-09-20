@@ -14,7 +14,7 @@ namespace Transactions
     /// <summary>
     /// The cost in action points required to process a given transaction.
     /// </summary>
-    public int Cost { get; }
+    public int Cost { get; protected set; }
     
     /// <summary>
     /// The owner of a transaction used to check whether a transaction can be performed during their turn.

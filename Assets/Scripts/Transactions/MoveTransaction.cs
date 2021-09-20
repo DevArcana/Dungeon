@@ -13,11 +13,12 @@ namespace Transactions
 
     private Vector3 _velocity;
     
-    public MoveTransaction(GridEntity movedEntity, Vector3 targetPosition) : base((int) math.round((movedEntity.transform.position - targetPosition).magnitude), movedEntity)
+    public MoveTransaction(GridEntity movedEntity, GridPos targetPosition) : base(0, movedEntity)
     {
       _targetEntity = movedEntity;
-      _targetPosition = targetPosition;
+      _targetPosition = MapUtils.ToWorldPos(targetPosition);
       _velocity = Vector3.zero;
+      Cost = (int) math.round((movedEntity.transform.position - _targetPosition).magnitude);
     }
 
     public override bool CanExecute()
