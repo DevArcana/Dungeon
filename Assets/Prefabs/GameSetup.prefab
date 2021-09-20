@@ -213,6 +213,10 @@ PrefabInstance:
       value: World Manager
       objectReference: {fileID: 0}
     - target: {fileID: 8260826318698247209, guid: ad8f9c74b6ea82a4c8e555daaa8cd381, type: 3}
+      propertyPath: enemySpawnPrefab
+      value: 
+      objectReference: {fileID: 4016761921896502214, guid: 5b4da0c22f232dd4b8ab2b9a2327f179, type: 3}
+    - target: {fileID: 8260826318698247209, guid: ad8f9c74b6ea82a4c8e555daaa8cd381, type: 3}
       propertyPath: playerSpawnPrefab
       value: 
       objectReference: {fileID: 168577634632048304, guid: ea9606cd225c235449bebd1807c35f68, type: 3}

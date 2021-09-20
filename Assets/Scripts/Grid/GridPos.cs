@@ -1,9 +1,39 @@
-﻿namespace Grid
+﻿using System;
+
+namespace Grid
 {
-  public struct GridPos
+  public readonly struct GridPos : IEquatable<GridPos>
   {
-    public int x;
-    public int y;
+    public bool Equals(GridPos other)
+    {
+      return x == other.x && y == other.y;
+    }
+
+    public override bool Equals(object obj)
+    {
+      return obj is GridPos other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+      unchecked
+      {
+        return (x * 397) ^ y;
+      }
+    }
+
+    public static bool operator ==(GridPos left, GridPos right)
+    {
+      return left.Equals(right);
+    }
+
+    public static bool operator !=(GridPos left, GridPos right)
+    {
+      return !left.Equals(right);
+    }
+
+    public readonly int x;
+    public readonly int y;
 
     public GridPos(int x, int y)
     {
