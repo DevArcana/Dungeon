@@ -4,7 +4,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using Utils;
 
-namespace TurnSystem.Transactions
+namespace Transactions
 {
   public class MoveTransaction : TransactionBase
   {
@@ -13,11 +13,12 @@ namespace TurnSystem.Transactions
 
     private Vector3 _velocity;
     
-    public MoveTransaction(GridEntity movedEntity, Vector3 targetPosition) : base((int) math.round((movedEntity.transform.position - targetPosition).magnitude), movedEntity)
+    public MoveTransaction(GridEntity movedEntity, GridPos targetPosition) : base(0, movedEntity)
     {
       _targetEntity = movedEntity;
-      _targetPosition = targetPosition;
+      _targetPosition = MapUtils.ToWorldPos(targetPosition);
       _velocity = Vector3.zero;
+      Cost = (int) math.round((movedEntity.transform.position - _targetPosition).magnitude);
     }
 
     public override bool CanExecute()
@@ -41,7 +42,7 @@ namespace TurnSystem.Transactions
       var difference = _targetPosition - position;
       var distance = difference.sqrMagnitude;
       
-      if (distance > 0.01f)
+      if (distance > 0.0001f)
       {
         transform.position = Vector3.SmoothDamp(position, _targetPosition, ref _velocity, 0.15f, 100.0f);
         transform.rotation = Quaternion.LookRotation(difference.normalized);

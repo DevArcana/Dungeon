@@ -1,6 +1,6 @@
 ﻿using Grid;
 
-namespace TurnSystem.Transactions
+namespace Transactions
 {
   /// <summary>
   /// Transaction base class. All transactions must inherit from it.
@@ -14,7 +14,7 @@ namespace TurnSystem.Transactions
     /// <summary>
     /// The cost in action points required to process a given transaction.
     /// </summary>
-    public int Cost { get; }
+    public int Cost { get; protected set; }
     
     /// <summary>
     /// The owner of a transaction used to check whether a transaction can be performed during their turn.

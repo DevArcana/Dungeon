@@ -79,12 +79,21 @@ namespace Map
         {
           _data[cell.x, cell.y].regionIndex = regionIndex;
         }
-
+        
         if (regionIndex == spawnRegion)
         {
           var spawnCell = region.cells[Random.Range(0, region.cells.Count)];
           var pos = MapUtils.ToWorldPos(spawnCell);
           Instantiate(playerSpawnPrefab, pos, Quaternion.identity);
+
+          var enemyCell = spawnCell;
+
+          while (enemyCell == spawnCell)
+          {
+            enemyCell = region.cells[Random.Range(0, region.cells.Count)];
+          }
+          pos = MapUtils.ToWorldPos(enemyCell);
+          Instantiate(enemySpawnPrefab, pos, Quaternion.identity);
         }
       }
     }

@@ -1,6 +1,7 @@
 ﻿using Grid;
-using TurnSystem.Transactions;
+using Transactions;
 using UnityEngine;
+using Utils;
 
 namespace TurnSystem
 {
@@ -10,7 +11,8 @@ namespace TurnSystem
     {
       if (TurnManager.Instance.CurrentTurnTaker == this && !TurnManager.Instance.TransactionPending)
       {
-        var transaction = new MoveTransaction(this, transform.position + new Vector3(1, 0, 0));
+        var pos = MapUtils.ToMapPos(transform.position);
+        var transaction = new MoveTransaction(this,  pos.North);
         TurnManager.Instance.EnqueueTransaction(transaction);
       }
     }
