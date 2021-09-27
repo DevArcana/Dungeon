@@ -1,4 +1,5 @@
-﻿using Map;
+﻿using Equipment;
+using Map;
 using TurnSystem;
 using UnityEngine;
 using Utils;
@@ -13,7 +14,7 @@ namespace Grid
     
     public int initiative = 0;
 
-    public int range = 20;
+    public Weapon weapon;
 
     public GridPos GridPos => MapUtils.ToMapPos(transform.position);
 

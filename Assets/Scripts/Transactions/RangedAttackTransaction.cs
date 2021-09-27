@@ -32,7 +32,7 @@ namespace Transactions
       var dir = difference.normalized;
 
       var ray = new Ray(offenderPosition + Vector3.up * 0.5f, dir);
-      if (Physics.Raycast(ray, out var hit, Owner.range))
+      if (Physics.Raycast(ray, out var hit, Owner.weapon.range))
       {
         return hit.collider.gameObject == _victim.gameObject;
       }
