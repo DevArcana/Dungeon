@@ -11,5 +11,12 @@ namespace UI
     {
       SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
     }
+    
+    // called by Unity UI
+    // ReSharper disable once UnusedMember.Global
+    public void Quit()
+    {
+      Application.Quit();
+    }
   }
 }
