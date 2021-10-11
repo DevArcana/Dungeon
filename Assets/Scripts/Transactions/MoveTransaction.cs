@@ -1,5 +1,6 @@
 ﻿using Grid;
 using Map;
+using Map.Legacy;
 using Unity.Mathematics;
 using UnityEngine;
 using Utils;

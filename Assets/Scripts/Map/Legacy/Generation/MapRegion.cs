@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Grid;
 
-namespace Map.Generation
+namespace Map.Legacy.Generation
 {
   public class MapRegion : IComparable<MapRegion>
   {

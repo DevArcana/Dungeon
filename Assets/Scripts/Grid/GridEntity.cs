@@ -1,5 +1,6 @@
 ﻿using Equipment;
 using Map;
+using Map.Legacy;
 using TurnSystem;
 using UnityEngine;
 using Utils;

@@ -1,8 +1,10 @@
 ﻿using System;
+using UnityEngine;
+using Random = System.Random;
 
-namespace Map.Generation
+namespace World.Map.Generation
 {
-  public class Map
+  public class MapLayer
   {
     /// <summary>
     /// width of the map
@@ -16,12 +18,19 @@ namespace Map.Generation
 
     private readonly bool[,] _data;
 
-    public Map(int width, int height)
+    public MapLayer(int width, int height)
     {
       this.width = width;
       this.height = height;
 
       _data = new bool[width, height];
+    }
+    
+    public MapLayer(bool[,] data)
+    {
+      width = data.GetLength(0);
+      height = data.GetLength(1);
+      _data = data;
     }
 
     /// <summary>
@@ -36,9 +45,9 @@ namespace Map.Generation
     /// Creates a copy of map.
     /// </summary>
     /// <returns>a copy of the map</returns>
-    public Map Copy()
+    public MapLayer Copy()
     {
-      var map = new Map(width, height);
+      var map = new MapLayer(width, height);
 
       for (var y = 0; y < height; y++)
       {
@@ -55,20 +64,37 @@ namespace Map.Generation
     /// Copies the data from the provided map
     /// </summary>
     /// <remarks>Source map must be of the same size!</remarks>
-    /// <param name="map">source map</param>
+    /// <param name="mapLayer">source map</param>
     /// <exception cref="ArgumentException">thrown if the source map is not of the same size</exception>
-    public void CopyFrom(Map map)
+    public void CopyFrom(MapLayer mapLayer)
     {
-      if (map.width != width || map.height != height)
+      if (mapLayer.width != width || mapLayer.height != height)
       {
-        throw new ArgumentException("provided map must be of the same dimensions!", nameof(map));
+        throw new ArgumentException("provided map must be of the same dimensions!", nameof(mapLayer));
       }
       
       for (var y = 0; y < height; y++)
       {
         for (var x = 0; x < width; x++)
         {
-          _data[x, y] = map._data[x, y];
+          _data[x, y] = mapLayer._data[x, y];
+        }
+      }
+    }
+
+    /// <summary>
+    /// Randomly fills the layer up to specified fill percentage (approx)
+    /// </summary>
+    /// <remarks>only affects empty tiles</remarks>
+    /// <param name="random">a pseudo random number generator instance</param>
+    /// <param name="fillChance">chance in percent each tile will be filled</param>
+    public void Randomize(Random random, float fillChance)
+    {
+      for (var y = 0; y < height; y++)
+      {
+        for (var x = 0; x < width; x++)
+        {
+          _data[x, y] = _data[x, y] || random.NextDouble() * 100.0f < fillChance;
         }
       }
     }

@@ -1,21 +1,22 @@
 ﻿using System.Collections.Generic;
-using Map.Generation;
-using Unity.Mathematics;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
-namespace Map.Mesh
+namespace World.Map.Mesh
 {
-  [RequireComponent(typeof(MeshFilter))]
-  [RequireComponent(typeof(MeshCollider))]
-  public class MarchingSquares : MonoBehaviour
+  public class MapLayerMeshProvider
   {
-    public int height;
-    public bool generateWalls = true;
-    public MapGenerator map;
-    private MeshFilter _meshFilter;
-    private MeshCollider _collider;
-    
+    // TODO: Clean up
+    public MapLayerMeshProvider(Map map, byte layer, bool generateWalls)
+    {
+      _layer = layer;
+      _generateWalls = generateWalls;
+      _map = map;
+    }
+
+    private readonly int _layer;
+    private readonly bool _generateWalls;
+    private readonly Map _map;
+
     private readonly List<Vector3> _vertices = new List<Vector3>();
     private readonly List<Vector2> _uvs = new List<Vector2>();
     private readonly List<int> _triangles = new List<int>();
@@ -27,7 +28,7 @@ namespace Map.Mesh
 
       public VoxelNode(Vector3 position)
       {
-        this.vertexIndex = -1;
+        vertexIndex = -1;
         this.position = position;
       }
     }
@@ -36,9 +37,9 @@ namespace Map.Mesh
     {
       public readonly bool filled;
       
-      public VoxelNode up;
-      public VoxelNode corner;
-      public VoxelNode right;
+      public readonly VoxelNode up;
+      public readonly VoxelNode corner;
+      public readonly VoxelNode right;
 
       public Voxel(Vector3 position, bool filled)
       {
@@ -60,11 +61,11 @@ namespace Map.Mesh
       _vertices.Clear();
       _uvs.Clear();
       _triangles.Clear();
-      
-      var data = map.GetMapData();
 
-      _width = data.GetLength(0);
-      _height = data.GetLength(1);
+
+
+      _width = _map.width;
+      _height = _map.height;
 
       _voxels = new Voxel[_width, _height];
 
@@ -72,7 +73,7 @@ namespace Map.Mesh
       {
         for (var x = 0; x < _width; x++)
         {
-          _voxels[x, y] = new Voxel(new Vector3(x, 0.0f, y), data[x, y] >= height);
+          _voxels[x, y] = new Voxel(new Vector3(x, 0.0f, y), _map[x, y] >= _layer);
         }
       }
     }
@@ -109,14 +110,14 @@ namespace Map.Mesh
 
     private int AddVertex(Vector3 position, Vector2 uv)
     {
-      _vertices.Add(SpaceDistortion.Distort(position, transform.position));
+      _vertices.Add(SpaceDistortion.Distort(position, Vector3.up * _height));
       _uvs.Add(uv);
       return _vertices.Count - 1;
     }
 
     private void AddWall(VoxelNode from, VoxelNode to)
     {
-      if (!generateWalls)
+      if (!_generateWalls)
       {
         return;
       }
@@ -139,15 +140,7 @@ namespace Map.Mesh
 
     #endregion
 
-    private void Start()
-    {
-      _meshFilter = GetComponent<MeshFilter>();
-      _collider = GetComponent<MeshCollider>();
-
-      Rebuild();
-    }
-
-    private void Rebuild()
+    public UnityEngine.Mesh CreateMesh()
     {
       Clear();
       
@@ -257,8 +250,7 @@ namespace Map.Mesh
       mesh.RecalculateTangents();
       mesh.Optimize();
 
-      _meshFilter.mesh = mesh;
-      _collider.sharedMesh = mesh;
+      return mesh;
     }
   }
 }

@@ -1,7 +1,6 @@
 ﻿using Grid;
-using TurnSystem;
 
-namespace Map
+namespace Map.Legacy
 {
   public class WorldData
   {

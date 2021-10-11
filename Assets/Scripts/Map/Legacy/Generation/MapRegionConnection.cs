@@ -1,6 +1,6 @@
 ﻿using Grid;
 
-namespace Map.Generation
+namespace Map.Legacy.Generation
 {
   public class MapRegionConnection
   {

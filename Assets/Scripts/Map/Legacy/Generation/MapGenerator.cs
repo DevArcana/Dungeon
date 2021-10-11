@@ -4,7 +4,7 @@ using Grid;
 using UnityEngine;
 using Random = System.Random;
 
-namespace Map.Generation
+namespace Map.Legacy.Generation
 {
   public class MapGenerator : MonoBehaviour
   {
