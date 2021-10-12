@@ -12,8 +12,13 @@ namespace World.Level
     public Material[] layers;
     public Heightmap heightmap;
 
-    public void Generate()
+    public void Generate(bool force = false)
     {
+      if (!regenerate && !force)
+      {
+        return;
+      }
+      
       var generator = new MapGenerator(settings);
       var map = generator.Generate();
 
@@ -23,7 +28,7 @@ namespace World.Level
       BuildMesh(map);
     }
 
-    private void BuildMesh(Common.Heightmap heightmap)
+    private void BuildMesh(Heightmap map)
     {
       for (byte i = 0; i < settings.layers && i < layers.Length; i++)
       {
@@ -31,7 +36,7 @@ namespace World.Level
         obj.transform.SetParent(transform);
         obj.transform.localPosition = Vector3.up * i;
           
-        var meshProvider = new MapLayerMeshProvider(heightmap, i, i != 0);
+        var meshProvider = new MapLayerMeshProvider(map, i, i != 0);
         var mesh = meshProvider.CreateMesh();
           
         obj.AddComponent<MeshRenderer>().material = layers[i];
@@ -61,10 +66,7 @@ namespace World.Level
 
     private void Start()
     {
-      if (regenerate)
-      {
-        Generate();
-      }
+      Generate();
     }
   }
 }

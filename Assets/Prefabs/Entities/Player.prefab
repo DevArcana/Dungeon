@@ -132,7 +132,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entityName: Player
   portrait: {fileID: 21300000, guid: 6eca0410d08f5c3469c6ee763edc9a6e, type: 3}
-  highlight: {fileID: 468013116956423736}
+  highlight: {fileID: 0}
   initiative: 10
   weapon:
     power: 0

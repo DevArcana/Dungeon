@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Transactions;
+using TurnSystem;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using World.Common;
@@ -78,16 +80,22 @@ namespace World
       else
       {
         Destroy(gameObject);
+        return;
       }
 
       DontDestroyOnLoad(gameObject);
+
+      SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    public void LoadNextFloor()
+    private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
     {
       _entities.Clear();
-      _levelProvider.Generate();
-      SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
+
+      if (_levelProvider != null)
+      {
+        _levelProvider.Generate();
+      }
     }
   }
 }

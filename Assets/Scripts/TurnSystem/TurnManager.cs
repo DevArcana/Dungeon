@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Transactions;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using World.Entities;
 
 namespace TurnSystem
@@ -19,9 +20,17 @@ namespace TurnSystem
       else if (instance != this)
       {
         Destroy(gameObject);
+        return;
       }
       
       DontDestroyOnLoad(gameObject);
+
+      SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
+    {
+      _entities.Clear();
     }
 
     private readonly List<GridLivingEntity> _entities = new List<GridLivingEntity>();

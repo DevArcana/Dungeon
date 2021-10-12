@@ -7,7 +7,7 @@ namespace World.Interaction
 {
   public class SelectionManager : MonoBehaviour
   {
-    public static SelectionManager Instance { get; private set; }
+    public static SelectionManager instance;
 
     public GameObject selectionPrefab;
 
@@ -16,12 +16,16 @@ namespace World.Interaction
     
     private void Awake()
     {
-      if (Instance != null)
+      if (instance == null)
       {
-        Debug.LogWarning("Multiple turn managers in scene!");
+        instance = this;
+      }
+      else if (instance != this)
+      {
+        Destroy(gameObject);
+        return;
       }
 
-      Instance = this;
       DontDestroyOnLoad(gameObject);
     }
 

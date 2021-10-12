@@ -13,7 +13,7 @@ namespace World.Level.Editor
 
       if (GUILayout.Button("Generate"))
       {
-        dungeon.Generate();
+        dungeon.Generate(true);
       }
     }
   }
