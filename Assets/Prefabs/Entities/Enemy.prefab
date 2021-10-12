@@ -390,7 +390,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entityName: Enemy 1
   portrait: {fileID: 21300000, guid: 94af4a52ecadefc4eb0ab04710b72f2d, type: 3}
-  highlight: {fileID: 0}
+  highlight: {fileID: 8387361508847544691}
   initiative: 0
   weapon:
     power: 0
