@@ -1,14 +1,16 @@
 ﻿using System;
+using UnityEngine;
 
 namespace World.Level.Common
 {
   [Serializable]
   public class Heightmap
   {
-    public readonly int width;
-    public readonly int height;
+    public int width;
+    public int height;
 
-    private readonly byte[,] _heightmap;
+    [SerializeField]
+    private Matrix<byte> heightmap;
 
     private byte _maxHeight;
 
@@ -16,7 +18,7 @@ namespace World.Level.Common
     {
       this.width = width;
       this.height = height;
-      _heightmap = new byte[width, height];
+      heightmap = new Matrix<byte>(width, height);
       _maxHeight = maxHeight;
     }
 
@@ -41,7 +43,7 @@ namespace World.Level.Common
       {
         for (var x = 0; x < width; x++)
         {
-          data[x, y] = _heightmap[x, y] == level + 1;
+          data[x, y] = heightmap[x, y] == level + 1;
         }
       }
 
@@ -61,24 +63,24 @@ namespace World.Level.Common
       {
         for (var x = 0; x < width; x++)
         {
-          var h = _heightmap[x, y];
+          var h = heightmap[x, y];
           
           if (h == level || h == level + 1)
           {
             h = layer[x, y] ? (byte) (h + 1) : h;
           }
 
-          _heightmap[x, y] = h;
+          heightmap[x, y] = h;
         }
       }
     }
     
     public byte this[int x, int y]
     {
-      get => IsWithinBounds(x, y) ? _heightmap[x, y] : _maxHeight;
+      get => IsWithinBounds(x, y) ? heightmap[x, y] : _maxHeight;
       set
       {
-        _heightmap[x, y] = value;
+        heightmap[x, y] = value;
 
         if (value > _maxHeight)
         {
