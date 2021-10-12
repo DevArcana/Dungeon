@@ -24,7 +24,7 @@ namespace Transactions
 
     public override bool CanExecute()
     {
-      return World.World.instance.GetEntities(MapUtils.ToMapPos(_targetPosition)).All(x => x.CollisionType != EntityCollisionType.Solid);
+      return World.World.instance.GetEntities(MapUtils.ToMapPos(_targetPosition)).All(x => !(x is GridLivingEntity));
     }
 
     protected override void Start()

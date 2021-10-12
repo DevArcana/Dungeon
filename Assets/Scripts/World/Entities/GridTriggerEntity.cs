@@ -1,7 +1,12 @@
-﻿namespace World.Entities
+﻿using UnityEngine;
+
+namespace World.Entities
 {
   public class GridTriggerEntity : GridEntity
   {
-    public override EntityCollisionType CollisionType => EntityCollisionType.Trigger;
+    public virtual void OnTrigger(GridEntity gridEntity)
+    {
+      Debug.Log("Triggered!");
+    }
   }
 }

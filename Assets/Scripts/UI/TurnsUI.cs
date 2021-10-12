@@ -12,14 +12,14 @@ namespace UI
     private void Start()
     {
       Destroy(transform.GetChild(0).gameObject);
-      TurnManager.Instance.TurnEntityAdded += OnTurnEntityAdded;
-      TurnManager.Instance.TurnChanged += OnTurnChanged;
+      TurnManager.instance.TurnEntityAdded += OnTurnEntityAdded;
+      TurnManager.instance.TurnChanged += OnTurnChanged;
     }
 
     private void OnDestroy()
     {
-      TurnManager.Instance.TurnEntityAdded -= OnTurnEntityAdded;
-      TurnManager.Instance.TurnChanged -= OnTurnChanged;
+      TurnManager.instance.TurnEntityAdded -= OnTurnEntityAdded;
+      TurnManager.instance.TurnChanged -= OnTurnChanged;
     }
 
     private void Rebuild()
@@ -29,7 +29,7 @@ namespace UI
         Destroy(child.gameObject);
       }
       
-      var queue = TurnManager.Instance.PeekQueue(queueSize);
+      var queue = TurnManager.instance.PeekQueue(queueSize);
 
       foreach (var entity in queue)
       {

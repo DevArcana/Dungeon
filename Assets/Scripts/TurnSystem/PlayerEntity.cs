@@ -29,7 +29,7 @@ namespace TurnSystem
 
         if (enemy != null)
         {
-          var turnManager = TurnManager.Instance;
+          var turnManager = TurnManager.instance;
           TransactionBase transaction = new AttackTransaction(this, enemy, 20);
 
           if (!turnManager.CanProcessTransaction(transaction))
@@ -42,7 +42,7 @@ namespace TurnSystem
         else
         {
           var transaction = new MoveTransaction(this, mapPos);
-          TurnManager.Instance.EnqueueTransaction(transaction);
+          TurnManager.instance.EnqueueTransaction(transaction);
         }
       }
     }

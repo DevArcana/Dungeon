@@ -13,7 +13,7 @@ namespace UI
     private void Start()
     {
       Destroy(transform.GetChild(0).gameObject);
-      TurnManager.Instance.ActionPoints.ActionPointsChanged += OnActionPointsChanged;
+      TurnManager.instance.ActionPoints.ActionPointsChanged += OnActionPointsChanged;
 
       _actionPoints = new ActionPoint[ActionPointsHolder.MaxActionPoints];
       for (var i = 0; i < ActionPointsHolder.MaxActionPoints; i++)
@@ -26,7 +26,7 @@ namespace UI
 
     private void OnDestroy()
     {
-      TurnManager.Instance.ActionPoints.ActionPointsChanged -= OnActionPointsChanged;
+      TurnManager.instance.ActionPoints.ActionPointsChanged -= OnActionPointsChanged;
     }
 
     private void OnActionPointsChanged(object sender, EventArgs args)
@@ -36,7 +36,7 @@ namespace UI
 
     private void Refresh()
     {
-      var ap = TurnManager.Instance.ActionPoints;
+      var ap = TurnManager.instance.ActionPoints;
       for (var i = 1; i <= _actionPoints.Length; i++)
       {
         var actionPoint = _actionPoints[i - 1];

@@ -8,16 +8,19 @@ namespace TurnSystem
 {
   public class TurnManager : MonoBehaviour
   {
-    public static TurnManager Instance { get; private set; }
+    public static TurnManager instance;
     
     private void Awake()
     {
-      if (Instance != null)
+      if (instance == null)
       {
-        Debug.LogWarning("Multiple turn managers in scene!");
+        instance = this;
       }
-
-      Instance = this;
+      else if (instance != this)
+      {
+        Destroy(gameObject);
+      }
+      
       DontDestroyOnLoad(gameObject);
     }
 

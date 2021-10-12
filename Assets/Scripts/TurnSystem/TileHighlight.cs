@@ -18,7 +18,7 @@ namespace TurnSystem
 
     private void Update()
     {
-      if (TurnManager.Instance.CurrentTurnTaker is PlayerEntity)
+      if (TurnManager.instance.CurrentTurnTaker is PlayerEntity)
       {
         Highlighted(true);
         if (Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out var hit))

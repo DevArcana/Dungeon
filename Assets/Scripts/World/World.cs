@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using World.Common;
 using World.Entities;
 using World.Level;
@@ -29,14 +30,13 @@ namespace World
       
       foreach (var e in entities)
       {
-        switch (e.CollisionType)
+        switch (e)
         {
-          case EntityCollisionType.Solid:
-            throw new ApplicationException("Multiple solid entities on the same tile!");
-          case EntityCollisionType.Trigger:
+          case GridLivingEntity _:
+            throw new ApplicationException("There is more than one living entity on the same tile!");
+          case GridTriggerEntity trigger:
+            trigger.OnTrigger(entity);
             break;
-          default:
-            throw new ArgumentOutOfRangeException();
         }
       }
 
@@ -81,6 +81,13 @@ namespace World
       }
 
       DontDestroyOnLoad(gameObject);
+    }
+
+    public void LoadNextFloor()
+    {
+      _entities.Clear();
+      _levelProvider.Generate();
+      SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
     }
   }
 }

@@ -20,7 +20,7 @@ namespace World.Entities
       Highlighted(false);
       
       // register
-      TurnManager.Instance.RegisterTurnBasedEntity(this);
+      TurnManager.instance.RegisterTurnBasedEntity(this);
       World.instance.Register(this);
     }
 

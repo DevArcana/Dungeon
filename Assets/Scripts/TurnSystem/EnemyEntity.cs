@@ -9,11 +9,11 @@ namespace TurnSystem
   {
     private void Update()
     {
-      if (TurnManager.Instance.CurrentTurnTaker == this && !TurnManager.Instance.TransactionPending)
+      if (TurnManager.instance.CurrentTurnTaker == this && !TurnManager.instance.TransactionPending)
       {
         var pos = MapUtils.ToMapPos(transform.position);
         var transaction = new MoveTransaction(this,  pos.North);
-        TurnManager.Instance.EnqueueTransaction(transaction);
+        TurnManager.instance.EnqueueTransaction(transaction);
       }
     }
   }
