@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Transactions;
-using TurnSystem;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Utils;
 using World.Common;
 using World.Entities;
 using World.Level;
@@ -18,8 +17,18 @@ namespace World
     private LevelProvider _levelProvider;
     private readonly Dictionary<GridPos, List<GridEntity>> _entities = new Dictionary<GridPos, List<GridEntity>>();
 
+    /// <summary>
+    /// Gets height of the heightmap at specified coordinates.
+    /// </summary>
+    /// <param name="pos">position on the grid</param>
+    /// <returns>height at given point</returns>
     public byte GetHeightAt(GridPos pos) => _levelProvider.heightmap[pos.x, pos.y];
 
+    /// <summary>
+    /// Adds a given entity to the list of entities in a given tile.
+    /// </summary>
+    /// <param name="entity">entity to register</param>
+    /// <exception cref="ApplicationException">thrown if two living entities exist on the same tile</exception>
     public void Register(GridEntity entity)
     {
       var pos = entity.GridPos;
@@ -45,6 +54,10 @@ namespace World
       entities.Add(entity);
     }
 
+    /// <summary>
+    /// Remove entity from a given tile.
+    /// </summary>
+    /// <param name="entity">entity to remove</param>
     public void Unregister(GridEntity entity)
     {
       var pos = entity.GridPos;
@@ -56,6 +69,11 @@ namespace World
       }
     }
 
+    /// <summary>
+    /// Gets a list of all entities existing on a given tile.
+    /// </summary>
+    /// <param name="pos">point on the grid</param>
+    /// <returns>a list of grid entities</returns>
     public IEnumerable<GridEntity> GetEntities(GridPos pos)
     {
       if (!_entities.ContainsKey(pos))
@@ -65,6 +83,11 @@ namespace World
 
       return _entities[pos];
     }
+
+    /// <summary>
+    /// Reactive variable showing current floor of the dungeon.
+    /// </summary>
+    public ReactiveVariable<int> currentFloor = new ReactiveVariable<int>();
 
     private void Start()
     {
@@ -96,6 +119,8 @@ namespace World
       {
         _levelProvider.Generate();
       }
+
+      currentFloor.CurrentValue++;
     }
   }
 }
