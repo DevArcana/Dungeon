@@ -1,12 +1,12 @@
-﻿using Grid;
-using Map;
+﻿using System.Linq;
 using Transactions;
 using UnityEngine;
 using Utils;
+using World.Entities;
 
 namespace TurnSystem
 {
-  public class PlayerEntity : GridEntity
+  public class PlayerEntity : GridLivingEntity
   {
     public GameObject projectilePrefab;
     public GameObject impactPrefab;
@@ -25,9 +25,9 @@ namespace TurnSystem
       if (Input.GetMouseButtonDown(0) && Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out var hit))
       {
         var mapPos = MapUtils.ToMapPos(hit.point);
-        var occupant = WorldDataProvider.Instance.GetData(mapPos)?.occupant;
+        var enemy = (EnemyEntity) World.World.instance.GetEntities(mapPos).FirstOrDefault(x => x is EnemyEntity);
 
-        if (occupant != null && occupant is EnemyEntity enemy)
+        if (enemy != null)
         {
           var turnManager = TurnManager.Instance;
           TransactionBase transaction = new AttackTransaction(this, enemy, 20);

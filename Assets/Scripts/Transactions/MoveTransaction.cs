@@ -1,8 +1,9 @@
-﻿using Grid;
-using Map;
+﻿using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
 using Utils;
+using World.Common;
+using World.Entities;
 
 namespace Transactions
 {
@@ -13,7 +14,7 @@ namespace Transactions
 
     private Vector3 _velocity;
     
-    public MoveTransaction(GridEntity movedEntity, GridPos targetPosition) : base(0, movedEntity)
+    public MoveTransaction(GridLivingEntity movedEntity, GridPos targetPosition) : base(0, movedEntity)
     {
       _targetEntity = movedEntity;
       _targetPosition = MapUtils.ToWorldPos(targetPosition);
@@ -23,16 +24,12 @@ namespace Transactions
 
     public override bool CanExecute()
     {
-      return WorldDataProvider.Instance.GetData(MapUtils.ToMapPos(_targetPosition))?.occupant == null;
+      return World.World.instance.GetEntities(MapUtils.ToMapPos(_targetPosition)).All(x => x.CollisionType != EntityCollisionType.Solid);
     }
 
     protected override void Start()
     {
-      var tile = WorldDataProvider.Instance.GetData(_targetEntity.GridPos);
-      if (tile != null)
-      {
-        tile.occupant = null;
-      }
+      World.World.instance.Unregister(_targetEntity);
     }
 
     protected override void Process()
@@ -58,11 +55,7 @@ namespace Transactions
 
     protected override void End()
     {
-      var tile = WorldDataProvider.Instance.GetData(MapUtils.ToMapPos(_targetPosition));
-      if (tile != null)
-      {
-        tile.occupant = _targetEntity;
-      }
+      World.World.instance.Register(_targetEntity);
     }
   }
 }

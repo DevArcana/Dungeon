@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Grid;
 using Transactions;
 using UnityEngine;
+using World.Entities;
 
 namespace TurnSystem
 {
@@ -21,29 +21,29 @@ namespace TurnSystem
       DontDestroyOnLoad(gameObject);
     }
 
-    private readonly List<GridEntity> _entities = new List<GridEntity>();
+    private readonly List<GridLivingEntity> _entities = new List<GridLivingEntity>();
 
-    public GridEntity CurrentTurnTaker => _entities.Count > 0 ? _entities[0] : null;
+    public GridLivingEntity CurrentTurnTaker => _entities.Count > 0 ? _entities[0] : null;
 
     public class TurnEventArgs : EventArgs
     {
-      public GridEntity Entity { get; set; }
+      public GridLivingEntity Entity { get; set; }
     }
 
     public event EventHandler<TurnEventArgs> TurnEntityAdded;
     public event EventHandler<TurnEventArgs> TurnChanged;
 
-    private void OnTurnEntityAdded(GridEntity entity)
+    private void OnTurnEntityAdded(GridLivingEntity entity)
     {
       TurnEntityAdded?.Invoke(this, new TurnEventArgs {Entity = entity});
     }
     
-    private void OnTurnChanged(GridEntity entity)
+    private void OnTurnChanged(GridLivingEntity entity)
     {
       TurnChanged?.Invoke(this, new TurnEventArgs {Entity = entity});
     }
 
-    public IEnumerable<GridEntity> PeekQueue(int count)
+    public IEnumerable<GridLivingEntity> PeekQueue(int count)
     {
       if (_entities.Count == 0)
       {
@@ -56,7 +56,7 @@ namespace TurnSystem
       }
     }
 
-    public void RegisterTurnBasedEntity(GridEntity entity)
+    public void RegisterTurnBasedEntity(GridLivingEntity entity)
     {
       var inserted = false;
       var current = CurrentTurnTaker;

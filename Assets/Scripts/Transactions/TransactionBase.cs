@@ -1,4 +1,4 @@
-﻿using Grid;
+﻿using World.Entities;
 
 namespace Transactions
 {
@@ -20,9 +20,9 @@ namespace Transactions
     /// The owner of a transaction used to check whether a transaction can be performed during their turn.
     /// </summary>
     /// <remarks>Can be null for entity invariant transactions such as global events.</remarks>
-    public GridEntity Owner { get; }
+    public GridLivingEntity Owner { get; }
 
-    protected TransactionBase(int cost, GridEntity owner = null)
+    protected TransactionBase(int cost, GridLivingEntity owner = null)
     {
       Cost = cost;
       Owner = owner;
