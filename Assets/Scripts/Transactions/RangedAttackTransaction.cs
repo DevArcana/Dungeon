@@ -1,6 +1,6 @@
 ﻿using Combat;
-using Grid;
 using UnityEngine;
+using World.Entities;
 
 namespace Transactions
 {
@@ -15,7 +15,7 @@ namespace Transactions
     private GameObject _projectile;
     private Vector3 _velocity;
     
-    public RangedAttackTransaction(GridEntity attacker, int cost, int damage, GameObject projectilePrefab, GridEntity victim, int range, GameObject impactPrefab) : base(cost, attacker)
+    public RangedAttackTransaction(GridLivingEntity attacker, int cost, int damage, GameObject projectilePrefab, GridLivingEntity victim, int range, GameObject impactPrefab) : base(cost, attacker)
     {
       _damage = damage;
       _projectilePrefab = projectilePrefab;

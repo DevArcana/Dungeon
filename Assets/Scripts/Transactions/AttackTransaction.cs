@@ -1,5 +1,5 @@
 ﻿using Combat;
-using Grid;
+using World.Entities;
 
 namespace Transactions
 {
@@ -9,7 +9,7 @@ namespace Transactions
     private readonly GridEntity _attackedEntity;
     private readonly int _damage;
 
-    public AttackTransaction(GridEntity attackingEntity, GridEntity attackedEntity, int damage) : base(1, attackingEntity)
+    public AttackTransaction(GridLivingEntity attackingEntity, GridLivingEntity attackedEntity, int damage) : base(1, attackingEntity)
     {
       _attackingEntity = attackingEntity;
       _attackedEntity = attackedEntity;

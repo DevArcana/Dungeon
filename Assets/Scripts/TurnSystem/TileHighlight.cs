@@ -1,6 +1,4 @@
-﻿using Map;
-using Map.Legacy;
-using Unity.Mathematics;
+﻿using Unity.Mathematics;
 using UnityEngine;
 using Utils;
 
@@ -29,7 +27,7 @@ namespace TurnSystem
           var y = hit.point.y;
           var z = math.round(hit.point.z);
 
-          var map = WorldDataProvider.Instance;
+          var map = World.World.instance;
           if (map != null)
           {
             y = map.GetHeightAt(MapUtils.ToMapPos(hit.point));

@@ -1,11 +1,11 @@
-﻿using Grid;
-using Transactions;
+﻿using Transactions;
 using UnityEngine;
 using Utils;
+using World.Entities;
 
 namespace TurnSystem
 {
-  public class EnemyEntity : GridEntity
+  public class EnemyEntity : GridLivingEntity
   {
     private void Update()
     {

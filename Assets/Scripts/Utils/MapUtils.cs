@@ -1,8 +1,6 @@
-﻿using Grid;
-using Map;
-using Map.Legacy;
-using Unity.Mathematics;
+﻿using Unity.Mathematics;
 using UnityEngine;
+using World.Common;
 
 namespace Utils
 {
@@ -10,7 +8,7 @@ namespace Utils
   {
     public static Vector3 ToWorldPos(GridPos pos)
     {
-      var height = WorldDataProvider.Instance.GetHeightAt(pos);
+      var height = World.World.instance.GetHeightAt(pos);
       return new Vector3(pos.x, height, pos.y);
     }
 
