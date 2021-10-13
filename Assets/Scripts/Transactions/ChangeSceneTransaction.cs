@@ -1,4 +1,5 @@
-﻿using UnityEngine.SceneManagement;
+﻿using UI;
+using UnityEngine;
 
 namespace Transactions
 {
@@ -13,7 +14,8 @@ namespace Transactions
 
     protected override void Process()
     {
-      SceneManager.LoadScene(_scene, LoadSceneMode.Single);
+      var obj = (GameObject) Object.Instantiate(Resources.Load("Level Loader"));
+      obj.GetComponent<SceneLoader>().scene = _scene;
       Finish();
     }
   }
