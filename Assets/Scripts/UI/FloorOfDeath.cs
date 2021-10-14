@@ -10,9 +10,9 @@ namespace UI
     private void Start()
     {
       _text = GetComponent<TextMeshProUGUI>();
-
+      var floor = World.World.instance.currentFloor.CurrentValue - 1;
       _text.text = World.World.instance != null
-        ? _text.text.Replace("<floor>", World.World.instance.currentFloor.CurrentValue.ToString())
+        ? _text.text.Replace("<floor>", floor.ToString())
         : "How strange... Did this scene load from incorrect place?";
     }
   }
