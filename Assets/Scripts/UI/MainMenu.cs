@@ -9,7 +9,10 @@ namespace UI
     // ReSharper disable once UnusedMember.Global
     public void Play()
     {
-      SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
+      var obj = (GameObject) Instantiate(Resources.Load("Level Loader"));
+      var loader = obj.GetComponent<SceneLoader>();
+      loader.scene = "GameScene";
+      loader.hard = true;
     }
     
     // called by Unity UI
