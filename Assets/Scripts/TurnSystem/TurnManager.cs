@@ -70,6 +70,11 @@ namespace TurnSystem
 
     public void RegisterTurnBasedEntity(GridLivingEntity entity)
     {
+      if (_entities.Contains(entity))
+      {
+        return;
+      }
+      
       var inserted = false;
       var current = CurrentTurnTaker;
       

@@ -7,8 +7,10 @@ namespace World.Entities
   public class GridLivingEntity : GridEntity
   {
     public string entityName = "Unnamed";
+    public string faction = "Enemies";
     public Sprite portrait;
     public GameObject highlight;
+    public bool autoRegister = false;
     
     public int initiative = 0;
 
@@ -20,7 +22,10 @@ namespace World.Entities
       Highlighted(false);
       
       // register
-      TurnManager.instance.RegisterTurnBasedEntity(this);
+      if (autoRegister)
+      {
+        TurnManager.instance.RegisterTurnBasedEntity(this);
+      }
       World.instance.Register(this);
     }
 
