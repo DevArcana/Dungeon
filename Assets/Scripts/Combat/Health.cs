@@ -1,9 +1,5 @@
 ﻿using System;
-using Transactions;
-using TurnSystem;
-using Unity.Mathematics;
 using UnityEngine;
-using Math = UnityEngine.ProBuilder.Math;
 
 namespace Combat
 {
@@ -33,7 +29,7 @@ namespace Combat
     /// <param name="damage">The amount of damage dealt to the entity.</param>
     public void SufferDamage(int damage)
     {
-      SetHealth(math.max(health - damage, 0));
+      SetHealth(Math.Max(health - damage, 0));
     }
 
     /// <summary>
@@ -42,7 +38,7 @@ namespace Combat
     /// <param name="heal">The amount of health restored by the entity.</param>
     public void Heal(int heal)
     {
-      SetHealth(math.min(health + heal, maxHealth));
+      SetHealth(Math.Min(health + heal, maxHealth));
     }
 
     /// <summary>

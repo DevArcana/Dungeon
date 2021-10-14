@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using Unity.Mathematics;
+﻿using System;
+using System.Linq;
 using UnityEngine;
 using Utils;
 using World.Common;
@@ -19,7 +19,7 @@ namespace Transactions
       _targetEntity = movedEntity;
       _targetPosition = MapUtils.ToWorldPos(targetPosition);
       _velocity = Vector3.zero;
-      Cost = (int) math.round((movedEntity.transform.position - _targetPosition).magnitude);
+      Cost = (int) Math.Round((movedEntity.transform.position - _targetPosition).magnitude);
     }
 
     public override bool CanExecute()
