@@ -31,7 +31,7 @@ namespace World.Level
 
     private void BuildMesh(Heightmap map)
     {
-      for (byte i = 0; i < settings.layers && i < layers.Length; i++)
+      for (byte i = 0; i <= settings.layers && i < layers.Length; i++)
       {
         var obj = new GameObject($"Layer {i}");
         obj.transform.SetParent(transform);

@@ -49,7 +49,24 @@ namespace World.Level.Generation
       layer = ca.Result;
       
       map.ApplyLayerAt(layer, 0);
+      map.ApplyLayerAt(layer, 1);
+      map.ApplyLayerAt(layer, 2);
 
+      var copy = layer.Copy();
+      for (var y = 0; y < layer.height; y++)
+      {
+        for (var x = 0; x < layer.width; x++)
+        {
+          var c = copy.CountWallsInRadius(x, y, 2);
+          if (c > 5)
+          {
+            layer[x, y] = true;
+          }
+        }
+      }
+
+      map.ApplyLayerAt(layer, 0);
+      
       return map;
     }
   }

@@ -13,26 +13,6 @@ namespace World.Level.Generation
       _buffer = layer.Copy();
     }
 
-    private int CountWallsInRadius(int x, int y, int r)
-    {
-      var count = 0;
-      
-      for (var j = y - r; j <= y + r; j++)
-      {
-        for (var i = x - r; i <= x + r; i++)
-        {
-          if (i == x && j == y) continue;
-
-          if (_layer[i, j])
-          {
-            count++;
-          }
-        }
-      }
-
-      return count;
-    }
-    
     public void Apply(int a, int b)
     {
       var w = _layer.width;
@@ -42,7 +22,7 @@ namespace World.Level.Generation
       {
         for (var x = 0; x < w; x++)
         {
-          var c = CountWallsInRadius(x, y, 1);
+          var c = _layer.CountWallsInRadius(x, y, 1);
 
           if (_layer[x, y] && c >= a)
           {

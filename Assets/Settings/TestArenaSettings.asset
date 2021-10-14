@@ -15,5 +15,5 @@ MonoBehaviour:
   seed: 0
   width: 32
   height: 32
-  layers: 2
+  layers: 5
   fillPercent: 45
