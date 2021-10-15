@@ -30,7 +30,11 @@ namespace TurnSystem
 
     private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
     {
+      _transaction = null;
+      _transactionQueue.Clear();
       _entities.Clear();
+      ActionPoints.ActionPoints = ActionPointsHolder.MaxActionPoints;
+      ActionPoints.ReservedActionPoints = 0;
     }
 
     private readonly List<GridLivingEntity> _entities = new List<GridLivingEntity>();

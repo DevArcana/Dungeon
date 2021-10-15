@@ -1,18 +1,15 @@
-﻿using System;
-using System.Linq;
-using EntityLogic;
+﻿using EntityLogic;
 using UnityEngine;
 
 namespace TurnSystem
 {
-  public class TriggerTurnRegister : MonoBehaviour
+  public class Encounter : MonoBehaviour
   {
     public string faction = "enemies";
     public GridLivingEntity[] entities;
 
     private void OnTriggerEnter(Collider other)
     {
-      Debug.Log(other.name);
       var gridEntity = other.GetComponent<GridLivingEntity>();
       if (gridEntity != null && gridEntity.faction != faction)
       {
