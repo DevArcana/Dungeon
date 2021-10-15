@@ -1,7 +1,7 @@
-﻿using Transactions;
+﻿using EntityLogic;
+using Transactions;
 using UnityEngine;
 using Utils;
-using World.Entities;
 
 namespace TurnSystem
 {

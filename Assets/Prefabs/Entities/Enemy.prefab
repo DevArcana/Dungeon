@@ -261,7 +261,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9148a081a8504198b9dcff8b3f051bfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: {fileID: 2069823116252989059}
+  entity: {fileID: 4481143655912953565}
 --- !u!1 &5958185219796975817
 GameObject:
   m_ObjectHideFlags: 0
@@ -348,8 +348,8 @@ GameObject:
   - component: {fileID: 4016761921896502214}
   - component: {fileID: 826060875}
   - component: {fileID: 527564245098237591}
-  - component: {fileID: 2069823116252989059}
   - component: {fileID: 5989213044304283006}
+  - component: {fileID: 4481143655912953565}
   m_Layer: 3
   m_Name: Enemy
   m_TagString: Untagged
@@ -389,8 +389,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   entityName: Enemy 1
+  faction: Enemies
   portrait: {fileID: 21300000, guid: 94af4a52ecadefc4eb0ab04710b72f2d, type: 3}
   highlight: {fileID: 0}
+  autoRegister: 0
   initiative: 0
   weapon:
     power: 0
@@ -411,20 +413,6 @@ CapsuleCollider:
   m_Height: 1.0181148
   m_Direction: 1
   m_Center: {x: 0, y: 0.35639787, z: 0}
---- !u!114 &2069823116252989059
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7704167482467389149}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd2ff8c54c554583adc2b87a4baf7780, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 100
-  health: 0
 --- !u!114 &5989213044304283006
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -438,6 +426,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1575596462011644933}
+--- !u!114 &4481143655912953565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7704167482467389149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd75a64c53134cbead0dc810a5c81cf6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageable:
+    maxHealth: 100
+    health: 100
 --- !u!1 &8387361508847544691
 GameObject:
   m_ObjectHideFlags: 0

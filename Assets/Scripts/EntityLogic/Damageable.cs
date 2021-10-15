@@ -1,27 +1,41 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Combat
+namespace EntityLogic
 {
-  public class Health : MonoBehaviour
+  [Serializable]
+  public class Damageable
   {
-    public int maxHealth = 100;
-    public int health;
+    [SerializeField]
+    private int maxHealth;
+    
+    [SerializeField]
+    private int health;
 
-    public class HealthChangedEventArgs : EventArgs
+    public Damageable(int maxHealth = 100)
     {
-      public readonly int health;
-      
-      public HealthChangedEventArgs(int health)
-      {
-        this.health = health;
-      }
+      health = this.maxHealth = maxHealth;
     }
     
     /// <summary>
+    /// Maximum amount of hit points an entity can have
+    /// </summary>
+    public int MaxHealth => maxHealth;
+    
+    /// <summary>
+    /// Current amount of hit points an entity has
+    /// </summary>
+    public int Health => health;
+
+    /// <summary>
     /// Fired every time the health changes.
     /// </summary>
-    public event EventHandler<HealthChangedEventArgs> HealthChanged;
+    public event Action HealthChanged;
+
+    /// <summary>
+    /// Fired when entity's health reaches zero.
+    /// </summary>
+    public event Action EntityDied;
 
     /// <summary>
     /// Causes the entity to suffer damage.
@@ -47,13 +61,18 @@ namespace Combat
     /// <param name="amount">The new amount of health to give the entity.</param>
     public void SetHealth(int amount)
     {
+      if (health == amount)
+      {
+        return;
+      }
+      
       health = amount;
-      HealthChanged?.Invoke(this, new HealthChangedEventArgs(health));
-    }
+      HealthChanged?.Invoke();
 
-    private void Start()
-    {
-      SetHealth(maxHealth);
+      if (health == 0)
+      {
+        EntityDied?.Invoke();
+      }
     }
   }
 }

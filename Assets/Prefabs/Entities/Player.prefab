@@ -93,14 +93,14 @@ GameObject:
   - component: {fileID: 1687080857}
   - component: {fileID: 4692986789365586099}
   - component: {fileID: 3408863510572672949}
-  - component: {fileID: 8998387674337165308}
+  - component: {fileID: 4389445747545231012}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &168577634632048304
 Transform:
   m_ObjectHideFlags: 0
@@ -170,7 +170,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 7957880117001265097}
---- !u!114 &8998387674337165308
+--- !u!114 &4389445747545231012
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -179,11 +179,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 775171587901771761}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd2ff8c54c554583adc2b87a4baf7780, type: 3}
+  m_Script: {fileID: 11500000, guid: fd75a64c53134cbead0dc810a5c81cf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
-  health: 0
+  damageable:
+    maxHealth: 100
+    health: 100
 --- !u!1 &2020034595098972302
 GameObject:
   m_ObjectHideFlags: 0
@@ -406,7 +407,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9148a081a8504198b9dcff8b3f051bfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: {fileID: 8998387674337165308}
+  entity: {fileID: 4389445747545231012}
 --- !u!1 &7957880117001265097
 GameObject:
   m_ObjectHideFlags: 0

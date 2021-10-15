@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
+using EntityLogic;
 using UnityEngine;
 using Utils;
 using World.Common;
-using World.Entities;
 
 namespace Transactions
 {

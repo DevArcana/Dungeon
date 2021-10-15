@@ -1,4 +1,4 @@
-﻿using Combat;
+﻿using EntityLogic;
 using TMPro;
 using UnityEngine;
 
@@ -7,19 +7,19 @@ namespace UI
   [RequireComponent(typeof(TextMeshProUGUI))]
   public class EntityStatus : MonoBehaviour
   {
-    public Health health;
+    public DamageableEntity entity;
     private TextMeshProUGUI _tmp;
 
     private void Start()
     {
       _tmp = GetComponent<TextMeshProUGUI>();
-      health.HealthChanged += OnHealthChanged;
-      _tmp.text = $"Health: {health.health}/{health.maxHealth}";
+      entity.damageable.HealthChanged += OnDamageableChanged;
+      _tmp.text = $"Health: {entity.damageable.Health}/{entity.damageable.MaxHealth}";
     }
 
-    private void OnHealthChanged(object sender, Health.HealthChangedEventArgs e)
+    private void OnDamageableChanged()
     {
-      _tmp.text = $"Health: {e.health}/{health.maxHealth}";
+      _tmp.text = $"Health: {entity.damageable.Health}/{entity.damageable.MaxHealth}";
     }
   }
 }

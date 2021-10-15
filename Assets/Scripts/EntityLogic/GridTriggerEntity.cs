@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace World.Entities
+namespace EntityLogic
 {
   public class GridTriggerEntity : GridEntity
   {

@@ -2,7 +2,7 @@
 using TurnSystem;
 using UnityEngine;
 
-namespace World.Entities
+namespace EntityLogic
 {
   public class GridLivingEntity : GridEntity
   {
@@ -26,7 +26,7 @@ namespace World.Entities
       {
         TurnManager.instance.RegisterTurnBasedEntity(this);
       }
-      World.instance.Register(this);
+      World.World.instance.Register(this);
     }
 
     public void Highlighted(bool active)

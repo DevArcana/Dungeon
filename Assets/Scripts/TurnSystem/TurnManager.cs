@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
+using EntityLogic;
 using Transactions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using World.Entities;
 
 namespace TurnSystem
 {

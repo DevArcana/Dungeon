@@ -1,4 +1,4 @@
-﻿using World.Entities;
+﻿using EntityLogic;
 
 namespace Transactions
 {

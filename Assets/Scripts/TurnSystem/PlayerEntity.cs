@@ -1,37 +1,39 @@
 ﻿using System.Linq;
-using Combat;
+using EntityLogic;
 using Transactions;
 using UnityEngine;
 using Utils;
-using World.Entities;
 
 namespace TurnSystem
 {
-  [RequireComponent(typeof(Health))]
   public class PlayerEntity : GridLivingEntity
   {
+    // prefabs
     public GameObject projectilePrefab;
     public GameObject impactPrefab;
     
+    // unity components
     private UnityEngine.Camera _camera;
-    private Health _health;
+    private DamageableEntity _damageable;
 
     protected override void Start()
     {
-      _health = GetComponent<Health>();
       base.Start();
       
       _camera = UnityEngine.Camera.main;
+      _damageable = GetComponent<DamageableEntity>();
 
-      _health.HealthChanged += OnHealthChanged;
+      _damageable.damageable.EntityDied += OnDeath;
+    }
+    
+    private void OnDestroy()
+    {
+      _damageable.damageable.EntityDied -= OnDeath;
     }
 
-    private static void OnHealthChanged(object sender, Health.HealthChangedEventArgs e)
+    private static void OnDeath()
     {
-      if (e.health <= 0)
-      {
-        TurnManager.instance.EnqueueTransaction(new ChangeSceneTransaction("DeathScene"));
-      }
+      TurnManager.instance.EnqueueTransaction(new ChangeSceneTransaction("DeathScene"));
     }
 
     private void Update()
@@ -61,13 +63,8 @@ namespace TurnSystem
       }
       else if (Input.GetButtonDown("Jump"))
       {
-        _health.SufferDamage(10);
+        _damageable.damageable.SufferDamage(10);
       }
-    }
-
-    private void OnDestroy()
-    {
-      _health.HealthChanged -= OnHealthChanged;
     }
   }
 }
