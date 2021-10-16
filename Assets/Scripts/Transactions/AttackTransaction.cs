@@ -1,7 +1,5 @@
-﻿using Combat;
-using UnityEngine;
-using World.Entities;
-﻿using EntityLogic;
+﻿using UnityEngine;
+using EntityLogic;
 
 namespace Transactions
 {

@@ -1,5 +1,5 @@
-﻿using TurnSystem;
-using World.Entities;
+﻿using EntityLogic;
+using TurnSystem;
 
 namespace Transactions
 {
