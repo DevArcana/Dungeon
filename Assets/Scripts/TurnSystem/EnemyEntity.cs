@@ -7,6 +7,7 @@ using UnityEngine;
 using Utils;
 using World.Common;
 using World.Entities;
+﻿using EntityLogic;
 
 
 namespace TurnSystem

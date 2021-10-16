@@ -1,25 +1,41 @@
 ﻿using System.Linq;
+using EntityLogic;
 using Transactions;
 using UnityEngine;
 using Utils;
-using World.Entities;
 
 namespace TurnSystem
 {
   public class PlayerEntity : GridLivingEntity
   {
+    // prefabs
     public GameObject projectilePrefab;
     public GameObject impactPrefab;
     
+    // unity components
     private UnityEngine.Camera _camera;
+    private DamageableEntity _damageable;
 
     protected override void Start()
     {
       base.Start();
       
       _camera = UnityEngine.Camera.main;
+      _damageable = GetComponent<DamageableEntity>();
+
+      _damageable.damageable.EntityDied += OnDeath;
     }
     
+    private void OnDestroy()
+    {
+      _damageable.damageable.EntityDied -= OnDeath;
+    }
+
+    private static void OnDeath()
+    {
+      TurnManager.instance.EnqueueTransaction(new ChangeSceneTransaction("DeathScene"));
+    }
+
     private void Update()
     {
       if (Input.GetMouseButtonDown(0) && Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out var hit))
@@ -45,6 +61,10 @@ namespace TurnSystem
           Debug.Log($"Player - {mapPos.x}, {mapPos.y}");
           TurnManager.instance.EnqueueTransaction(transaction);
         }
+      }
+      else if (Input.GetButtonDown("Jump"))
+      {
+        _damageable.damageable.SufferDamage(10);
       }
     }
   }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using World.Level.Common;
 using World.Level.Generation;
 using World.Level.Mesh;
@@ -30,7 +31,7 @@ namespace World.Level
 
     private void BuildMesh(Heightmap map)
     {
-      for (byte i = 0; i < settings.layers && i < layers.Length; i++)
+      for (byte i = 0; i <= settings.layers && i < layers.Length; i++)
       {
         var obj = new GameObject($"Layer {i}");
         obj.transform.SetParent(transform);
@@ -67,6 +68,17 @@ namespace World.Level
     private void Start()
     {
       Generate();
+    }
+
+    private void OnDrawGizmos()
+    {
+      for (var y = 0; y < heightmap.height; y++)
+      {
+        for (var x = 0; x < heightmap.width; x++)
+        {
+          Gizmos.DrawCube(new Vector3(x, heightmap[x, y], y), Vector3.one * 0.5f);
+        }
+      }
     }
   }
 }

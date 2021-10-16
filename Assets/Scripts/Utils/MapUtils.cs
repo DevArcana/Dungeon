@@ -1,5 +1,4 @@
-﻿using Unity.Mathematics;
-using UnityEngine;
+﻿using UnityEngine;
 using World.Common;
 
 namespace Utils
@@ -12,6 +11,6 @@ namespace Utils
       return new Vector3(pos.x, height, pos.y);
     }
 
-    public static GridPos ToMapPos(Vector3 pos) => GridPos.At((int) math.round(pos.x), (int) math.round(pos.z));
+    public static GridPos ToMapPos(Vector3 pos) => GridPos.At((int) Mathf.Round(pos.x), (int) Mathf.Round(pos.z));
   }
 }

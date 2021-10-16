@@ -2,7 +2,7 @@
 using Utils;
 using World.Common;
 
-namespace World.Entities
+namespace EntityLogic
 {
   public abstract class GridEntity : MonoBehaviour
   {
@@ -10,7 +10,7 @@ namespace World.Entities
 
     private void Start()
     {
-      World.instance.Register(this);
+      World.World.instance.Register(this);
     }
   }
 }

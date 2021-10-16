@@ -1,5 +1,4 @@
-﻿using Unity.Mathematics;
-using UnityEngine;
+﻿using UnityEngine;
 using Utils;
 
 namespace TurnSystem
@@ -23,9 +22,9 @@ namespace TurnSystem
         Highlighted(true);
         if (Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out var hit))
         {
-          var x = math.round(hit.point.x);
+          var x = Mathf.Round(hit.point.x);
           var y = hit.point.y;
-          var z = math.round(hit.point.z);
+          var z = Mathf.Round(hit.point.z);
 
           var map = World.World.instance;
           if (map != null)

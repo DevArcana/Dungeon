@@ -58,6 +58,33 @@ namespace World.Level.Common
       
       return map;
     }
+    
+    /// <summary>
+    /// Returns a number of walls surrounding a given cell.
+    /// </summary>
+    /// <param name="x">x coordinate</param>
+    /// <param name="y">y coordinate</param>
+    /// <param name="r">radius</param>
+    /// <returns>number of walls</returns>
+    public int CountWallsInRadius(int x, int y, int r)
+    {
+      var count = 0;
+      
+      for (var j = y - r; j <= y + r; j++)
+      {
+        for (var i = x - r; i <= x + r; i++)
+        {
+          if (i == x && j == y) continue;
+
+          if (this[i, j])
+          {
+            count++;
+          }
+        }
+      }
+
+      return count;
+    }
 
     /// <summary>
     /// Copies the data from the provided map

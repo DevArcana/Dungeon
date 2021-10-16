@@ -1,6 +1,7 @@
 ﻿using Combat;
 using UnityEngine;
 using World.Entities;
+﻿using EntityLogic;
 
 namespace Transactions
 {
@@ -31,7 +32,7 @@ namespace Transactions
 
     protected override void Process()
     {
-      var victimHealth = _attackedEntity.GetComponent<Health>();
+      var victimHealth = _attackedEntity.GetComponent<Damageable>();
       if (victimHealth != null)
       {
         victimHealth.SufferDamage(_damage);

@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
+using EntityLogic;
 using Transactions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using World.Entities;
 
 namespace TurnSystem
 {
@@ -30,7 +30,11 @@ namespace TurnSystem
 
     private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
     {
+      _transaction = null;
+      _transactionQueue.Clear();
       _entities.Clear();
+      ActionPoints.ActionPoints = ActionPointsHolder.MaxActionPoints;
+      ActionPoints.ReservedActionPoints = 0;
     }
 
     private readonly List<GridLivingEntity> _entities = new List<GridLivingEntity>();
@@ -70,6 +74,11 @@ namespace TurnSystem
 
     public void RegisterTurnBasedEntity(GridLivingEntity entity)
     {
+      if (_entities.Contains(entity))
+      {
+        return;
+      }
+      
       var inserted = false;
       var current = CurrentTurnTaker;
       

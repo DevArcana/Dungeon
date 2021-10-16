@@ -1,6 +1,6 @@
-﻿using Transactions;
+﻿using EntityLogic;
+using Transactions;
 using TurnSystem;
-using World.Entities;
 
 namespace Triggers
 {

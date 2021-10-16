@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using AI;
+using EntityLogic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Utils;
 using World.Common;
-using World.Entities;
 using World.Level;
 
 namespace World
