@@ -1,4 +1,5 @@
 ﻿using Combat;
+using UnityEngine;
 using World.Entities;
 
 namespace Transactions
@@ -22,8 +23,10 @@ namespace Transactions
       var victimPosition = _attackedEntity.transform.position;
       var difference = offenderPosition - victimPosition;
       var distance = difference.magnitude;
+      var heightDifference = Mathf.Abs(offenderPosition.y - victimPosition.y);
+      const float epsilon = 0.1f;
 
-      return distance <= 1.0f;
+      return distance <= 1.5f + epsilon && heightDifference < epsilon;
     }
 
     protected override void Process()

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using AI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Utils;
@@ -23,6 +25,25 @@ namespace World
     /// <param name="pos">position on the grid</param>
     /// <returns>height at given point</returns>
     public byte GetHeightAt(GridPos pos) => _levelProvider.heightmap[pos.x, pos.y];
+
+    public PathNode[,] GetAreaAround(int distance, GridPos pos)
+    {
+      var width = distance * 2 + 1;
+      var area = new PathNode[width, width];
+      var (edgeX, edgeY) = (pos.x - distance, pos.y - distance);
+
+      for (var x = 0; x < width; x++)
+      {
+        for (var y = 0; y < width; y++)
+        {
+          var currentPos = GridPos.At(x + edgeX, y + edgeY);
+          var isWalkable = !GetEntities(currentPos).Any();
+          area[x, y] = new PathNode(currentPos.x, currentPos.y, x, y, GetHeightAt(currentPos), isWalkable);
+        }
+      }
+      
+      return area;
+    }
 
     /// <summary>
     /// Adds a given entity to the list of entities in a given tile.
@@ -82,6 +103,11 @@ namespace World
       }
 
       return _entities[pos];
+    }
+
+    public Dictionary<GridPos, List<GridEntity>> GetAllMapEntities()
+    {
+      return _entities;
     }
 
     /// <summary>

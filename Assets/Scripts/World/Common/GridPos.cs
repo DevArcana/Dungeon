@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 namespace World.Common
 {
@@ -46,5 +47,6 @@ namespace World.Common
     public GridPos East => At(x + 1, y );
     public GridPos South => At(x, y - 1);
     public GridPos West => At(x - 1, y);
+    public int OneDimDistance(GridPos other) => Mathf.Max(Mathf.Abs(this.x - other.x), Mathf.Abs(this.y - other.y));
   }
 }

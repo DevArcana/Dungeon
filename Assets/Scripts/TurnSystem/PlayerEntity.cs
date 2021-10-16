@@ -42,6 +42,7 @@ namespace TurnSystem
         else
         {
           var transaction = new MoveTransaction(this, mapPos);
+          Debug.Log($"Player - {mapPos.x}, {mapPos.y}");
           TurnManager.instance.EnqueueTransaction(transaction);
         }
       }
