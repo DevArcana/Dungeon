@@ -26,7 +26,11 @@ namespace TurnSystem
         {
           _target = Pathfinding.FindClosestPlayer(pos);
           var pathFinding = new Pathfinding(pos.OneDimDistance(_target), pos);
-          _path = new Queue<GridPos>(pathFinding.FindPath(_target));
+          var path = pathFinding.FindPath(_target);
+          if (!(path is null))
+          {
+            _path = new Queue<GridPos>(path);
+          }
         }
         if (!(_path is null) && _path.Count != 0)
         {
