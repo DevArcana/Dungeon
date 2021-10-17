@@ -59,7 +59,29 @@ namespace AI
                 var currentNode = GetLowestFCostNode(_openList);
                 if (currentNode == endNode)
                 {
-                    return GetPath(endNode).Select(node => GridPos.At(node.x, node.y));
+                    var path = GetPath(endNode);
+                    for (var i = 0; i < _grid.GetLength(0); i++)
+                    {
+                        for (var j = 0; j < _grid.GetLength(1); j++)
+                        {
+                            var node = _grid[i, j];
+
+                            if (startNode == node)
+                            {
+                                Debug.DrawRay(new Vector3(node.x, node.height, node.y), Vector3.up, Color.blue, 10);
+                            }
+                            else if (endNode == node)
+                            {
+                                Debug.DrawRay(new Vector3(node.x, node.height, node.y), Vector3.up, Color.magenta, 10);
+                            }
+                            else
+                            {
+                                var isPath = path.Contains(node);
+                                Debug.DrawRay(new Vector3(node.x, node.height, node.y), Vector3.up, isPath ? Color.green : Color.red, 10);
+                            }
+                        }
+                    }
+                    return path.Select(node => GridPos.At(node.x, node.y));
                 }
 
                 _openList.Remove(currentNode);

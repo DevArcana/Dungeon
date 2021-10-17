@@ -22,15 +22,12 @@ namespace TurnSystem
       {
         var pos = MapUtils.ToMapPos(transform.position);
         Debug.Log($"Enemy - {pos.x}, {pos.y}");
-        if (TurnManager.instance.ActionPoints.ActionPoints == ActionPointsHolder.MaxActionPoints)
+        if (TurnManager.instance.ActionPoints.RemainingActionPoints == ActionPointsHolder.MaxActionPoints)
         {
           _target = Pathfinding.FindClosestPlayer(pos);
           var pathFinding = new Pathfinding(pos.OneDimDistance(_target), pos);
           var path = pathFinding.FindPath(_target);
-          if (!(path is null))
-          {
-            _path = new Queue<GridPos>(path);
-          }
+          _path = new Queue<GridPos>(path ?? Array.Empty<GridPos>());
         }
         if (!(_path is null) && _path.Count != 0)
         {

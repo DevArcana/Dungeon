@@ -7,7 +7,7 @@ namespace Transactions
     {
         public PassTurnTransaction(GridLivingEntity owner) : base(0, owner)
         {
-            Cost = TurnManager.instance.ActionPoints.ActionPoints;
+            Cost = TurnManager.instance.ActionPoints.RemainingActionPoints;
         }
     }
 }
