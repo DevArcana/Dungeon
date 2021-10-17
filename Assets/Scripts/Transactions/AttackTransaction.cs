@@ -30,12 +30,8 @@ namespace Transactions
 
     protected override void Process()
     {
-      var victimHealth = _attackedEntity.GetComponent<Damageable>();
-      if (victimHealth != null)
-      {
-        victimHealth.SufferDamage(_damage);
-      }
-      
+      var victimHealth = _attackedEntity.GetComponent<DamageableEntity>()?.damageable;
+      victimHealth?.SufferDamage(_damage);
       Finish();
     }
   }

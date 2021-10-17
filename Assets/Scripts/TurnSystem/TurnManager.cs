@@ -196,5 +196,14 @@ namespace TurnSystem
     }
 
     #endregion
+
+    /// <summary>
+    /// Unregisters a given entity from the queue.
+    /// </summary>
+    /// <param name="entity">entity to unregister</param>
+    public void UnregisterTurnBasedEntity(GridLivingEntity entity)
+    {
+      _entities.Remove(entity);
+    }
   }
 }
