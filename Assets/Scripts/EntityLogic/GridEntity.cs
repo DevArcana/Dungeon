@@ -4,7 +4,7 @@ using World.Common;
 
 namespace EntityLogic
 {
-  public abstract class GridEntity : MonoBehaviour
+  public class GridEntity : MonoBehaviour
   {
     public GridPos GridPos => MapUtils.ToMapPos(transform.position);
 

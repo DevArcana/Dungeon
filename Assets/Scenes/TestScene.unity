@@ -2634,7 +2634,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1205852612056236418, guid: 17d9304224ef7204988f85cf5d622dc8, type: 3}
       propertyPath: m_Name
-      value: Barrel
+      value: Barrel (WIP)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1205852612056236418, guid: 17d9304224ef7204988f85cf5d622dc8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2015321402422762296, guid: 17d9304224ef7204988f85cf5d622dc8, type: 3}
       propertyPath: m_RootOrder
@@ -2642,7 +2646,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2015321402422762296, guid: 17d9304224ef7204988f85cf5d622dc8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 11
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 2015321402422762296, guid: 17d9304224ef7204988f85cf5d622dc8, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2650,7 +2654,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2015321402422762296, guid: 17d9304224ef7204988f85cf5d622dc8, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 18
+      value: 19
       objectReference: {fileID: 0}
     - target: {fileID: 2015321402422762296, guid: 17d9304224ef7204988f85cf5d622dc8, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2755,3 +2759,73 @@ PrefabInstance:
       objectReference: {fileID: 1707134438}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aef783dc31990be48b840f70485601b0, type: 3}
+--- !u!1 &1922513704515332723 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1205852612056236418, guid: 17d9304224ef7204988f85cf5d622dc8, type: 3}
+  m_PrefabInstance: {fileID: 725687056963087345}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1922513704515332724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1922513704515332723}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db0c5ca105924f97a485daf36f9217b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 5
+--- !u!114 &1922513704515332725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1922513704515332723}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd75a64c53134cbead0dc810a5c81cf6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageable:
+    maxHealth: 1
+    health: 1
+--- !u!114 &1922513704515332726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1922513704515332723}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c6de971f4c34f8f88ab0daa84bbb5cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entityName: Unnamed
+  faction: Enemies
+  portrait: {fileID: 0}
+  highlight: {fileID: 0}
+  autoRegister: 0
+  initiative: 0
+  weapon:
+    power: 0
+    range: 20
+    attackPrefab: {fileID: 0}
+    isRanged: 0
+--- !u!136 &1922513704515332727
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1922513704515332723}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.28367317
+  m_Height: 0.78063256
+  m_Direction: 1
+  m_Center: {x: 0.000000029802322, y: 0.39031628, z: 0.0045024157}
