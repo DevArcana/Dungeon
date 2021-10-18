@@ -11,11 +11,29 @@ namespace EntityLogic
     [RequireComponent(typeof(PlayerEntity))]
     public class PlayerControllable : MonoBehaviour
     {
-
         private PlayerEntity _player;
         private void Start()
         {
             _player = GetComponent<PlayerEntity>();
+
+            TurnManager.instance.ActionPoints.ActionPointsChanged += OnActionPointsChanged;
+            TurnManager.instance.TurnChanged += OnTurnChanged;
+            Highlight();
+        }
+
+        private void OnDestroy()
+        {
+            TurnManager.instance.ActionPoints.ActionPointsChanged -= OnActionPointsChanged;
+            TurnManager.instance.TurnChanged -= OnTurnChanged;
+        }
+
+        private void OnTurnChanged(object sender, TurnManager.TurnEventArgs e)
+        {
+            Highlight();
+        }
+
+        private void OnActionPointsChanged(object sender, EventArgs e)
+        {
             Highlight();
         }
 
@@ -37,55 +55,72 @@ namespace EntityLogic
         {
             var s = SelectionManager.instance;
             var world = World.World.instance;
-            
+            var turns = TurnManager.instance;
+
             s.Clear();
-            
-            var playerPos = _player.GridPos;
-            
+            if (turns.CurrentTurnTaker != _player)
+            {
+                return;
+            }
+
+            var pos = _player.GridPos;
+            var cost = 0;
+            var height = world.GetHeightAt(pos);
+
+            var tiles = new Dictionary<GridPos, Tile>
+            {
+                [pos] = new Tile(pos, height, cost)
+            };
+
             var queue = new Queue<GridPos>();
-            queue.Enqueue(playerPos);
-
-            var tiles = new Dictionary<GridPos, Tile>();
-            var unavailableTiles = new List<GridPos> { playerPos };
-
+            queue.Enqueue(pos);
+            
             while (queue.Any())
             {
-                var tile = queue.Dequeue();
-                var cost = tiles.ContainsKey(tile) ? tiles[tile].cost : 0;
-                var height = world.GetHeightAt(tile);
+                var tile = tiles[queue.Dequeue()];
+
                 for (var x = -1; x <= 1; x++)
                 {
                     for (var y = -1; y <= 1; y++)
                     {
                         if (x == 0 && y == 0) continue;
-                        var pos = GridPos.At(x + tile.x, y + tile.y);
-                        if (unavailableTiles.Contains(pos)) continue;
-                        if (world.GetEntities(pos).Any())
-                        {
-                            unavailableTiles.Add(pos);
-                            continue;
-                        }
-                        var h = world.GetHeightAt(pos);
-                        var dif = Math.Abs(height - h);
-                        if (dif > 1) continue;
-                        Tile t;
+                        
+                        pos = GridPos.At(x + tile.gridPos.x, y + tile.gridPos.y);
+                        if (pos == _player.GridPos) continue;
+
                         if (tiles.ContainsKey(pos))
                         {
-                            t = tiles[pos];
+                            var neighbour = tiles[pos];
+                            var heightDifference = Math.Abs(tile.height - neighbour.height);
+                            if (heightDifference > 1) continue;
+
+                            cost = tile.cost + heightDifference + 1;
+                            if (cost < neighbour.cost)
+                            {
+                                neighbour.cost = cost;
+                                if (neighbour.cost <= TurnManager.instance.ActionPoints.RemainingActionPoints)
+                                {
+                                    queue.Enqueue(neighbour.gridPos);
+                                }
+                            }
                         }
                         else
                         {
-                            t = new Tile(pos, h, cost + dif + 1);
-                            queue.Enqueue(pos);
-                        }
-                        if (t.cost > cost + dif + 1)
-                        {
-                            t.cost = cost + dif + 1;
-                            queue.Enqueue(pos);
-                        }
+                            height = world.GetHeightAt(pos);
+                            var heightDifference = Math.Abs(tile.height - height);
+                            
+                            if (heightDifference > 1) continue;
 
-                        if (t.cost > 5) continue;
-                        tiles[pos] = t;
+                            var neighbour = new Tile(pos, height, tile.cost + heightDifference + 1);
+                            
+                            if (world.GetEntities(pos).Any(e => e is GridLivingEntity)) continue;
+
+                            if (neighbour.cost <= TurnManager.instance.ActionPoints.RemainingActionPoints)
+                            {
+                                tiles[pos] = neighbour;
+                                queue.Enqueue(neighbour.gridPos);
+                            }
+                        }
                     }
                 }
             }

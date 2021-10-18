@@ -68,10 +68,10 @@ namespace Transactions
 
     protected override void End()
     {
-      var victimHealth = _victim.GetComponent<Damageable>();
+      var victimHealth = _victim.GetComponent<DamageableEntity>();
       if (victimHealth != null)
       {
-        victimHealth.SufferDamage(_damage);
+        victimHealth.damageable.SufferDamage(_damage);
         Object.Destroy(_projectile);
 
         if (_impactPrefab != null)
