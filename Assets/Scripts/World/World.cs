@@ -37,7 +37,7 @@ namespace World
         for (var y = 0; y < width; y++)
         {
           var currentPos = GridPos.At(x + edgeX, y + edgeY);
-          var isWalkable = !GetEntities(currentPos).Any();
+          var isWalkable = IsWalkable(currentPos);
           area[x, y] = new PathNode(currentPos.x, currentPos.y, x, y, GetHeightAt(currentPos), isWalkable);
         }
       }
@@ -90,24 +90,24 @@ namespace World
       }
     }
 
-    /// <summary>
-    /// Gets a list of all entities existing on a given tile.
-    /// </summary>
-    /// <param name="pos">point on the grid</param>
-    /// <returns>a list of grid entities</returns>
-    public IEnumerable<GridEntity> GetEntities(GridPos pos)
+    public GridEntity GetEntity(GridPos pos)
     {
-      if (!_entities.ContainsKey(pos))
-      {
-        return Array.Empty<GridEntity>();
-      }
-
-      return _entities[pos];
+      var worldPos = MapUtils.ToWorldPos(pos);
+      var colliders = Physics.OverlapBox(worldPos, Vector3.one * 0.5f, Quaternion.identity, LayerMask.GetMask("Entities"));
+      if (colliders == null || !colliders.Any()) return null;
+      return colliders[0].GetComponent<GridEntity>();
     }
 
-    public Dictionary<GridPos, List<GridEntity>> GetAllMapEntities()
+    /// <summary>
+    /// Determines whether a tile is possible to be walked on.
+    /// </summary>
+    /// <remarks>Checks whether a tile contains colliders on the "entities" layer.</remarks>
+    /// <param name="pos">position to check</param>
+    /// <returns>boolean indicating whether a tile is walkable</returns>
+    public bool IsWalkable(GridPos pos)
     {
-      return _entities;
+      var worldPos = MapUtils.ToWorldPos(pos);
+      return !Physics.CheckBox(worldPos, Vector3.one * 0.5f, Quaternion.identity, LayerMask.GetMask("Entities"));
     }
 
     /// <summary>

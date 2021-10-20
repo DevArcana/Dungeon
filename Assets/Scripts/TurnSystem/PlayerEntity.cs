@@ -41,7 +41,7 @@ namespace TurnSystem
       if (Input.GetMouseButtonDown(0) && Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out var hit))
       {
         var mapPos = MapUtils.ToMapPos(hit.point);
-        var enemy = (EnemyEntity) World.World.instance.GetEntities(mapPos).FirstOrDefault(x => x is EnemyEntity);
+        var enemy = World.World.instance.GetEntity(mapPos) as EnemyEntity;
 
         if (enemy != null)
         {

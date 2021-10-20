@@ -113,7 +113,7 @@ namespace EntityLogic
 
                             var neighbour = new Tile(pos, height, tile.cost + heightDifference + 1);
                             
-                            if (world.GetEntities(pos).Any(e => e is GridLivingEntity)) continue;
+                            if (!world.IsWalkable(pos)) continue;
 
                             if (neighbour.cost <= TurnManager.instance.ActionPoints.RemainingActionPoints)
                             {

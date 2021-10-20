@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 9096109393378609561}
   - component: {fileID: 309598983318980145}
   - component: {fileID: 3417573728918854790}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -126,7 +126,7 @@ GameObject:
   - component: {fileID: 6941971925771060963}
   - component: {fileID: 3245504739252997067}
   - component: {fileID: 4229103568838079585}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -273,7 +273,7 @@ GameObject:
   - component: {fileID: 8727204994350591869}
   - component: {fileID: 938976841679183383}
   - component: {fileID: 9151589125777789576}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -350,7 +350,7 @@ GameObject:
   - component: {fileID: 527564245098237591}
   - component: {fileID: 5989213044304283006}
   - component: {fileID: 4481143655912953565}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -452,7 +452,7 @@ GameObject:
   - component: {fileID: 1488403708285157123}
   - component: {fileID: 4107705133585480403}
   - component: {fileID: 2530324049733729159}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Highlight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -540,6 +540,10 @@ PrefabInstance:
     - target: {fileID: 6414825715766418841, guid: baf9b3cbc1b6f6b43b56f9385a79686f, type: 3}
       propertyPath: m_Name
       value: Sparks
+      objectReference: {fileID: 0}
+    - target: {fileID: 6414825715766418841, guid: baf9b3cbc1b6f6b43b56f9385a79686f, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 8233687240993079132, guid: baf9b3cbc1b6f6b43b56f9385a79686f, type: 3}
       propertyPath: m_RootOrder
@@ -647,6 +651,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bonfire
       objectReference: {fileID: 0}
+    - target: {fileID: 2638059524896002995, guid: 66827c59bc6abbc4ca6634d6c119529d, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 3023433562790035600, guid: 66827c59bc6abbc4ca6634d6c119529d, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -747,7 +755,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6861735139374745379, guid: a8cd22adf1bd6094eb4832b03a475bb8, type: 3}
       propertyPath: m_Layer
-      value: 3
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a8cd22adf1bd6094eb4832b03a475bb8, type: 3}

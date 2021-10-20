@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2267620328811973510}
   - component: {fileID: 5475311530065985890}
   - component: {fileID: 2210300531590852151}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Highlight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 3408863510572672949}
   - component: {fileID: 4389445747545231012}
   - component: {fileID: 8706016168830317113}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -209,7 +209,7 @@ GameObject:
   - component: {fileID: 1803322066150903082}
   - component: {fileID: 4038063600568756572}
   - component: {fileID: 1153433104248351611}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -285,7 +285,7 @@ GameObject:
   - component: {fileID: 5679663485178849507}
   - component: {fileID: 4091748028434352528}
   - component: {fileID: 5809974059145815405}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -434,7 +434,7 @@ GameObject:
   - component: {fileID: 6550481097541250150}
   - component: {fileID: 3476651129548624053}
   - component: {fileID: 2695626831861988037}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -592,7 +592,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6861735139374745379, guid: a8cd22adf1bd6094eb4832b03a475bb8, type: 3}
       propertyPath: m_Layer
-      value: 3
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a8cd22adf1bd6094eb4832b03a475bb8, type: 3}

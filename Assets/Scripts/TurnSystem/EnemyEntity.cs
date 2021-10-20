@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using AI;
 using Transactions;
 using UnityEngine;
@@ -38,7 +37,7 @@ namespace TurnSystem
         if (pos.OneDimDistance(_target) == 1)
         {
           var map = World.World.instance;
-          var attackedEntity = (PlayerEntity) map.GetEntities(_target).FirstOrDefault(x => x is PlayerEntity);
+          var attackedEntity = map.GetEntity(_target) as PlayerEntity;
           TransactionBase transaction = new AttackTransaction(this, attackedEntity, 10);
           if (!TurnManager.instance.CanProcessTransaction(transaction))
           {

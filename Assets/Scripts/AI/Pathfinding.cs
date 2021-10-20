@@ -203,19 +203,17 @@ namespace AI
 
         public static GridPos FindClosestPlayer(GridPos startPos)
         {
-            var map = World.World.instance;
-            var entities = map.GetAllMapEntities();
+            var entities = TurnManager.instance.PeekQueue().Where(e => e is PlayerEntity);
             var lowestDistance = int.MaxValue;
-            GridPos target = new GridPos(0,0);
-            foreach (var gridTile in entities)
+            
+            var target = new GridPos(0,0);
+            
+            foreach (var entity in entities)
             {
-                if (gridTile.Value.OfType<PlayerEntity>().Any())
-                {
-                    var distance = Mathf.Abs(startPos.x - gridTile.Key.x) + Mathf.Abs(startPos.y - gridTile.Key.y);
-                    if (distance >= lowestDistance) continue;
-                    lowestDistance = distance;
-                    target = gridTile.Key;
-                }
+                var distance = Mathf.Abs(startPos.x - entity.GridPos.x) + Mathf.Abs(startPos.y - entity.GridPos.y);
+                if (distance >= lowestDistance) continue;
+                lowestDistance = distance;
+                target = entity.GridPos;
             }
 
             return target;

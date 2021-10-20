@@ -72,6 +72,11 @@ namespace TurnSystem
       }
     }
 
+    public IEnumerable<GridLivingEntity> PeekQueue()
+    {
+      return _entities;
+    }
+
     public void RegisterTurnBasedEntity(GridLivingEntity entity)
     {
       if (_entities.Contains(entity))
