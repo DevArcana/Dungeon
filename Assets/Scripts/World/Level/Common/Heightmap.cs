@@ -10,7 +10,7 @@ namespace World.Level.Common
     public int height;
 
     [SerializeField]
-    private Matrix<byte> heightmap;
+    private byte[] heightmap;
 
     private byte _maxHeight;
 
@@ -18,7 +18,7 @@ namespace World.Level.Common
     {
       this.width = width;
       this.height = height;
-      heightmap = new Matrix<byte>(width, height);
+      heightmap = new byte[width * height];
       _maxHeight = maxHeight;
     }
 
@@ -43,7 +43,7 @@ namespace World.Level.Common
       {
         for (var x = 0; x < width; x++)
         {
-          data[x, y] = heightmap[x, y] == level + 1;
+          data[x, y] = heightmap[x + y * width] == level + 1;
         }
       }
 
@@ -52,35 +52,44 @@ namespace World.Level.Common
 
     /// <summary>
     /// Applies a layer at a given level.
-    /// When the height at said level is equal to the level, it sets the height to either level or one higher depending on layer.
-    /// Otherwise, it does nothing.
     /// </summary>
     /// <param name="layer"></param>
     /// <param name="level"></param>
-    public void ApplyLayerAt(MapLayer layer, byte level)
+    /// <param name="carve"></param>
+    public void ApplyLayerAt(MapLayer layer, byte level, bool carve = false)
     {
       for (var y = 0; y < height; y++)
       {
         for (var x = 0; x < width; x++)
         {
-          var h = heightmap[x, y];
-          
-          if (h == level || h == level + 1)
+          if (layer[x, y] && !(x == 0 || y == 0 || x == width - 1 || y == height - 1) && heightmap[x + y * width] < level)
           {
-            h = layer[x, y] ? (byte) (h + 1) : h;
+            heightmap[x + y * width] = level;
           }
-
-          heightmap[x, y] = h;
+        }
+      }
+    }
+    
+    public void CarveLayerTo(MapLayer layer, byte level)
+    {
+      for (var y = 0; y < height; y++)
+      {
+        for (var x = 0; x < width; x++)
+        {
+          if (!layer[x, y] && !(x == 0 || y == 0 || x == width - 1 || y == height - 1) && heightmap[x + y * width] > level)
+          {
+            heightmap[x + y * width] = level;
+          }
         }
       }
     }
     
     public byte this[int x, int y]
     {
-      get => IsWithinBounds(x, y) ? heightmap[x, y] : _maxHeight;
+      get => IsWithinBounds(x, y) ? heightmap[x + y * width] : _maxHeight;
       set
       {
-        heightmap[x, y] = value;
+        heightmap[x + y * width] = value;
 
         if (value > _maxHeight)
         {

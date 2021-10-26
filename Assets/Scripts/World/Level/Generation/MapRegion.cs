@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using World.Common;
+using World.Level.Common;
 
-namespace World.Level.Generation.Legacy
+namespace World.Level.Generation
 {
+  [Serializable]
   public class MapRegion : IComparable<MapRegion>
   {
-    public readonly List<GridPos> outline = new List<GridPos>();
-    public readonly List<GridPos> cells = new List<GridPos>();
-    public readonly List<MapRegion> connectedRegions = new List<MapRegion>();
+    public List<GridPos> outline = new List<GridPos>();
+    public List<GridPos> cells = new List<GridPos>();
+    
+    [NonSerialized]
+    public List<MapRegion> connectedRegions = new List<MapRegion>();
 
     private bool _isConnectedToRoot;
 
@@ -29,10 +33,10 @@ namespace World.Level.Generation.Legacy
 
     public int Size => cells.Count;
 
-    public MapRegion(GridPos start, int[,] map, int[,] mask, int tile)
+    public MapRegion(GridPos start, MapLayer map, MapLayer mask)
     {
-      var width = map.GetLength(0);
-      var height = map.GetLength(1);
+      var width = map.width;
+      var height = map.height;
 
       var queue = new Queue<GridPos>();
       queue.Enqueue(start);
@@ -41,7 +45,7 @@ namespace World.Level.Generation.Legacy
       {
         var x = pos.x;
         var y = pos.y;
-        return x < 0 || y < 0 || x >= width || y >= height || map[x, y] != tile;
+        return x <= 0 || y <= 0 || x >= width - 1 || y >= height - 1 || map[x, y];
       }
 
       while (queue.Count > 0)
@@ -50,9 +54,9 @@ namespace World.Level.Generation.Legacy
         var x = cell.x;
         var y = cell.y;
 
-        if (mask[x, y] == 0 && !IsDifferentTile(cell))
+        if (!mask[x, y] && !IsDifferentTile(cell))
         {
-          mask[x, y] = 1;
+          mask[x, y] = true;
 
           var left = GridPos.At(x - 1, y);
           var right = GridPos.At(x + 1, y);

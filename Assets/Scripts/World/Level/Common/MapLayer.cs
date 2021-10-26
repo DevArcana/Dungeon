@@ -23,6 +23,18 @@ namespace World.Level.Common
       this.height = height;
 
       _data = new bool[width, height];
+      
+      for (var i = 0; i < width; i++)
+      {
+        _data[i, 0] = true;
+        _data[i, height - 1] = true;
+      }
+      
+      for (var i = 0; i < height; i++)
+      {
+        _data[0, i] = true;
+        _data[width - 1, i] = true;
+      }
     }
     
     public MapLayer(bool[,] data)
@@ -108,6 +120,17 @@ namespace World.Level.Common
       }
     }
 
+    public void Add(MapLayer layer)
+    {
+      for (var y = 0; y < height; y++)
+      {
+        for (var x = 0; x < width; x++)
+        {
+          _data[x, y] = _data[x, y] || layer[x, y];
+        }
+      }
+    }
+
     /// <summary>
     /// Randomly fills the layer up to specified fill percentage (approx)
     /// </summary>
@@ -120,7 +143,14 @@ namespace World.Level.Common
       {
         for (var x = 0; x < width; x++)
         {
-          _data[x, y] = _data[x, y] || random.NextDouble() * 100.0f < fillChance;
+          if (x == 0 || y == 0 || x == width - 1 || y == height - 1)
+          {
+            _data[x, y] = true;
+          }
+          else
+          {
+            _data[x, y] = _data[x, y] || random.NextDouble() * 100.0f < fillChance;
+          }
         }
       }
     }

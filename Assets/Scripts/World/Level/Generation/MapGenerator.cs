@@ -1,11 +1,16 @@
 ﻿using System;
+using World.Level.Common;
 
 namespace World.Level.Generation
 {
+  [Serializable]
   public class MapGenerator
   {
     private readonly MapGenerationSettings _settings;
     private readonly Random _random;
+
+    public Heightmap heightmap;
+    public RegionBuilder regionBuilder;
 
     public MapGenerator(MapGenerationSettings settings)
     {
@@ -18,9 +23,9 @@ namespace World.Level.Generation
       _random = _settings.seed != 0 ? new Random(settings.seed) : new Random();
     }
 
-    public Common.Heightmap Generate()
+    public void Generate()
     {
-      var map = new Common.Heightmap(_settings.width, _settings.height, _settings.layers);
+      var map = new Heightmap(_settings.width, _settings.height, _settings.layers);
 
       // outer walls
       for (var i = 0; i < map.width; i++)
@@ -39,35 +44,50 @@ namespace World.Level.Generation
       var layer = map.GetLayerAt(0);
       layer.Randomize(_random, _settings.fillPercent);
 
+      // cellular automata
       var ca = new CellularAutomata(layer);
-
+      
       for (var i = 0; i < 5; i++)
       {
         ca.Apply(4, 5);
       }
-
+      
       layer = ca.Result;
-      
-      map.ApplyLayerAt(layer, 0);
-      map.ApplyLayerAt(layer, 1);
-      map.ApplyLayerAt(layer, 2);
 
-      var copy = layer.Copy();
-      for (var y = 0; y < layer.height; y++)
+      // detect regions
+      var regions = new RegionBuilder(layer);
+      regions.FillSmallRegions(30);
+      regions.EnsureConnectedness();
+      
+      heightmap = map;
+      regionBuilder = regions;
+      
+      layer = regions.Result;
+      var topLayer = layer;
+      map.ApplyLayerAt(topLayer, _settings.layers);
+
+      for (var i = _settings.layers - 2; i >= 1; i--)
       {
-        for (var x = 0; x < layer.width; x++)
+        var copy = layer.Copy();
+        copy.Randomize(_random, _settings.fillPercent * 0.5f);
+        ca = new CellularAutomata(copy);
+        
+        for (var j = 0; j < 5; j++)
         {
-          var c = copy.CountWallsInRadius(x, y, 2);
-          if (c > 5)
-          {
-            layer[x, y] = true;
-          }
+          ca.Apply(4, 5);
         }
-      }
+        
+        ca.Result.Add(layer);
+        layer = ca.Result;
 
-      map.ApplyLayerAt(layer, 0);
-      
-      return map;
+        regions = new RegionBuilder(layer);
+        regions.FillSmallRegions(15);
+        regions.EnsureConnectedness();
+        regions.CarvePassages(topLayer);
+        
+        map.ApplyLayerAt(layer, (byte) i);
+        map.CarveLayerTo(topLayer, (byte) i);
+      }
     }
   }
 }

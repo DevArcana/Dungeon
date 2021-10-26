@@ -3,7 +3,8 @@ using UnityEngine;
 
 namespace World.Common
 {
-  public readonly struct GridPos : IEquatable<GridPos>
+  [Serializable]
+  public struct GridPos : IEquatable<GridPos>
   {
     public bool Equals(GridPos other)
     {
@@ -33,8 +34,8 @@ namespace World.Common
       return !left.Equals(right);
     }
 
-    public readonly int x;
-    public readonly int y;
+    public int x;
+    public int y;
 
     public GridPos(int x, int y)
     {

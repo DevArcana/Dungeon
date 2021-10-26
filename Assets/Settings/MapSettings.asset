@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MapSettings
   m_EditorClassIdentifier: 
   seed: 0
-  width: 64
-  height: 64
-  layers: 4
-  fillPercent: 55
+  width: 32
+  height: 48
+  layers: 5
+  fillPercent: 51

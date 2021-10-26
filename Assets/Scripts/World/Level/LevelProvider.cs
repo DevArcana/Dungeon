@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using Utils;
 using World.Level.Common;
 using World.Level.Generation;
 using World.Level.Mesh;
@@ -11,7 +12,7 @@ namespace World.Level
     public bool regenerate;
     public MapGenerationSettings settings;
     public Material[] layers;
-    public Heightmap heightmap;
+    public MapGenerator generator;
 
     public void Generate(bool force = false)
     {
@@ -20,13 +21,11 @@ namespace World.Level
         return;
       }
       
-      var generator = new MapGenerator(settings);
-      var map = generator.Generate();
+      generator = new MapGenerator(settings);
+      generator.Generate();
 
-      heightmap = map;
-      
       Clear();
-      BuildMesh(map);
+      BuildMesh(generator.heightmap);
     }
 
     private void BuildMesh(Heightmap map)
@@ -72,12 +71,28 @@ namespace World.Level
 
     private void OnDrawGizmos()
     {
-      for (var y = 0; y < heightmap.height; y++)
+      for (var y = 0; y < generator.heightmap.height; y++)
       {
-        for (var x = 0; x < heightmap.width; x++)
+        for (var x = 0; x < generator.heightmap.width; x++)
         {
-          Gizmos.DrawCube(new Vector3(x, heightmap[x, y], y), Vector3.one * 0.5f);
+          Gizmos.DrawCube(new Vector3(x, generator.heightmap[x, y], y), Vector3.one * 0.5f);
         }
+      }
+
+      Gizmos.color = Color.red;
+      foreach (var region in generator.regionBuilder.Regions)
+      {
+        foreach (var cell in region.outline)
+        {
+          Gizmos.DrawCube(new Vector3(cell.x, generator.heightmap[cell.x, cell.y], cell.y), Vector3.one * 0.75f);
+        }
+      }
+
+      Gizmos.color = Color.green;
+
+      foreach (var connection in generator.regionBuilder.Connections)
+      {
+        Gizmos.DrawLine(new Vector3(connection.PosA.x, generator.heightmap[connection.PosA.x, connection.PosA.y], connection.PosA.y), new Vector3(connection.PosB.x, generator.heightmap[connection.PosB.x, connection.PosB.y], connection.PosB.y));
       }
     }
   }

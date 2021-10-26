@@ -24,7 +24,7 @@ namespace World
     /// </summary>
     /// <param name="pos">position on the grid</param>
     /// <returns>height at given point</returns>
-    public byte GetHeightAt(GridPos pos) => _levelProvider.heightmap[pos.x, pos.y];
+    public byte GetHeightAt(GridPos pos) => _levelProvider.generator.heightmap[pos.x, pos.y];
 
     public PathNode[,] GetAreaAround(int distance, GridPos pos)
     {
