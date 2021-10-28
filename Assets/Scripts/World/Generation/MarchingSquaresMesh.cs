@@ -1,30 +1,31 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using World.Common;
 
-namespace World.Level.Mesh
+namespace World.Generation
 {
-  public class MapLayerMeshProvider
+  public class MarchingSquaresMesh
   {
-    // TODO: Clean up
-    public MapLayerMeshProvider(Common.Heightmap heightmap, byte layer, bool generateWalls)
-    {
-      _layer = layer;
-      _generateWalls = generateWalls;
-      _heightmap = heightmap;
-    }
-
-    private readonly int _layer;
     private readonly bool _generateWalls;
-    private readonly Common.Heightmap _heightmap;
+
+    private readonly SerializableMap<bool> _map;
 
     private readonly List<Vector3> _vertices = new List<Vector3>();
+
     private readonly List<Vector2> _uvs = new List<Vector2>();
+
     private readonly List<int> _triangles = new List<int>();
+
+    public MarchingSquaresMesh(SerializableMap<bool> map, bool generateWalls)
+    {
+      _generateWalls = generateWalls;
+      _map = map;
+    }
 
     private class VoxelNode
     {
       public int vertexIndex;
-      public Vector3 position;
+      public readonly Vector3 position;
 
       public VoxelNode(Vector3 position)
       {
@@ -62,18 +63,16 @@ namespace World.Level.Mesh
       _uvs.Clear();
       _triangles.Clear();
 
+      _width = _map.width;
+      _height = _map.height;
 
+      _voxels = new Voxel[_width + 2, _height + 2];
 
-      _width = _heightmap.width;
-      _height = _heightmap.height;
-
-      _voxels = new Voxel[_width, _height];
-
-      for (var y = 0; y < _height; y++)
+      for (var y = -1; y <= _height; y++)
       {
-        for (var x = 0; x < _width; x++)
+        for (var x = -1; x <= _width; x++)
         {
-          _voxels[x, y] = new Voxel(new Vector3(x, 0.0f, y), _heightmap[x, y] >= _layer);
+          _voxels[x + 1, y + 1] = new Voxel(new Vector3(x, 0.0f, y), !_map.WithinBounds(x, y) || _map[x, y]);
         }
       }
     }
@@ -110,7 +109,7 @@ namespace World.Level.Mesh
 
     private int AddVertex(Vector3 position, Vector2 uv)
     {
-      _vertices.Add(SpaceDistortion.Distort(position, Vector3.up * _height));
+      _vertices.Add(position);
       _uvs.Add(uv);
       return _vertices.Count - 1;
     }
@@ -140,14 +139,17 @@ namespace World.Level.Mesh
 
     #endregion
 
-    public UnityEngine.Mesh CreateMesh()
+    public Mesh CreateMesh()
     {
       Clear();
       
-      for (var y = 0; y < _height - 1; y++)
+      for (var ty = -1; ty <= _height - 1; ty++)
       {
-        for (var x = 0; x < _width - 1; x++)
+        for (var tx = -1; tx <= _width - 1; tx++)
         {
+          var x = tx + 1;
+          var y = ty + 1;
+          
           var bottomLeft = _voxels[x, y]; // 0001
           var topLeft = _voxels[x, y + 1]; // 0010
           var topRight = _voxels[x + 1, y + 1]; // 0100
@@ -232,14 +234,12 @@ namespace World.Level.Mesh
         }
       }
       
-      // boundary walls
-      // TODO: fix seams
-      AddWall(_voxels[0, 0].corner, _voxels[_width - 1, 0].corner);
-      AddWall(_voxels[_width - 1, 0].corner, _voxels[_width - 1, _height - 1].corner);
-      AddWall(_voxels[_width - 1, _height - 1].corner, _voxels[0, _height - 1].corner);
-      AddWall(_voxels[0, _height - 1].corner, _voxels[0, 0].corner);
+      AddWall(_voxels[0, 0].corner, _voxels[_width + 1, 0].corner);
+      AddWall(_voxels[_width + 1, 0].corner, _voxels[_width + 1, _height + 1].corner);
+      AddWall(_voxels[_width + 1, _height + 1].corner, _voxels[0, _height + 1].corner);
+      AddWall(_voxels[0, _height + 1].corner, _voxels[0, 0].corner);
 
-      var mesh = new UnityEngine.Mesh
+      var mesh = new Mesh
       {
         vertices = _vertices.ToArray(),
         uv = _uvs.ToArray(),

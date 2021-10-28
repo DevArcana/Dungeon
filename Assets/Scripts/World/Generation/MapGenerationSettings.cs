@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace World.Level.Generation
+namespace World.Generation
 {
   [CreateAssetMenu(fileName = "MapSettings", menuName = "Endless Dungeon/Map Generation Settings", order = 1)]
   public class MapGenerationSettings : ScriptableObject

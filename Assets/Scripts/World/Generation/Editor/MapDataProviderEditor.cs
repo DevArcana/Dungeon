@@ -1,15 +1,15 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace World.Level.Editor
+namespace World.Generation.Editor
 {
-  [CustomEditor(typeof(LevelProvider))]
-  public class EndlessDungeonEditor : UnityEditor.Editor
+  [CustomEditor(typeof(MapDataProvider))]
+  public class MapDataProviderEditor : UnityEditor.Editor
   {
     public override void OnInspectorGUI()
     {
       base.OnInspectorGUI();
-      var dungeon = (LevelProvider) target;
+      var dungeon = (MapDataProvider) target;
 
       if (GUILayout.Button("Generate"))
       {
