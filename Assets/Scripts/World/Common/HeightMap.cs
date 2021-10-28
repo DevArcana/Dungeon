@@ -17,11 +17,25 @@ namespace World.Common
       {
         for (var x = 0; x < width; x++)
         {
-          slice[x, y] = this[x, y] == level;
+          slice[x, y] = this[x, y] >= level;
         }
       }
       
       return slice;
+    }
+
+    public void ApplyAt(SerializableMap<bool> map, byte level)
+    {
+      for (var y = 0; y < height; y++)
+      {
+        for (var x = 0; x < width; x++)
+        {
+          if (map[x, y])
+          {
+            this[x, y] = level;
+          }
+        }
+      }
     }
   }
 }

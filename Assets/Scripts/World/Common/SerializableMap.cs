@@ -18,6 +18,21 @@ namespace World.Common
       data = new T[width * height];
     }
 
+    public SerializableMap<T> Copy()
+    {
+      var copy = new SerializableMap<T>(width, height);
+      
+      for (var y = 0; y < height; y++)
+      {
+        for (var x = 0; x < width; x++)
+        {
+          copy[x, y] = this[x, y];
+        }
+      }
+
+      return copy;
+    }
+
     public bool WithinBounds(GridPos pos)
     {
       return WithinBounds(pos.x, pos.y);
