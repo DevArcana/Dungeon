@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffc2d30aaecd408090106d03c342c787, type: 3}
   m_Name: TestArenaSettings
   m_EditorClassIdentifier: 
-  seed: 0
-  width: 32
-  height: 48
+  seed: 1
+  width: 48
+  height: 32
   layers: 5
-  fillPercent: 49
+  fillPercent: 50

@@ -1,4 +1,5 @@
-﻿using World.Common;
+﻿using UnityEngine;
+using World.Common;
 
 namespace World.Generation
 {
@@ -42,14 +43,12 @@ namespace World.Generation
           var r1 = NeighboursInRadius(x, y, 1);
           var r2 = NeighboursInRadius(x, y, 2);
 
-          if (r1 <= 2)
-          {
-            _buffer[x, y] = false;
-          }
-          else if (r1 >= 5)
-          {
-            _buffer[x, y] = true;
-          }
+          _buffer[x, y] = _map[x, y];
+          
+          // if (r1 >= 4)
+          // {
+          //   _buffer[x, y] = true;
+          // }
         }
       }
 

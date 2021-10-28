@@ -38,11 +38,10 @@ namespace World.Generation
 
       var ca = new CellularAutomata(map);
       
-      ca.Apply();
-      // for (var i = 0; i < 5; i++)
-      // {
-      //   ca.Apply();
-      // }
+      for (var i = 0; i < 2; i++)
+      {
+        ca.Apply();
+      }
 
       map = ca.Result;
       
