@@ -24,9 +24,15 @@ namespace World.Generation
       {
         for (var tx = x - r; tx <= x + r; tx++)
         {
-          if (!_map.WithinBounds(tx, ty) || tx != x && ty != y && _map[tx, ty])
+          if (tx == x && ty == y) continue;
+
+          if (!_map.WithinBounds(tx, ty))
           {
-            count += 1;
+            count++;
+          }
+          else if (_map[tx, ty])
+          {
+            count++;
           }
         }
       }
@@ -41,14 +47,18 @@ namespace World.Generation
         for (var x = 0; x < _map.width; x++)
         {
           var r1 = NeighboursInRadius(x, y, 1);
-          var r2 = NeighboursInRadius(x, y, 2);
+          var r3 = NeighboursInRadius(x, y, 3);
 
           _buffer[x, y] = _map[x, y];
           
-          // if (r1 >= 4)
-          // {
-          //   _buffer[x, y] = true;
-          // }
+          if (r1 >= 5 || r3 <= 3)
+          {
+            _buffer[x, y] = true;
+          }
+          else if (r1 <= 2)
+          {
+            _buffer[x, y] = false;
+          }
         }
       }
 
