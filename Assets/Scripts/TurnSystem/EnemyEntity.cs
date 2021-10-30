@@ -24,8 +24,8 @@ namespace TurnSystem
         if (TurnManager.instance.ActionPoints.RemainingActionPoints == ActionPointsHolder.MaxActionPoints)
         {
           _target = Pathfinding.FindClosestPlayer(pos);
-          var pathFinding = new Pathfinding(pos.OneDimDistance(_target), pos);
-          var path = pathFinding.FindPath(_target);
+          var pathFinding = new Pathfinding();
+          var path = pathFinding.FindPath(pos, _target);
           _path = new Queue<GridPos>(path ?? Array.Empty<GridPos>());
         }
         if (!(_path is null) && _path.Count != 0)
