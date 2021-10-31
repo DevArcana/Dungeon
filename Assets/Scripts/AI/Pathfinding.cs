@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using EntityLogic;
 using TurnSystem;
 using UnityEngine;
 using World.Common;
@@ -17,7 +18,7 @@ namespace AI
         private HashSet<PathNode> _openList;
         private HashSet<PathNode> _closedList;
 
-        public IEnumerable<GridPos> FindPath(GridPos start, GridPos end)
+        public (List<GridPos>, int) FindPath(GridPos start, GridPos end)
         {
             var map = World.World.instance;
             var startNode = new PathNode(start.x, start.y, map.GetHeightAt(start), map.IsWalkable(start));
@@ -36,7 +37,7 @@ namespace AI
                 if (currentNode == endNode)
                 {
                     var path = GetPath(currentNode);
-                    return path.Select(node => GridPos.At(node.x, node.y));
+                    return (path.Select(node => GridPos.At(node.x, node.y)).ToList(), Mathf.FloorToInt(currentNode.gCost));
                 }
 
                 _openList.Remove(currentNode);
@@ -63,7 +64,7 @@ namespace AI
                 }
             }
 
-            return null;
+            return (null, 0);
         }
 
         private static float CalculateDistanceCost(PathNode a, PathNode b)
@@ -134,19 +135,19 @@ namespace AI
             return neighbourNodes;
         }
 
-        public static GridPos FindClosestPlayer(GridPos startPos)
+        public static GridLivingEntity FindClosestPlayer(GridPos startPos)
         {
             var entities = TurnManager.instance.PeekQueue().Where(e => e is PlayerEntity);
             var lowestDistance = int.MaxValue;
             
-            var target = new GridPos(0,0);
+            GridLivingEntity target = null;
             
             foreach (var entity in entities)
             {
                 var distance = Mathf.Abs(startPos.x - entity.GridPos.x) + Mathf.Abs(startPos.y - entity.GridPos.y);
                 if (distance >= lowestDistance) continue;
                 lowestDistance = distance;
-                target = entity.GridPos;
+                target = entity;
             }
 
             return target;
