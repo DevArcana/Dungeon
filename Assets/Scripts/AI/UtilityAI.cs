@@ -89,10 +89,12 @@ namespace AI
         private float RushPlayerUtility(GridLivingEntity entity, GridLivingEntity targetEntity)
         {
             var pathfinding = new Pathfinding();
-            var (_, distance) = pathfinding.FindPath(entity.GridPos, targetEntity.GridPos);
-            var maxDistance = ActionPointsHolder.MaxActionPoints;
-            if (distance > maxDistance || distance == 1) return 0f;
-            return Mathf.Pow(distance / (float) maxDistance, 0.333f);
+            var (_, cost) = pathfinding.FindPath(entity.GridPos, targetEntity.GridPos);
+            var maxCost = ActionPointsHolder.MaxActionPoints;
+            var map = World.World.instance;
+            var heightDifference = Mathf.Abs(map.GetHeightAt(entity.GridPos) - map.GetHeightAt(targetEntity.GridPos));
+            if (cost > maxCost || cost == 1 || heightDifference == 1 && cost == 2) return 0f;
+            return Mathf.Pow(cost / (float) maxCost, 0.333f);
         }
 
         private float PassTurnUtility(EnemyEntity entity)
