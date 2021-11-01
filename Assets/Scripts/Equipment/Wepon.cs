@@ -4,10 +4,10 @@ using UnityEngine;
 namespace Equipment
 {
     [Serializable]
-    public class Weapon
+    public class Weapon : Item
     {
         public int power;
-        public int range = 20;
+        public int range;
         public Sprite attackPrefab;
         public bool isRanged;
     }

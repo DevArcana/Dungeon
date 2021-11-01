@@ -50,7 +50,7 @@ namespace TurnSystem
 
           if (!turnManager.CanProcessTransaction(transaction))
           {
-            transaction = new RangedAttackTransaction(this, 2, 15, projectilePrefab, enemy, weapon.range, impactPrefab);
+            transaction = new RangedAttackTransaction(this, 2, 15, projectilePrefab, enemy, equipment.weapon.range, impactPrefab);
           }
           
           turnManager.EnqueueTransaction(transaction);

@@ -15,7 +15,7 @@ namespace EntityLogic
     
     public int initiative = 0;
 
-    public Weapon weapon;
+    public EntityEquipment equipment;
 
     protected virtual void Start()
     {
