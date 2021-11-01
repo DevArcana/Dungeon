@@ -1,8 +1,10 @@
 ﻿using System.Linq;
+using Abilities;
 using EntityLogic;
 using Transactions;
 using UnityEngine;
 using Utils;
+using Abilities = Abilities.Abilities;
 
 namespace TurnSystem
 {
