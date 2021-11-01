@@ -71,7 +71,7 @@ namespace AI
                     transaction = new PassTurnTransaction(entity);
                     break;
                 default:
-                    Debug.Log("Not action found");
+                    Debug.Log("No action found");
                     transaction = new PassTurnTransaction(entity);
                     break;
             }
