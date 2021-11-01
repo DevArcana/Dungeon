@@ -12,6 +12,7 @@ namespace World.Generation
     
     // serialized data
     public HeightMap heightmap;
+    public SerializableMap<int> regions;
 
     public void Generate(bool force = false)
     {
@@ -24,6 +25,7 @@ namespace World.Generation
       var result = generator.Generate();
       
       heightmap = result.heightmap;
+      regions = result.regions;
 
       Clear();
       BuildMesh();
@@ -70,6 +72,15 @@ namespace World.Generation
       Generate();
     }
 
+    private static readonly Color[] Colors = {
+      new Color(0, 0, 1),
+      new Color(0, 1, 0),
+      new Color(1, 0, 0),
+      new Color(1, 1, 0),
+      new Color(1, 0, 1),
+      new Color(0, 1, 1)
+    };
+
     private void OnDrawGizmos()
     {
       for (var y = 0; y < heightmap.height; y++)
@@ -77,6 +88,22 @@ namespace World.Generation
         for (var x = 0; x < heightmap.width; x++)
         {
           Gizmos.DrawCube(new Vector3(x, heightmap[x, y], y), Vector3.one * 0.5f);
+        }
+      }
+
+      if (regions != null)
+      {
+        for (var y = 0; y < regions.height; y++)
+        {
+          for (var x = 0; x < regions.width; x++)
+          {
+            var region = regions[x, y];
+            if (region != -1)
+            {
+              Gizmos.color = Colors[region % Colors.Length];
+              Gizmos.DrawCube(new Vector3(x, heightmap[x, y], y), Vector3.one * 0.75f);
+            }
+          }
         }
       }
     }

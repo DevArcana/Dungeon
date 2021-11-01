@@ -6,6 +6,7 @@ namespace World.Generation
   public class MapGenerationResult
   {
     public HeightMap heightmap;
+    public SerializableMap<int> regions;
   }
   
   public class MapGenerator
@@ -36,6 +37,7 @@ namespace World.Generation
         }
       }
 
+      // step 2, apply ca
       var ca = new CellularAutomata(map);
       
       for (var i = 0; i < 5; i++)
@@ -45,11 +47,16 @@ namespace World.Generation
 
       map = ca.Result;
       
+      // step 3, split into regions
+      var regions = new MapRegions(map, 30);
+
+      // finally, apply to heightmap
       heightmap.ApplyAt(map, _settings.layers);
 
       return new MapGenerationResult
       {
-        heightmap = heightmap
+        heightmap = heightmap,
+        regions = regions.Regions
       };
     }
   }

@@ -48,5 +48,11 @@ namespace World.Common
       get => data[x + y * width];
       set => data[x + y * width] = value;
     }
+    
+    public T this[GridPos pos]
+    {
+      get => data[pos.x + pos.y * width];
+      set => data[pos.x + pos.y * width] = value;
+    }
   }
 }
