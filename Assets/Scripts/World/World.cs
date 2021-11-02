@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AI;
 using EntityLogic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Utils;
 using World.Common;
 using World.Generation;
-using Random = System.Random;
 
 namespace World
 {
-  [RequireComponent(typeof(MapDataProvider))]
   public class World : MonoBehaviour
   {
     public static World instance;
@@ -99,7 +96,7 @@ namespace World
 
     private void Start()
     {
-      _mapDataProvider = GetComponent<MapDataProvider>();
+      _mapDataProvider = FindObjectOfType<MapDataProvider>();
     }
 
     private void Awake()
@@ -121,6 +118,8 @@ namespace World
     private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
     {
       _entities.Clear();
+
+      _mapDataProvider = FindObjectOfType<MapDataProvider>();
 
       if (_mapDataProvider != null)
       {
