@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffc2d30aaecd408090106d03c342c787, type: 3}
   m_Name: TestArenaSettings
   m_EditorClassIdentifier: 
-  seed: 0
-  width: 32
-  height: 48
+  seed: 1
+  width: 48
+  height: 32
   layers: 5
-  fillPercent: 49
+  fillPercent: 35
+  playerPrefab: {fileID: 168577634632048304, guid: ea9606cd225c235449bebd1807c35f68, type: 3}
+  staircasePrefab: {fileID: 971944668040218621, guid: aef783dc31990be48b840f70485601b0, type: 3}

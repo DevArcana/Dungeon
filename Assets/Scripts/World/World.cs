@@ -7,16 +7,17 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Utils;
 using World.Common;
-using World.Level;
+using World.Generation;
+using Random = System.Random;
 
 namespace World
 {
-  [RequireComponent(typeof(LevelProvider))]
+  [RequireComponent(typeof(MapDataProvider))]
   public class World : MonoBehaviour
   {
     public static World instance;
 
-    private LevelProvider _levelProvider;
+    private MapDataProvider _mapDataProvider;
     private readonly Dictionary<GridPos, List<GridEntity>> _entities = new Dictionary<GridPos, List<GridEntity>>();
 
     /// <summary>
@@ -24,7 +25,7 @@ namespace World
     /// </summary>
     /// <param name="pos">position on the grid</param>
     /// <returns>height at given point</returns>
-    public byte GetHeightAt(GridPos pos) => _levelProvider.generator.heightmap[pos.x, pos.y];
+    public byte GetHeightAt(GridPos pos) => _mapDataProvider.heightmap.WithinBounds(pos) ? _mapDataProvider.heightmap[pos.x, pos.y] : byte.MaxValue;
 
     /// <summary>
     /// Adds a given entity to the list of entities in a given tile.
@@ -98,7 +99,7 @@ namespace World
 
     private void Start()
     {
-      _levelProvider = GetComponent<LevelProvider>();
+      _mapDataProvider = GetComponent<MapDataProvider>();
     }
 
     private void Awake()
@@ -114,7 +115,6 @@ namespace World
       }
 
       DontDestroyOnLoad(gameObject);
-
       SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
@@ -122,9 +122,9 @@ namespace World
     {
       _entities.Clear();
 
-      if (_levelProvider != null)
+      if (_mapDataProvider != null)
       {
-        _levelProvider.Generate();
+        _mapDataProvider.Generate();
       }
 
       currentFloor.CurrentValue++;

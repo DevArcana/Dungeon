@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace World.Level.Generation
+namespace World.Generation
 {
   [CreateAssetMenu(fileName = "MapSettings", menuName = "Endless Dungeon/Map Generation Settings", order = 1)]
   public class MapGenerationSettings : ScriptableObject
@@ -14,5 +14,8 @@ namespace World.Level.Generation
     public byte layers = 4;
 
     public float fillPercent = 45.0f;
+    
+    public Transform playerPrefab;
+    public Transform staircasePrefab;
   }
 }
