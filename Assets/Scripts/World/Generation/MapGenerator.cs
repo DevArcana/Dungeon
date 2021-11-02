@@ -6,7 +6,7 @@ namespace World.Generation
   public class MapGenerationResult
   {
     public HeightMap heightmap;
-    public SerializableMap<int> regions;
+    public RegionsMap regions;
   }
   
   public class MapGenerator

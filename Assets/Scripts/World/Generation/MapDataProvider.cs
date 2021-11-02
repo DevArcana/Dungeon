@@ -12,7 +12,7 @@ namespace World.Generation
     
     // serialized data
     public HeightMap heightmap;
-    public SerializableMap<int> regions;
+    public RegionsMap regions;
 
     public void Generate(bool force = false)
     {
