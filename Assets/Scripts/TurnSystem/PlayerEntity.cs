@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Abilities;
+using Camera;
 using EntityLogic;
 using Transactions;
 using UnityEngine;
@@ -30,7 +31,10 @@ namespace TurnSystem
     
     private void OnDestroy()
     {
-      _damageable.damageable.EntityDied -= OnDeath;
+      if (_damageable != null)
+      {
+        _damageable.damageable.EntityDied -= OnDeath;
+      }
     }
 
     private static void OnDeath()

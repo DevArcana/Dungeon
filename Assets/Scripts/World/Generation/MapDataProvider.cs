@@ -1,5 +1,7 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 using World.Common;
+using Random = System.Random;
 
 namespace World.Generation
 {
@@ -29,6 +31,27 @@ namespace World.Generation
 
       Clear();
       BuildMesh();
+      Populate();
+    }
+
+    private void Populate()
+    {
+      // put player in a random position on the map and generate a staircase
+      var allRegions = this.regions.AllRegions().ToArray();
+      var random = new Random();
+
+      var region = allRegions[random.Next(allRegions.Length)];
+      var pos = region.cells[random.Next(region.cells.Count)];
+      Instantiate(settings.playerPrefab, new Vector3(pos.x, heightmap[pos], pos.y), Quaternion.identity, transform);
+
+      var endRegion = region;
+      while (endRegion == region)
+      {
+        endRegion = allRegions[random.Next(allRegions.Length)];
+      }
+      pos = endRegion.cells[random.Next(endRegion.cells.Count)];
+      
+      Instantiate(settings.staircasePrefab, new Vector3(pos.x, heightmap[pos], pos.y), Quaternion.identity, transform);
     }
 
     private void BuildMesh()

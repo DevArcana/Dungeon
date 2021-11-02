@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 using Utils;
 using World.Common;
 using World.Generation;
+using Random = System.Random;
 
 namespace World
 {
@@ -114,7 +115,6 @@ namespace World
       }
 
       DontDestroyOnLoad(gameObject);
-
       SceneManager.sceneLoaded += OnSceneLoaded;
     }
 

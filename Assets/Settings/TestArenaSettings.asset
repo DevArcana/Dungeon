@@ -17,3 +17,5 @@ MonoBehaviour:
   height: 32
   layers: 5
   fillPercent: 35
+  playerPrefab: {fileID: 168577634632048304, guid: ea9606cd225c235449bebd1807c35f68, type: 3}
+  staircasePrefab: {fileID: 971944668040218621, guid: aef783dc31990be48b840f70485601b0, type: 3}

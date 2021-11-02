@@ -14,5 +14,8 @@ namespace World.Generation
     public byte layers = 4;
 
     public float fillPercent = 45.0f;
+    
+    public Transform playerPrefab;
+    public Transform staircasePrefab;
   }
 }
