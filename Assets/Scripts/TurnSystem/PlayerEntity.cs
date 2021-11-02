@@ -1,8 +1,10 @@
 ﻿using System.Linq;
+using Abilities;
 using EntityLogic;
 using Transactions;
 using UnityEngine;
 using Utils;
+using Abilities = Abilities.Abilities;
 
 namespace TurnSystem
 {
@@ -50,7 +52,7 @@ namespace TurnSystem
 
           if (!turnManager.CanProcessTransaction(transaction))
           {
-            transaction = new RangedAttackTransaction(this, 2, 15, projectilePrefab, enemy, weapon.range, impactPrefab);
+            transaction = new RangedAttackTransaction(this, 2, 15, projectilePrefab, enemy, equipment.weapon.range, impactPrefab);
           }
           
           turnManager.EnqueueTransaction(transaction);
@@ -58,7 +60,6 @@ namespace TurnSystem
         else
         {
           var transaction = new MoveTransaction(this, mapPos);
-          Debug.Log($"Player - {mapPos.x}, {mapPos.y}");
           TurnManager.instance.EnqueueTransaction(transaction);
         }
       }

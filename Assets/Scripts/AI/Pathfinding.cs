@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using EntityLogic;
 using TurnSystem;
 using UnityEngine;
 using World.Common;
@@ -9,46 +10,22 @@ namespace AI
 {
     public class Pathfinding
     {
+
         private const int RegularMoveCost = 1;
-        private const float DiagonalPenalizedCost = 1.1f;
+        private const float DiagonalPenalizedCost = 1.0001f;
         private const int ClimbCost = 1;
         
-        private readonly PathNode[,] _grid;
+        private HashSet<PathNode> _openList;
+        private HashSet<PathNode> _closedList;
 
-        private List<PathNode> _openList;
-        private List<PathNode> _closedList;
-        
-        public Pathfinding(int distance, GridPos start)
+        public (List<GridPos>, int) FindPath(GridPos start, GridPos end)
         {
             var map = World.World.instance;
-            _grid = map.GetAreaAround(distance, start);
-        }
+            var startNode = new PathNode(start.x, start.y, map.GetHeightAt(start), map.IsWalkable(start));
+            var endNode = new PathNode(end.x, end.y, map.GetHeightAt(end), map.IsWalkable(end));
 
-        public IEnumerable<GridPos> FindPath(GridPos end)
-        {
-            var middle = _grid.GetLength(0) / 2;
-            var startNode = _grid[middle, middle];
-
-            var xDistance = startNode.x - end.x;
-            var yDistance = startNode.y - end.y;
-            var endX = middle - xDistance;
-            var endY = middle - yDistance;
-
-            var endNode = _grid[endX, endY];
-
-            _openList = new List<PathNode> { startNode };
-            _closedList = new List<PathNode>();
-
-            for (var x = 0; x < _grid.GetLength(0); x++)
-            {
-                for (var y = 0; y < _grid.GetLength(1); y++)
-                {
-                    var pathNode = _grid[x, y];
-                    pathNode.gCost = int.MaxValue;
-                    pathNode.CalculateFCost();
-                    pathNode.previousNode = null;
-                }
-            }
+            _openList = new HashSet<PathNode> { startNode };
+            _closedList = new HashSet<PathNode>();
 
             startNode.gCost = 0;
             startNode.hCost = CalculateDistanceCost(startNode, endNode);
@@ -59,29 +36,8 @@ namespace AI
                 var currentNode = GetLowestFCostNode(_openList);
                 if (currentNode == endNode)
                 {
-                    var path = GetPath(endNode);
-                    for (var i = 0; i < _grid.GetLength(0); i++)
-                    {
-                        for (var j = 0; j < _grid.GetLength(1); j++)
-                        {
-                            var node = _grid[i, j];
-
-                            if (startNode == node)
-                            {
-                                Debug.DrawRay(new Vector3(node.x, node.height, node.y), Vector3.up, Color.blue, 10);
-                            }
-                            else if (endNode == node)
-                            {
-                                Debug.DrawRay(new Vector3(node.x, node.height, node.y), Vector3.up, Color.magenta, 10);
-                            }
-                            else
-                            {
-                                var isPath = path.Contains(node);
-                                Debug.DrawRay(new Vector3(node.x, node.height, node.y), Vector3.up, isPath ? Color.green : Color.red, 10);
-                            }
-                        }
-                    }
-                    return path.Select(node => GridPos.At(node.x, node.y));
+                    var path = GetPath(currentNode);
+                    return (path.Select(node => GridPos.At(node.x, node.y)).ToList(), Mathf.FloorToInt(currentNode.gCost));
                 }
 
                 _openList.Remove(currentNode);
@@ -96,23 +52,22 @@ namespace AI
                         continue;
                     }
                     var tempGCost = currentNode.gCost + CalculateDistanceCost(currentNode, neighbourNode);
-                    if (tempGCost >= neighbourNode.gCost || Mathf.Abs(currentNode.height - neighbourNode.height) > 1) continue;
+                    if (tempGCost >= neighbourNode.gCost
+                        || Mathf.Abs(currentNode.height - neighbourNode.height) > 1
+                        || Mathf.Floor(tempGCost) > ActionPointsHolder.MaxActionPoints * 3) continue;
                     neighbourNode.previousNode = currentNode;
                     neighbourNode.gCost = tempGCost;
                     neighbourNode.hCost = CalculateDistanceCost(neighbourNode, endNode);
                     neighbourNode.CalculateFCost();
-
-                    if (!_openList.Contains(neighbourNode))
-                    {
-                        _openList.Add(neighbourNode);
-                    }
+                    
+                    _openList.Add(neighbourNode);
                 }
             }
 
-            return null;
+            return (null, 0);
         }
 
-        private float CalculateDistanceCost(PathNode a, PathNode b)
+        private static float CalculateDistanceCost(PathNode a, PathNode b)
         {
             var xDistance = Mathf.Abs(a.x - b.x);
             var yDistance = Mathf.Abs(a.y - b.y);
@@ -123,22 +78,25 @@ namespace AI
             return straightMoves * RegularMoveCost + diagonalMoves * DiagonalPenalizedCost + heightDifference * ClimbCost;
         }
 
-        private PathNode GetLowestFCostNode(List<PathNode> pathNodes)
+        private static PathNode GetLowestFCostNode(HashSet<PathNode> pathNodes)
         {
-            var lowestFCostNode = pathNodes[0];
-            for (var i = 1; i < pathNodes.Count; i++)
+            PathNode lowestFCostNode = null;
+            foreach (var node in pathNodes)
             {
-                var currentNode = pathNodes[i];
-                if (currentNode.fCost < lowestFCostNode.fCost)
+                if (lowestFCostNode is null)
                 {
-                    lowestFCostNode = currentNode;
+                    lowestFCostNode = node;
+                    continue;
+                }
+                if (node.fCost < lowestFCostNode.fCost)
+                {
+                    lowestFCostNode = node;
                 }
             }
-
             return lowestFCostNode;
         }
         
-        private List<PathNode> GetPath(PathNode endNode)
+        private static List<PathNode> GetPath(PathNode endNode)
         {
             var path = new List<PathNode> { endNode };
             var currentNode = endNode;
@@ -153,67 +111,43 @@ namespace AI
             return path;
         }
 
-        private List<PathNode> GetNeighbourNodes(PathNode currentNode)
+        private static List<PathNode> GetNeighbourNodes(PathNode currentNode)
         {
             var neighbourNodes = new List<PathNode>();
-            
-            // W
-            if (currentNode.relativeX - 1 >= 0)
+            var map = World.World.instance;
+
+            for (var x = currentNode.x - 1; x <= currentNode.x + 1; x++)
             {
-                neighbourNodes.Add(_grid[currentNode.relativeX - 1, currentNode.relativeY]);
-                // NW
-                if (currentNode.relativeY - 1 >= 0)
+                for (var y = currentNode.y - 1; y <= currentNode.y + 1; y++)
                 {
-                    neighbourNodes.Add(_grid[currentNode.relativeX - 1, currentNode.relativeY - 1]);
+                    if (x == currentNode.x && y == currentNode.y) continue;
+                    var pos = GridPos.At(x, y);
+                    var node = new PathNode(x, y, map.GetHeightAt(pos), map.IsWalkable(pos));
+                    if (Math.Abs(node.gCost - default(float)) < 0.01f)
+                    {
+                        node.gCost = int.MaxValue;
+                        node.CalculateFCost();
+                        node.previousNode = null;
+                    }
+                    neighbourNodes.Add(node);
                 }
             }
-            // E
-            if (currentNode.relativeX + 1 < _grid.GetLength(0))
-            {
-                neighbourNodes.Add(_grid[currentNode.relativeX + 1, currentNode.relativeY]);
-                // SE
-                if (currentNode.relativeY + 1 < _grid.GetLength(1))
-                {
-                    neighbourNodes.Add(_grid[currentNode.relativeX + 1, currentNode.relativeY + 1]);
-                }
-            }
-            // N
-            if (currentNode.relativeY - 1 >= 0)
-            {
-                neighbourNodes.Add(_grid[currentNode.relativeX, currentNode.relativeY - 1]);
-                // NE
-                if (currentNode.relativeX + 1 < _grid.GetLength(0))
-                {
-                    neighbourNodes.Add(_grid[currentNode.relativeX + 1, currentNode.relativeY - 1]);
-                }
-            }
-            // S
-            if (currentNode.relativeY + 1 < _grid.GetLength(1))
-            {
-                neighbourNodes.Add(_grid[currentNode.relativeX, currentNode.relativeY + 1]);
-                // SW
-                if (currentNode.relativeX - 1 >= 0)
-                {
-                    neighbourNodes.Add(_grid[currentNode.relativeX - 1, currentNode.relativeY + 1]);
-                }
-            }
-            
             return neighbourNodes;
         }
 
-        public static GridPos FindClosestPlayer(GridPos startPos)
+        public static GridLivingEntity FindClosestPlayer(GridPos startPos)
         {
             var entities = TurnManager.instance.PeekQueue().Where(e => e is PlayerEntity);
             var lowestDistance = int.MaxValue;
             
-            var target = new GridPos(0,0);
+            GridLivingEntity target = null;
             
             foreach (var entity in entities)
             {
                 var distance = Mathf.Abs(startPos.x - entity.GridPos.x) + Mathf.Abs(startPos.y - entity.GridPos.y);
                 if (distance >= lowestDistance) continue;
                 lowestDistance = distance;
-                target = entity.GridPos;
+                target = entity;
             }
 
             return target;

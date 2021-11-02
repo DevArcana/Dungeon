@@ -26,25 +26,6 @@ namespace World
     /// <returns>height at given point</returns>
     public byte GetHeightAt(GridPos pos) => _mapDataProvider.heightmap.WithinBounds(pos) ? _mapDataProvider.heightmap[pos.x, pos.y] : byte.MaxValue;
 
-    public PathNode[,] GetAreaAround(int distance, GridPos pos)
-    {
-      var width = distance * 2 + 1;
-      var area = new PathNode[width, width];
-      var (edgeX, edgeY) = (pos.x - distance, pos.y - distance);
-
-      for (var x = 0; x < width; x++)
-      {
-        for (var y = 0; y < width; y++)
-        {
-          var currentPos = GridPos.At(x + edgeX, y + edgeY);
-          var isWalkable = IsWalkable(currentPos);
-          area[x, y] = new PathNode(currentPos.x, currentPos.y, x, y, GetHeightAt(currentPos), isWalkable);
-        }
-      }
-      
-      return area;
-    }
-
     /// <summary>
     /// Adds a given entity to the list of entities in a given tile.
     /// </summary>
