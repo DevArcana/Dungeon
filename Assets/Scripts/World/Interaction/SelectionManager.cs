@@ -23,10 +23,7 @@ namespace World.Interaction
       else if (instance != this)
       {
         Destroy(gameObject);
-        return;
       }
-
-      DontDestroyOnLoad(gameObject);
     }
 
     public void Clear()

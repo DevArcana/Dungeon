@@ -9,11 +9,6 @@ namespace UI
     public string scene;
     public bool hard = false;
 
-    private void Start()
-    {
-      DontDestroyOnLoad(gameObject);
-    }
-
     public void LoadScene()
     {
       if (hard && World.World.instance != null)

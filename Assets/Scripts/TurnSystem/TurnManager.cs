@@ -22,8 +22,6 @@ namespace TurnSystem
         Destroy(gameObject);
         return;
       }
-      
-      DontDestroyOnLoad(gameObject);
 
       SceneManager.sceneLoaded += OnSceneLoaded;
     }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using EntityLogic;
 using UnityEngine;
 using Utils;
@@ -27,11 +26,6 @@ namespace Transactions
       return World.World.instance.IsWalkable(MapUtils.ToMapPos(_targetPosition));
     }
 
-    protected override void Start()
-    {
-      World.World.instance.Unregister(_targetEntity);
-    }
-
     protected override void Process()
     {
       var transform = _targetEntity.transform;
@@ -51,11 +45,6 @@ namespace Transactions
         transform.rotation = Quaternion.LookRotation(forward.normalized);
         Finish();
       }
-    }
-
-    protected override void End()
-    {
-      World.World.instance.Register(_targetEntity);
     }
   }
 }

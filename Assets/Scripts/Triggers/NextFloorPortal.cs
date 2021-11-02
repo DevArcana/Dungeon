@@ -1,15 +1,16 @@
-﻿using EntityLogic;
-using Transactions;
+﻿using Transactions;
 using TurnSystem;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Triggers
 {
-  public class NextFloorPortal : GridTriggerEntity
+  public class NextFloorPortal : MonoBehaviour
   {
-    public override void OnTrigger(GridEntity gridEntity)
+    private void OnTriggerEnter(Collider other)
     {
       TurnManager.instance.EnqueueTransaction(new ChangeSceneTransaction(SceneManager.GetActiveScene().name));
+      Destroy(gameObject);
     }
   }
 }

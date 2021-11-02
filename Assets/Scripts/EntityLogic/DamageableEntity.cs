@@ -21,7 +21,6 @@ namespace EntityLogic
 
     private void OnDeath()
     {
-      World.World.instance.Unregister(_entity);
       Destroy(gameObject);
     }
   }

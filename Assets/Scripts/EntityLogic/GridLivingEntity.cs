@@ -1,5 +1,4 @@
-﻿using System;
-using Abilities;
+﻿using Abilities;
 using Equipment;
 using TurnSystem;
 using UnityEngine;
@@ -41,8 +40,6 @@ namespace EntityLogic
       {
         TurnManager.instance.RegisterTurnBasedEntity(this);
       }
-      
-      World.World.instance.Register(this);
     }
 
     private void OnDestroy()
