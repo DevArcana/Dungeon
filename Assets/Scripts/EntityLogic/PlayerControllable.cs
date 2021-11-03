@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AI;
+using Transactions;
 using TurnSystem;
 using UnityEngine;
 using World.Common;
@@ -127,7 +129,18 @@ namespace EntityLogic
 
             foreach (var tile in tiles.Values)
             {
-                s.Select(tile.gridPos);
+                s.Select(tile.gridPos, gridPos =>
+                {
+                    s.Clear();
+                    var pathfinding = new Pathfinding();
+                    var (path, cost) = pathfinding.FindPath(_player.GridPos, gridPos);
+                    foreach (var segment in path)
+                    {
+                        TurnManager.instance.Transactions.EnqueueTransaction(new MoveTransaction(_player, segment));
+                    }
+
+                    TurnManager.instance.Transactions.EnqueueTransaction(new PassTurnTransaction(_player));
+                });
             }
         }
     }
