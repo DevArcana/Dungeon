@@ -2,26 +2,29 @@
 using System.Collections.Generic;
 using EntityLogic;
 using Transactions;
+using UnityEngine;
+using UnityEngine.UI;
 using World.Common;
 
 namespace Abilities
 {
-  public abstract class AbilityBase
+  public abstract class AbilityBase : ScriptableObject
   {
     private TransactionBase _transaction;
+
+    public string title;
+    public string description;
+    public Image icon;
+    public AbilityTag[] tags;
     
-    public string Title { get; set; }
-    public string Description { get; set; }
-    public IEnumerable<AbilityTag> Tags { get; set; }
     public int Cost => _transaction.Cost;
 
     protected AbilityBase(GridLivingEntity owner)
     {
       _transaction = new DoNothingTransaction(owner);
-
-      Title = "Do nothing";
-      Description = "Do nothing. Menacingly.";
-      Tags = Array.Empty<AbilityTag>();
+      title = "Do nothing";
+      description = "Do nothing. Menacingly.";
+      tags = Array.Empty<AbilityTag>();
     }
     
     public abstract IEnumerable<GridPos> GetValidTargetPositions();
