@@ -1,5 +1,4 @@
-﻿using System;
-using Transactions;
+﻿using Transactions;
 using TurnSystem;
 using UnityEngine;
 using UnityEngine.UI;

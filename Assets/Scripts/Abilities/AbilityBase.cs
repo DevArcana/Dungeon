@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using EntityLogic;
 using Transactions;
+using World.Common;
 
 namespace Abilities
 {
@@ -22,5 +23,10 @@ namespace Abilities
       Description = "Do nothing. Menacingly.";
       Tags = Array.Empty<AbilityTag>();
     }
+    
+    public abstract IEnumerable<GridPos> GetValidTargetPositions();
+    public abstract IEnumerable<GridPos> GetEffectiveRange(GridPos pos);
+    public abstract int GetEffectiveCost(GridPos pos);
+    public abstract void Execute(GridPos pos);
   }
 }

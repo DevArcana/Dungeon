@@ -14,7 +14,7 @@ namespace Transactions
     private GameObject _projectile;
     private Vector3 _velocity;
     
-    public RangedAttackTransaction(GridLivingEntity attacker, int cost, int damage, GameObject projectilePrefab, GridLivingEntity victim, int range, GameObject impactPrefab) : base(cost, attacker)
+    public RangedAttackTransaction(GridLivingEntity attacker, int cost, int damage, GameObject projectilePrefab, GridLivingEntity victim, int range, GameObject impactPrefab) : base(0, attacker)
     {
       _damage = damage;
       _projectilePrefab = projectilePrefab;
