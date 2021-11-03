@@ -29,6 +29,9 @@ namespace TurnSystem
       _transactionQueue.Clear();
     }
 
+    /// <summary>
+    /// Called each frame.
+    /// </summary>
     public void ProcessTransactions()
     {
       if (_transaction == null && _transactionQueue.Count > 0)
