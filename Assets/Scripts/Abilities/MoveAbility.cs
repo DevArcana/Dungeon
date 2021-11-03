@@ -50,7 +50,7 @@ namespace Abilities
               if (cost < neighbour.cost)
               {
                 neighbour.cost = cost;
-                if (neighbour.cost <= TurnManager.instance.ActionPoints.RemainingActionPoints)
+                if (neighbour.cost <= TurnManager.instance.ActionPoints.ActionPoints)
                 {
                   queue.Enqueue(neighbour.gridPos);
                 }
@@ -67,7 +67,7 @@ namespace Abilities
 
               if (!world.IsWalkable(pos)) continue;
 
-              if (neighbour.cost <= TurnManager.instance.ActionPoints.RemainingActionPoints)
+              if (neighbour.cost <= TurnManager.instance.ActionPoints.ActionPoints)
               {
                 tiles[pos] = neighbour;
                 queue.Enqueue(neighbour.gridPos);
