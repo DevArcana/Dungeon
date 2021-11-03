@@ -1,4 +1,5 @@
 ﻿using System;
+using EntityLogic;
 using TMPro;
 using TurnSystem;
 using UnityEngine;
@@ -23,8 +24,8 @@ namespace UI
     public TextMeshProUGUI abilityButtonText3;
     public TextMeshProUGUI abilityButtonText4;
 
-    public global::Abilities.Abilities abilities;
-
+    public GridLivingEntity turnTaker;
+    
     private void Start()
     {
       abilityButton1.onClick.AddListener(() =>
@@ -47,14 +48,8 @@ namespace UI
       var turnManager = TurnManager.instance;
       turnManager.ActionPoints.ActionPointsChanged += OnActionPointsChanged;
 
-      var turnTaker = turnManager.CurrentTurnTaker;
+      turnTaker = turnManager.CurrentTurnTaker;
 
-      abilities = !(turnTaker is PlayerEntity) ? null : Abilities.Abilities.FromEntity(turnTaker);
-    
-      if (!(abilities is null))
-      {
-        abilities.AbilitySelectionChanged += OnAbilitySelectionChanged;
-      }
       turnManager.TurnChanged += OnTurnChanged;
     }
 
@@ -64,20 +59,9 @@ namespace UI
       {
         return;
       }
-    
-      if (!(abilities is null))
-      {
-        abilities.AbilitySelectionChanged -= OnAbilitySelectionChanged;
-      }
 
-      abilities = Abilities.Abilities.FromEntity(player);
-      abilities.AbilitySelectionChanged += OnAbilitySelectionChanged;
+      turnTaker = TurnManager.instance.CurrentTurnTaker;
       
-      RefreshAbilities();
-    }
-
-    private void OnAbilitySelectionChanged(object sender, global::Abilities.Abilities.AbilitySelectionChangedEventArgs e)
-    {
       RefreshAbilities();
     }
 
@@ -88,28 +72,18 @@ namespace UI
 
     private void SelectAbility(int abilityNumber)
     {
-      if (abilities is null)
+      if (turnTaker.selectedAbilityNumber == abilityNumber)
       {
+        turnTaker.selectedAbility = turnTaker.abilities[0];
         return;
       }
 
-      if (abilities.SelectedAbilityNumber == abilityNumber)
-      {
-        abilities.DeselectAbility();
-        return;
-      }
-
-      abilities.SelectAbility(abilityNumber);
+      turnTaker.selectedAbility = turnTaker.abilities[abilityNumber];
     }
 
     private void RefreshAbilities()
     {
-      if (abilities is null)
-      {
-        return;
-      }
-
-      var abilityNumber = abilities.SelectedAbilityNumber;
+      var abilityNumber = turnTaker.selectedAbilityNumber;
 
       var actionPoints = TurnManager.instance.ActionPoints.RemainingActionPoints;
 
@@ -118,14 +92,14 @@ namespace UI
       abilityButtonText3.text = "3";
       abilityButtonText4.text = "S";
 
-      var ability = abilities.Slot1;
-      abilityButtonImage1.color = abilityNumber == 1 ? Color.yellow : ability is null || ability.Cost > actionPoints ? Color.gray : Color.white;
-      ability = abilities.Slot2;
-      abilityButtonImage2.color = abilityNumber == 2 ? Color.yellow : ability is null || ability.Cost > actionPoints ? Color.gray : Color.white;
-      ability = abilities.Slot3;
-      abilityButtonImage3.color = abilityNumber == 3 ? Color.yellow : ability is null || ability.Cost > actionPoints ? Color.gray : Color.white;
-      ability = abilities.Special;
-      abilityButtonImage4.color = abilityNumber == 4 ? Color.yellow : ability is null || ability.Cost > actionPoints ? Color.gray : Color.blue;
+      var ability = turnTaker.abilities[1];
+      abilityButtonImage1.color = abilityNumber == 1 ? Color.yellow : ability is null || ability.cost > actionPoints ? Color.gray : Color.white;
+      ability = turnTaker.abilities[2];
+      abilityButtonImage2.color = abilityNumber == 2 ? Color.yellow : ability is null || ability.cost > actionPoints ? Color.gray : Color.white;
+      ability = turnTaker.abilities[3];
+      abilityButtonImage3.color = abilityNumber == 3 ? Color.yellow : ability is null || ability.cost > actionPoints ? Color.gray : Color.white;
+      ability = turnTaker.abilities[4];
+      abilityButtonImage4.color = abilityNumber == 4 ? Color.yellow : ability is null || ability.cost > actionPoints ? Color.gray : Color.blue;
     }
   }
 }

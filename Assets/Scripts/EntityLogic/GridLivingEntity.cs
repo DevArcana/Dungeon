@@ -17,18 +17,9 @@ namespace EntityLogic
 
     public EntityEquipment equipment;
 
-    public AbilityBase ability1;
-    public AbilityBase ability2;
-    public AbilityBase ability3;
-    public AbilityBase abilitySpecial;
-
-    private void Awake()
-    {
-      ability1 = new DoNothingAbility(this);
-      ability2 = new DoNothingAbility(this);
-      ability3 = new DoNothingAbility(this);
-      abilitySpecial = new DoNothingAbility(this);
-    }
+    public AbilityBase[] abilities;
+    public AbilityBase selectedAbility;
+    public int selectedAbilityNumber;
 
     protected virtual void Start()
     {

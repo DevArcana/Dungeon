@@ -9,11 +9,6 @@ namespace Abilities
   [CreateAssetMenu(fileName = "DoNothing", menuName = "Abilities/Do nothing", order = 1)]
   public class DoNothingAbility : AbilityBase
   {
-    public DoNothingAbility(GridLivingEntity owner) : base(owner)
-    {
-      
-    }
-
     public override IEnumerable<GridPos> GetValidTargetPositions()
     {
       return Array.Empty<GridPos>();
