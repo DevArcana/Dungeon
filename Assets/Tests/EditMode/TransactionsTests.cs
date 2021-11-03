@@ -80,5 +80,48 @@ namespace Tests.EditMode
       
       Assert.That(transaction.processCounter, Is.EqualTo(e));
     }
+
+    [Test]
+    public void CallAllMethodsDuringSingleRunWhenFinishedImmediately()
+    {
+      var transaction = new CounterTransaction(0);
+      Assert.That(transaction.Run(), Is.EqualTo(true));
+      Assert.That(transaction.startCounter, Is.EqualTo(1));
+      Assert.That(transaction.processCounter, Is.EqualTo(1));
+      Assert.That(transaction.endCounter, Is.EqualTo(1));
+    }
+
+    [Test]
+    public void ProcessIsNotCalledAfterFinished()
+    {
+      var transaction = new CounterTransaction(0);
+      Assert.That(transaction.Run(), Is.EqualTo(true));
+
+      for (var i = 0; i < 3; i++)
+      {
+        Assert.That(transaction.Run(), Is.EqualTo(true));
+      }
+      
+      Assert.That(transaction.startCounter, Is.EqualTo(1));
+      Assert.That(transaction.processCounter, Is.EqualTo(1));
+      Assert.That(transaction.endCounter, Is.EqualTo(1));
+    }
+
+    [Test]
+    public void EndCalledDirectlyAfterFinish()
+    {
+      var transaction = new CounterTransaction(2);
+      Assert.That(transaction.Run(), Is.EqualTo(false));
+      
+      Assert.That(transaction.startCounter, Is.EqualTo(1));
+      Assert.That(transaction.processCounter, Is.EqualTo(1));
+      Assert.That(transaction.endCounter, Is.EqualTo(0));
+      
+      Assert.That(transaction.Run(), Is.EqualTo(true));
+      
+      Assert.That(transaction.startCounter, Is.EqualTo(1));
+      Assert.That(transaction.processCounter, Is.EqualTo(2));
+      Assert.That(transaction.endCounter, Is.EqualTo(1));
+    }
   }
 }
