@@ -22,7 +22,6 @@ namespace World.Generation
       _regions = new RegionsMap(map.width, map.height);
 
       ScanRegions();
-      Antialias();
     }
 
     private void ScanRegion(int sx, int sy)
@@ -117,34 +116,6 @@ namespace World.Generation
       }
 
       return neighbours.OrderBy(x => x.Value).FirstOrDefault().Key;
-    }
-    
-    private void Antialias()
-    {
-      var regions = new SerializableMap<int>(_regions.width, _regions.height);
-      for (var y = 0; y < _regions.height; y++)
-      {
-        for (var x = 0; x < _regions.width; x++)
-        {
-          if (_regions[x, y] > 0)
-          {
-            // count neighbours in 4 cardinal directions of the same region type
-            regions[x, y] = DecideRegion(x, y);
-          }
-          else
-          {
-            regions[x, y] = -1;
-          }
-        }
-      }
-
-      for (var y = 0; y < _regions.height; y++)
-      {
-        for (var x = 0; x < _regions.width; x++)
-        {
-          _regions[x, y] = regions[x, y];
-        }
-      }
     }
   }
 }
