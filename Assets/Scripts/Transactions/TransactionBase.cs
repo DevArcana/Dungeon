@@ -1,6 +1,4 @@
-﻿using EntityLogic;
-
-namespace Transactions
+﻿namespace Transactions
 {
   /// <summary>
   /// Transaction base class. All transactions must inherit from it.
@@ -10,32 +8,6 @@ namespace Transactions
   {
     private bool _finished;
     private bool _started;
-    
-    /// <summary>
-    /// The cost in action points required to process a given transaction.
-    /// </summary>
-    public int Cost { get; protected set; }
-    
-    /// <summary>
-    /// The owner of a transaction used to check whether a transaction can be performed during their turn.
-    /// </summary>
-    /// <remarks>Can be null for entity invariant transactions such as global events.</remarks>
-    public GridLivingEntity Owner { get; }
-
-    protected TransactionBase(int cost, GridLivingEntity owner = null)
-    {
-      Cost = cost;
-      Owner = owner;
-    }
-
-    /// <summary>
-    /// Called directly before enqueuing the transaction to determine whether it's possible to execute it and also before execution.
-    /// </summary>
-    /// <returns>A boolean determining whether a transaction can be executed.</returns>
-    public virtual bool CanExecute()
-    {
-      return true;
-    }
 
     /// <summary>
     /// This method is called once at the beginning before processing the transaction.

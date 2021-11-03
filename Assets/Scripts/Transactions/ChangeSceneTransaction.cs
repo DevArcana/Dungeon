@@ -7,7 +7,7 @@ namespace Transactions
   {
     private readonly string _scene;
     
-    public ChangeSceneTransaction(string scene) : base(0)
+    public ChangeSceneTransaction(string scene)
     {
       _scene = scene;
     }

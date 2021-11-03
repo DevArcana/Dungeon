@@ -49,12 +49,6 @@ namespace TurnSystem
         {
           var turnManager = TurnManager.instance;
           TransactionBase transaction = new AttackTransaction(this, enemy, 20);
-
-          if (!turnManager.CanProcessTransaction(transaction))
-          {
-            transaction = new RangedAttackTransaction(this, 2, 15, projectilePrefab, enemy, equipment.weapon.range, impactPrefab);
-          }
-          
           turnManager.EnqueueTransaction(transaction);
         }
         else

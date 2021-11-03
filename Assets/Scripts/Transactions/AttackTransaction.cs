@@ -9,23 +9,11 @@ namespace Transactions
     private readonly GridEntity _attackedEntity;
     private readonly int _damage;
 
-    public AttackTransaction(GridLivingEntity attackingEntity, GridLivingEntity attackedEntity, int damage) : base(0, attackingEntity)
+    public AttackTransaction(GridLivingEntity attackingEntity, GridLivingEntity attackedEntity, int damage)
     {
       _attackingEntity = attackingEntity;
       _attackedEntity = attackedEntity;
       _damage = damage;
-    }
-
-    public override bool CanExecute()
-    {
-      var offenderPosition = _attackingEntity.transform.position;
-      var victimPosition = _attackedEntity.transform.position;
-      var difference = offenderPosition - victimPosition;
-      var distance = difference.magnitude;
-      var heightDifference = Mathf.Abs(offenderPosition.y - victimPosition.y);
-      const float epsilon = 0.1f;
-
-      return distance <= 1.5f + epsilon && heightDifference < epsilon;
     }
 
     protected override void Process()
