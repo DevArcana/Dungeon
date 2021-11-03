@@ -14,7 +14,7 @@ namespace UI
       var turnManager = TurnManager.instance;
       passTurnButton.onClick.AddListener(() =>
       {
-        turnManager.EnqueueTransaction(new PassTurnTransaction(turnManager.CurrentTurnTaker));
+        turnManager.Transactions.EnqueueTransaction(new PassTurnTransaction(turnManager.CurrentTurnTaker));
       });
       turnManager.TurnChanged += OnTurnChanged;
     }

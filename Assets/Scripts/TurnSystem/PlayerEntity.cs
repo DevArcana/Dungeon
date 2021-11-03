@@ -35,7 +35,7 @@ namespace TurnSystem
 
     private static void OnDeath()
     {
-      TurnManager.instance.EnqueueTransaction(new ChangeSceneTransaction("DeathScene"));
+      TurnManager.instance.Transactions.EnqueueTransaction(new ChangeSceneTransaction("DeathScene"));
     }
 
     private void Update()
@@ -49,12 +49,12 @@ namespace TurnSystem
         {
           var turnManager = TurnManager.instance;
           TransactionBase transaction = new AttackTransaction(this, enemy, 20);
-          turnManager.EnqueueTransaction(transaction);
+          turnManager.Transactions.EnqueueTransaction(transaction);
         }
         else
         {
           var transaction = new MoveTransaction(this, mapPos);
-          TurnManager.instance.EnqueueTransaction(transaction);
+          TurnManager.instance.Transactions.EnqueueTransaction(transaction);
         }
       }
       else if (Input.GetButtonDown("Jump"))

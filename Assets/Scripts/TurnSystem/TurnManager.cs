@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using EntityLogic;
-using Transactions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,6 +9,18 @@ namespace TurnSystem
   public class TurnManager : MonoBehaviour
   {
     public static TurnManager instance;
+    
+    // components
+    
+    /// <summary>
+    /// Holder for all action points related functionalities
+    /// </summary>
+    public ActionPointsHolder ActionPoints { get; } = new ActionPointsHolder();
+
+    /// <summary>
+    /// Holder for all transactions related functionalities
+    /// </summary>
+    public TransactionProcessor Transactions { get; } = new TransactionProcessor();
     
     private void Awake()
     {
@@ -28,11 +39,15 @@ namespace TurnSystem
 
     private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
     {
-      _transaction = null;
-      _transactionQueue.Clear();
       _entities.Clear();
       ActionPoints.ActionPoints = ActionPointsHolder.MaxActionPoints;
       ActionPoints.ReservedActionPoints = 0;
+      Transactions.Clear();
+    }
+
+    private void Update()
+    {
+      Transactions.ProcessTransactions();
     }
 
     private readonly List<GridLivingEntity> _entities = new List<GridLivingEntity>();
@@ -124,55 +139,6 @@ namespace TurnSystem
       ActionPoints.ActionPoints = ActionPointsHolder.MaxActionPoints;
       OnTurnChanged(CurrentTurnTaker);
     }
-
-    #region Transactions
-
-    private TransactionBase _transaction;
-    private readonly Queue<TransactionBase> _transactionQueue = new Queue<TransactionBase>();
-
-    /// <summary>
-    /// Holder for all action points related functionalities
-    /// </summary>
-    public ActionPointsHolder ActionPoints { get; } = new ActionPointsHolder();
-
-    /// <summary>
-    /// Indicates whether there are any queued up transactions being processed.
-    /// </summary>
-    /// <remarks>Can be used to gray out UI or block adding new transactions before previous ones finished.</remarks>
-    public bool TransactionPending => _transaction != null;
-
-    /// <summary>
-    /// Pushes the transaction to the queue of pending transactions.
-    /// </summary>
-    /// <param name="transaction">Transaction to be queued and processed.</param>
-    /// <remarks>Also checks whether the transaction can be performed.</remarks>
-    public void EnqueueTransaction(TransactionBase transaction)
-    { 
-      _transactionQueue.Enqueue(transaction);
-    }
-
-    private void Update()
-    {
-      if (_transaction == null && _transactionQueue.Count > 0)
-      {
-        _transaction = _transactionQueue.Dequeue();
-      }
-
-      if (_transaction != null)
-      {
-        if (_transaction.Run())
-        {
-          _transaction = null;
-
-          if (_transactionQueue.Count == 0 && ActionPoints.ActionPoints == 0)
-          {
-            NextTurn();
-          }
-        }
-      }
-    }
-
-    #endregion
 
     /// <summary>
     /// Unregisters a given entity from the queue.

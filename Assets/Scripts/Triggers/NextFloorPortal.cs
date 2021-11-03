@@ -9,7 +9,7 @@ namespace Triggers
   {
     private void OnTriggerEnter(Collider other)
     {
-      TurnManager.instance.EnqueueTransaction(new ChangeSceneTransaction(SceneManager.GetActiveScene().name));
+      TurnManager.instance.Transactions.EnqueueTransaction(new ChangeSceneTransaction(SceneManager.GetActiveScene().name));
       Destroy(gameObject);
     }
   }

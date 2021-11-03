@@ -76,7 +76,7 @@ namespace AI
                     break;
             }
             
-            TurnManager.instance.EnqueueTransaction(transaction);
+            TurnManager.instance.Transactions.EnqueueTransaction(transaction);
         }
 
         private float MeleeAttackUtility(GridLivingEntity entity, GridLivingEntity targetEntity)

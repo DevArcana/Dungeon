@@ -18,7 +18,7 @@ namespace TurnSystem
 
     private void Update()
     {
-      if (TurnManager.instance.CurrentTurnTaker == this && !TurnManager.instance.TransactionPending)
+      if (TurnManager.instance.CurrentTurnTaker == this && !TurnManager.instance.Transactions.HasPendingTransactions)
       {
         // var pos = MapUtils.ToMapPos(transform.position);
         // Debug.Log($"Enemy - {pos.x}, {pos.y}");
