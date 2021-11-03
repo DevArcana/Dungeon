@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Utils;
 using World.Common;
@@ -9,15 +10,10 @@ namespace World.Interaction
   {
     public static SelectionManager instance;
 
-    public GameObject targetPositionSelectionPrefab;
-    public GameObject abilityRangeSelectionPrefab;
+    public HighlightedTile prefab;
 
-    private readonly Dictionary<GridPos, GameObject> _targetPositionLayerEnabled = new Dictionary<GridPos, GameObject>();
-    private readonly List<GameObject> _targetPositionLayerDisabled = new List<GameObject>();
-    
-    private readonly Dictionary<GridPos, GameObject> _abilityRangeLayerEnabled = new Dictionary<GridPos, GameObject>();
-    private readonly List<GameObject> _abilityRangeLayerDisabled = new List<GameObject>();
-    
+    private Dictionary<GridPos, HighlightedTile> _selected;
+
     private void Awake()
     {
       if (instance == null)
@@ -28,80 +24,64 @@ namespace World.Interaction
       {
         Destroy(gameObject);
       }
+
+      _selected = new Dictionary<GridPos, HighlightedTile>();
     }
 
-    public void ClearTargetPositions()
+    public void Clear()
     {
-      foreach (var tile in _targetPositionLayerEnabled.Values)
+      _selected.Clear();
+      var childCount = transform.childCount;
+      while (childCount > 0)
       {
-        tile.SetActive(false);
-        _targetPositionLayerDisabled.Add(tile);
+        childCount--;
+        var obj = transform.GetChild(childCount).gameObject;
+
+        if (Application.isEditor)
+        {
+          DestroyImmediate(obj);
+        }
+        else
+        {
+          Destroy(obj);
+        }
       }
-
-      _targetPositionLayerEnabled.Clear();
     }
 
-    public void ClearAbilityRange()
+    public bool Deselect(GridPos pos)
     {
-      foreach (var tile in _abilityRangeLayerEnabled.Values)
+      if (!_selected.ContainsKey(pos))
       {
-        tile.SetActive(false);
-        _abilityRangeLayerDisabled.Add(tile);
+        return false;
       }
       
-      _abilityRangeLayerEnabled.Clear();
-    }
-    
-    public void HighlightTargetPosition(GridPos pos, bool highlight = true)
-    {
-      var position = MapUtils.ToWorldPos(pos);
-      if (highlight)
-      {
-        if (_targetPositionLayerDisabled.Count == 0)
-        {
-          _targetPositionLayerEnabled[pos] = Instantiate(targetPositionSelectionPrefab, position, Quaternion.identity, transform);
-        }
-        else
-        {
-          var tile = _targetPositionLayerDisabled[0];
-          _targetPositionLayerDisabled.RemoveAt(0);
-          _targetPositionLayerEnabled[pos] = tile;
-          tile.SetActive(true);
-          tile.transform.position = MapUtils.ToWorldPos(pos);
-        }
-      }
-      else if (_targetPositionLayerEnabled.TryGetValue(pos, out var tile))
-      {
-        _targetPositionLayerEnabled.Remove(pos);
-        tile.SetActive(false);
-        _targetPositionLayerDisabled.Add(tile);
-      }
+      var tile = _selected[pos];
+      Destroy(tile.gameObject);
+      _selected.Remove(pos);
+
+      return true;
     }
 
-    public void HighlightAbilityRange(GridPos pos, bool highlight = true)
+    public void Select(GridPos pos, Action<GridPos> onClick = null, Action<GridPos> hoverEnter = null)
     {
-      var position = MapUtils.ToWorldPos(pos);
-      if (highlight)
-      {
-        if (_abilityRangeLayerDisabled.Count == 0)
-        {
-          _abilityRangeLayerEnabled[pos] = Instantiate(abilityRangeSelectionPrefab, position, Quaternion.identity, transform);
-        }
-        else
-        {
-          var tile = _targetPositionLayerDisabled[0];
-          _abilityRangeLayerDisabled.RemoveAt(0);
-          _abilityRangeLayerEnabled[pos] = tile;
-          tile.SetActive(true);
-          tile.transform.position = MapUtils.ToWorldPos(pos);
-        }
-      }
-      else if (_abilityRangeLayerEnabled.TryGetValue(pos, out var tile))
-      {
-        _abilityRangeLayerEnabled.Remove(pos);
-        tile.SetActive(false);
-        _abilityRangeLayerDisabled.Add(tile);
-      }
+      Select(pos, new Color(1.0f, 1.0f, 1.0f, 0.5f), onClick);
+    }
+    
+    public void Select(GridPos pos, Color color, Action<GridPos> onClick = null)
+    {
+      var darken = color * 0.85f;
+      darken.a = color.a;
+      Select(pos, color, darken, onClick);
+    }
+
+    public void Select(GridPos pos, Color color, Color hoverColor, Action<GridPos> onClick = null)
+    {
+      Deselect(pos);
+      var tile = Instantiate(prefab, MapUtils.ToWorldPos(pos), Quaternion.identity, transform);
+      tile.color = color;
+      tile.hoverColor = hoverColor;
+      tile.onClick = onClick;
+      _selected[pos] = tile;
     }
   }
 }

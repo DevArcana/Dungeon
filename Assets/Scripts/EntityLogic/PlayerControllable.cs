@@ -57,7 +57,7 @@ namespace EntityLogic
             var world = World.World.instance;
             var turns = TurnManager.instance;
 
-            s.ClearTargetPositions();
+            s.Clear();
             if (turns.CurrentTurnTaker != _player)
             {
                 return;
@@ -127,7 +127,7 @@ namespace EntityLogic
 
             foreach (var tile in tiles.Values)
             {
-                s.HighlightTargetPosition(tile.gridPos);
+                s.Select(tile.gridPos);
             }
         }
     }
