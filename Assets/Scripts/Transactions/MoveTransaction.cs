@@ -13,17 +13,11 @@ namespace Transactions
 
     private Vector3 _velocity;
     
-    public MoveTransaction(GridLivingEntity movedEntity, GridPos targetPosition) : base(0, movedEntity)
+    public MoveTransaction(GridLivingEntity movedEntity, GridPos targetPosition)
     {
       _targetEntity = movedEntity;
       _targetPosition = MapUtils.ToWorldPos(targetPosition);
       _velocity = Vector3.zero;
-      Cost = (int) Math.Round((movedEntity.transform.position - _targetPosition).magnitude);
-    }
-
-    public override bool CanExecute()
-    {
-      return World.World.instance.IsWalkable(MapUtils.ToMapPos(_targetPosition));
     }
 
     protected override void Process()

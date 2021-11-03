@@ -142,32 +142,13 @@ namespace TurnSystem
     public bool TransactionPending => _transaction != null;
 
     /// <summary>
-    /// Checks whether there are enough action points to process the transaction and whether it is the owner's turn (if owner is provided).
-    /// </summary>
-    /// <param name="transaction">Transaction to be processed.</param>
-    /// <returns>Boolean indicating whether processing is possible.</returns>
-    public bool CanProcessTransaction(TransactionBase transaction)
-    {
-      return transaction.CanExecute() && ActionPoints.RemainingActionPoints >= transaction.Cost && (transaction.Owner == CurrentTurnTaker || transaction.Owner == null);
-    }
-
-    /// <summary>
     /// Pushes the transaction to the queue of pending transactions.
     /// </summary>
     /// <param name="transaction">Transaction to be queued and processed.</param>
-    /// <returns>Boolean indicating whether transaction was put in the queue.</returns>
     /// <remarks>Also checks whether the transaction can be performed.</remarks>
-    public bool EnqueueTransaction(TransactionBase transaction)
-    {
-      if (!CanProcessTransaction(transaction))
-      {
-        return false;
-      }
-
-      ActionPoints.ReservedActionPoints += transaction.Cost;
+    public void EnqueueTransaction(TransactionBase transaction)
+    { 
       _transactionQueue.Enqueue(transaction);
-      
-      return true;
     }
 
     private void Update()
@@ -175,19 +156,12 @@ namespace TurnSystem
       if (_transaction == null && _transactionQueue.Count > 0)
       {
         _transaction = _transactionQueue.Dequeue();
-        if (!_transaction.CanExecute())
-        {
-          ActionPoints.ReservedActionPoints -= _transaction.Cost;
-          _transaction = null;
-        }
       }
 
       if (_transaction != null)
       {
         if (_transaction.Run())
         {
-          ActionPoints.ActionPoints -= _transaction.Cost;
-          ActionPoints.ReservedActionPoints -= _transaction.Cost;
           _transaction = null;
 
           if (_transactionQueue.Count == 0 && ActionPoints.ActionPoints == 0)

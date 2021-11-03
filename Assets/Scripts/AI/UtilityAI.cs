@@ -82,7 +82,7 @@ namespace AI
         private float MeleeAttackUtility(GridLivingEntity entity, GridLivingEntity targetEntity)
         {
             var testTransaction = new AttackTransaction(entity, targetEntity, 0);
-            if (!TurnManager.instance.CanProcessTransaction(testTransaction)) return 0f;
+            //TODO: fix if (!TurnManager.instance.CanProcessTransaction(testTransaction)) return 0f;
             return 1f;
         }
 

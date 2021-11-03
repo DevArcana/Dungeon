@@ -5,7 +5,7 @@ namespace Transactions
 {
   public class ExplosionTransaction : TransactionBase
   {
-    public ExplosionTransaction(GridPos center, int radius) : base(0)
+    public ExplosionTransaction(GridPos center, int radius)
     {
     }
 
