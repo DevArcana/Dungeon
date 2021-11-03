@@ -11,15 +11,25 @@ namespace TurnSystem
     public event Action<int> ActionPointsChanged;
     public event Action<int> ActionPointsReserved;
 
+    public ActionPointsProcessor()
+    {
+      ResetPoints();
+    }
+
     public void ReservePoints(int points)
     {
+      if (points < 0)
+      {
+        points = 0;
+      }
+      
       ReservedActionPoints = points;
       ActionPointsReserved?.Invoke(ReservedActionPoints);
     }
 
     public bool SpendReservedPoints()
     {
-      if (ReservedActionPoints > ActionPoints)
+      if (ReservedActionPoints > ActionPoints || ReservedActionPoints == 0)
       {
         return false;
       }
@@ -37,7 +47,7 @@ namespace TurnSystem
     {
       ActionPoints = MaxActionPoints;
       ReservedActionPoints = 0;
-      ActionPointsChanged?.Invoke(ReservedActionPoints);
+      ActionPointsChanged?.Invoke(ActionPoints);
       ActionPointsReserved?.Invoke(ReservedActionPoints);
     }
   }
