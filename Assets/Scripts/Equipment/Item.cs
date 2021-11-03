@@ -1,4 +1,7 @@
 ﻿using System;
+using Abilities;
+using JetBrains.Annotations;
+using UnityEngine.UIElements;
 
 namespace Equipment
 {
@@ -15,5 +18,9 @@ namespace Equipment
     {
         public int level;
         public ItemRarity itemRarity;
+        public string name;
+        public string description;
+        public Image icon;
+        [CanBeNull] public AbilityBase ability;
     }
 }

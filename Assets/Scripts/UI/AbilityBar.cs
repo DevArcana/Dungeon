@@ -1,9 +1,11 @@
 ﻿using System;
+using Abilities;
 using EntityLogic;
 using TMPro;
 using TurnSystem;
 using UnityEngine;
 using UnityEngine.UI;
+using World.Interaction;
 
 namespace UI
 {
@@ -24,7 +26,7 @@ namespace UI
     public TextMeshProUGUI abilityButtonText3;
     public TextMeshProUGUI abilityButtonText4;
 
-    public GridLivingEntity turnTaker;
+    public AbilityProcessor abilities;
     
     private void Start()
     {
@@ -48,7 +50,12 @@ namespace UI
       var turnManager = TurnManager.instance;
       turnManager.ActionPoints.ActionPointsChanged += OnActionPointsChanged;
 
-      turnTaker = turnManager.CurrentTurnTaker;
+      var turnTaker = turnManager.CurrentTurnTaker;
+
+      if (!(turnTaker is null))
+      {
+        abilities = turnTaker.abilities;
+      }
 
       turnManager.TurnChanged += OnTurnChanged;
     }
@@ -60,7 +67,7 @@ namespace UI
         return;
       }
 
-      turnTaker = TurnManager.instance.CurrentTurnTaker;
+      abilities = player.abilities;
       
       RefreshAbilities();
     }
@@ -72,27 +79,27 @@ namespace UI
 
     private void SelectAbility(int abilityNumber)
     {
-      if (turnTaker.selectedAbilityNumber == abilityNumber)
+      if (abilities.selectedAbilityNumber == abilityNumber)
       {
-        turnTaker.selectedAbility = turnTaker.abilities[0];
+        abilities.DeselectAbility();
         return;
       }
 
-      turnTaker.selectedAbility = turnTaker.abilities[abilityNumber];
+      abilities.SelectAbility(abilityNumber);
     }
 
     private void RefreshAbilities()
     {
-      var ability = turnTaker.abilities[1];
+      var ability = abilities.ability1;
       abilityButtonImage1 = ability.icon;
       abilityButtonText1.text = ability.title;
-      ability = turnTaker.abilities[2];
+      ability = abilities.ability2;
       abilityButtonImage2 = ability.icon;
       abilityButtonText2.text = ability.title;
-      ability = turnTaker.abilities[3];
+      ability = abilities.ability3;
       abilityButtonImage3 = ability.icon;
       abilityButtonText3.text = ability.title;
-      ability = turnTaker.abilities[4];
+      ability = abilities.abilitySpecial;
       abilityButtonImage4 = ability.icon;
       abilityButtonText4.text = ability.title;
     }
