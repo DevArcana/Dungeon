@@ -9,6 +9,11 @@ namespace Triggers
   {
     private void OnTriggerEnter(Collider other)
     {
+      if (!other.CompareTag("Player"))
+      {
+        return;
+      }
+      
       TurnManager.instance.Transactions.EnqueueTransaction(new ChangeSceneTransaction(SceneManager.GetActiveScene().name));
       Destroy(gameObject);
     }
