@@ -40,6 +40,11 @@
     /// <returns>A boolean indicating whether a given transaction has finished.</returns>
     public bool Run()
     {
+      if (_finished)
+      {
+        return true;
+      }
+      
       if (!_started)
       {
         Start();
