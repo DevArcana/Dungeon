@@ -85,21 +85,19 @@ namespace UI
     {
       var abilityNumber = turnTaker.selectedAbilityNumber;
 
-      var actionPoints = TurnManager.instance.ActionPoints.RemainingActionPoints;
-
       abilityButtonText1.text = "1";
       abilityButtonText2.text = "2";
       abilityButtonText3.text = "3";
       abilityButtonText4.text = "S";
 
       var ability = turnTaker.abilities[1];
-      abilityButtonImage1.color = abilityNumber == 1 ? Color.yellow : ability is null || ability.cost > actionPoints ? Color.gray : Color.white;
+      abilityButtonImage1.color = abilityNumber == 1 ? Color.yellow : ability is null ? Color.gray : Color.white;
       ability = turnTaker.abilities[2];
-      abilityButtonImage2.color = abilityNumber == 2 ? Color.yellow : ability is null || ability.cost > actionPoints ? Color.gray : Color.white;
+      abilityButtonImage2.color = abilityNumber == 2 ? Color.yellow : ability is null ? Color.gray : Color.white;
       ability = turnTaker.abilities[3];
-      abilityButtonImage3.color = abilityNumber == 3 ? Color.yellow : ability is null || ability.cost > actionPoints ? Color.gray : Color.white;
+      abilityButtonImage3.color = abilityNumber == 3 ? Color.yellow : ability is null ? Color.gray : Color.white;
       ability = turnTaker.abilities[4];
-      abilityButtonImage4.color = abilityNumber == 4 ? Color.yellow : ability is null || ability.cost > actionPoints ? Color.gray : Color.blue;
+      abilityButtonImage4.color = abilityNumber == 4 ? Color.yellow : ability is null ? Color.gray : Color.blue;
     }
   }
 }

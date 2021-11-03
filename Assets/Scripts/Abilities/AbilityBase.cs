@@ -11,7 +11,6 @@ namespace Abilities
     public string description;
     public Image icon;
     public AbilityTag[] tags;
-    public int cost;
 
     public abstract IEnumerable<GridPos> GetValidTargetPositions();
     public abstract IEnumerable<GridPos> GetEffectiveRange(GridPos pos);
