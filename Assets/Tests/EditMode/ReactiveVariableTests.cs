@@ -11,7 +11,7 @@ namespace Tests.EditMode
       var variable = new ReactiveVariable<int>(17);
       var changed = false;
 
-      void OnChange(object sender, ReactiveVariableEventArgs<int> reactiveVariableEventArgs)
+      void OnChange(int old, int current)
       {
         changed = true;
       }

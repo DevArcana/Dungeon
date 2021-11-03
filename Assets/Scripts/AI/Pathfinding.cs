@@ -54,7 +54,7 @@ namespace AI
                     var tempGCost = currentNode.gCost + CalculateDistanceCost(currentNode, neighbourNode);
                     if (tempGCost >= neighbourNode.gCost
                         || Mathf.Abs(currentNode.height - neighbourNode.height) > 1
-                        || Mathf.Floor(tempGCost) > ActionPointsHolder.MaxActionPoints * 3) continue;
+                        || Mathf.Floor(tempGCost) > ActionPointsProcessor.MaxActionPoints * 3) continue;
                     neighbourNode.previousNode = currentNode;
                     neighbourNode.gCost = tempGCost;
                     neighbourNode.hCost = CalculateDistanceCost(neighbourNode, endNode);

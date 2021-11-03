@@ -3,34 +3,22 @@ using UnityEngine;
 
 namespace Utils
 {
-  public class ReactiveVariableEventArgs<T> : EventArgs
-  {
-    public readonly T old;
-    public readonly T current;
-
-    public ReactiveVariableEventArgs(T old, T current)
-    {
-      this.old = old;
-      this.current = current;
-    }
-  }
-  
   [Serializable]
   public class ReactiveVariable<T>
   {
     [SerializeField]
     private T value;
 
-    public event EventHandler<ReactiveVariableEventArgs<T>> ValueChanged; 
+    public event Action<T, T> ValueChanged; 
 
     public T CurrentValue
     {
       get => value;
       set
       {
-        var args = new ReactiveVariableEventArgs<T>(this.value, value);
+        var old = this.value;
         this.value = value;
-        ValueChanged?.Invoke(this, args);
+        ValueChanged?.Invoke(old, value);
       }
     }
 

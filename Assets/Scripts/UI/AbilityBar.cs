@@ -65,7 +65,7 @@ namespace UI
       RefreshAbilities();
     }
 
-    private void OnActionPointsChanged(object sender, EventArgs e)
+    private void OnActionPointsChanged(int points)
     {
       RefreshAbilities();
     }

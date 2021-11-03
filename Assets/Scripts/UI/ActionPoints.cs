@@ -15,8 +15,8 @@ namespace UI
       Destroy(transform.GetChild(0).gameObject);
       TurnManager.instance.ActionPoints.ActionPointsChanged += OnActionPointsChanged;
 
-      _actionPoints = new ActionPoint[ActionPointsHolder.MaxActionPoints];
-      for (var i = 0; i < ActionPointsHolder.MaxActionPoints; i++)
+      _actionPoints = new ActionPoint[ActionPointsProcessor.MaxActionPoints];
+      for (var i = 0; i < ActionPointsProcessor.MaxActionPoints; i++)
       {
         _actionPoints[i] = Instantiate(actionPointPrefab, transform);
       }
@@ -29,7 +29,7 @@ namespace UI
       TurnManager.instance.ActionPoints.ActionPointsChanged -= OnActionPointsChanged;
     }
 
-    private void OnActionPointsChanged(object sender, EventArgs args)
+    private void OnActionPointsChanged(int i)
     {
       Refresh();
     }
@@ -42,7 +42,7 @@ namespace UI
         var actionPoint = _actionPoints[i - 1];
         var status = ActionPointStatus.Spent;
 
-        if (i <= ap.RemainingActionPoints)
+        if (i <= ap.ActionPoints)
         {
           status = ActionPointStatus.Available;
         }

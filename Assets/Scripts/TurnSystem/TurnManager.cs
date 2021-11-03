@@ -11,16 +11,16 @@ namespace TurnSystem
     public static TurnManager instance;
     
     // components
-    
-    /// <summary>
-    /// Holder for all action points related functionalities
-    /// </summary>
-    public ActionPointsHolder ActionPoints { get; } = new ActionPointsHolder();
 
     /// <summary>
     /// Holder for all transactions related functionalities
     /// </summary>
     public TransactionProcessor Transactions { get; } = new TransactionProcessor();
+
+    /// <summary>
+    /// Holder for all action point related functionalities
+    /// </summary>
+    public ActionPointsProcessor ActionPoints { get; } = new ActionPointsProcessor();
     
     private void Awake()
     {
@@ -40,8 +40,7 @@ namespace TurnSystem
     private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
     {
       _entities.Clear();
-      ActionPoints.ActionPoints = ActionPointsHolder.MaxActionPoints;
-      ActionPoints.ReservedActionPoints = 0;
+      ActionPoints.ResetPoints();
       Transactions.Clear();
     }
 
@@ -117,7 +116,7 @@ namespace TurnSystem
 
       if (current != CurrentTurnTaker)
       {
-        ActionPoints.ActionPoints = ActionPointsHolder.MaxActionPoints;
+        ActionPoints.ResetPoints();
         OnTurnChanged(CurrentTurnTaker);
       }
 
@@ -136,7 +135,7 @@ namespace TurnSystem
         CurrentTurnTaker.Highlighted(true);
       }
 
-      ActionPoints.ActionPoints = ActionPointsHolder.MaxActionPoints;
+      ActionPoints.ResetPoints();
       OnTurnChanged(CurrentTurnTaker);
     }
 

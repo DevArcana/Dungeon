@@ -90,7 +90,7 @@ namespace AI
         {
             var pathfinding = new Pathfinding();
             var (_, cost) = pathfinding.FindPath(entity.GridPos, targetEntity.GridPos);
-            var maxCost = ActionPointsHolder.MaxActionPoints;
+            const int maxCost = ActionPointsProcessor.MaxActionPoints;
             var map = World.World.instance;
             var heightDifference = Mathf.Abs(map.GetHeightAt(entity.GridPos) - map.GetHeightAt(targetEntity.GridPos));
             if (cost > maxCost || cost == 1 || heightDifference == 1 && cost == 2) return 0f;

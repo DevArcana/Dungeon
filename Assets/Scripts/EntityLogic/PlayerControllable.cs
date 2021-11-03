@@ -32,7 +32,7 @@ namespace EntityLogic
             Highlight();
         }
 
-        private void OnActionPointsChanged(object sender, EventArgs e)
+        private void OnActionPointsChanged(int points)
         {
             Highlight();
         }
@@ -98,7 +98,7 @@ namespace EntityLogic
                             if (cost < neighbour.cost)
                             {
                                 neighbour.cost = cost;
-                                if (neighbour.cost <= TurnManager.instance.ActionPoints.RemainingActionPoints)
+                                if (neighbour.cost <= TurnManager.instance.ActionPoints.ActionPoints)
                                 {
                                     queue.Enqueue(neighbour.gridPos);
                                 }
@@ -115,7 +115,7 @@ namespace EntityLogic
                             
                             if (!world.IsWalkable(pos)) continue;
 
-                            if (neighbour.cost <= TurnManager.instance.ActionPoints.RemainingActionPoints)
+                            if (neighbour.cost <= TurnManager.instance.ActionPoints.ActionPoints)
                             {
                                 tiles[pos] = neighbour;
                                 queue.Enqueue(neighbour.gridPos);
