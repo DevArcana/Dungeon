@@ -17,9 +17,7 @@ namespace EntityLogic
 
     public EntityEquipment equipment;
 
-    public AbilityBase[] abilities;
-    public AbilityBase selectedAbility;
-    public int selectedAbilityNumber;
+    public AbilityProcessor abilities;
 
     protected virtual void Start()
     {

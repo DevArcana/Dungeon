@@ -9,10 +9,14 @@ namespace World.Interaction
   {
     public static SelectionManager instance;
 
-    public GameObject selectionPrefab;
+    public GameObject targetPositionSelectionPrefab;
+    public GameObject abilityRangeSelectionPrefab;
 
-    private readonly List<GameObject> _disabled = new List<GameObject>();
-    private readonly Dictionary<GridPos, GameObject> _enabled = new Dictionary<GridPos, GameObject>();
+    private readonly Dictionary<GridPos, GameObject> _targetPositionLayerEnabled = new Dictionary<GridPos, GameObject>();
+    private readonly List<GameObject> _targetPositionLayerDisabled = new List<GameObject>();
+    
+    private readonly Dictionary<GridPos, GameObject> _abilityRangeLayerEnabled = new Dictionary<GridPos, GameObject>();
+    private readonly List<GameObject> _abilityRangeLayerDisabled = new List<GameObject>();
     
     private void Awake()
     {
@@ -26,40 +30,77 @@ namespace World.Interaction
       }
     }
 
-    public void Clear()
+    public void ClearTargetPositions()
     {
-      foreach (var enabled in _enabled.Values)
+      foreach (var tile in _targetPositionLayerEnabled.Values)
       {
-        enabled.SetActive(false);
-        _disabled.Add(enabled);
+        tile.SetActive(false);
+        _targetPositionLayerDisabled.Add(tile);
       }
-      
-      _enabled.Clear();
+
+      _targetPositionLayerEnabled.Clear();
     }
 
-    public void Highlight(GridPos pos, bool highlight = true)
+    public void ClearAbilityRange()
+    {
+      foreach (var tile in _abilityRangeLayerEnabled.Values)
+      {
+        tile.SetActive(false);
+        _abilityRangeLayerDisabled.Add(tile);
+      }
+      
+      _abilityRangeLayerEnabled.Clear();
+    }
+    
+    public void HighlightTargetPosition(GridPos pos, bool highlight = true)
     {
       var position = MapUtils.ToWorldPos(pos);
       if (highlight)
       {
-        if (_disabled.Count == 0)
+        if (_targetPositionLayerDisabled.Count == 0)
         {
-          _enabled[pos] = Instantiate(selectionPrefab, position, Quaternion.identity, transform);
+          _targetPositionLayerEnabled[pos] = Instantiate(targetPositionSelectionPrefab, position, Quaternion.identity, transform);
         }
         else
         {
-          var tile = _disabled[0];
-          _disabled.RemoveAt(0);
-          _enabled[pos] = tile;
+          var tile = _targetPositionLayerDisabled[0];
+          _targetPositionLayerDisabled.RemoveAt(0);
+          _targetPositionLayerEnabled[pos] = tile;
           tile.SetActive(true);
           tile.transform.position = MapUtils.ToWorldPos(pos);
         }
       }
-      else if (_enabled.TryGetValue(pos, out var tile))
+      else if (_targetPositionLayerEnabled.TryGetValue(pos, out var tile))
       {
-        _enabled.Remove(pos);
+        _targetPositionLayerEnabled.Remove(pos);
         tile.SetActive(false);
-        _disabled.Add(tile);
+        _targetPositionLayerDisabled.Add(tile);
+      }
+    }
+
+    public void HighlightAbilityRange(GridPos pos, bool highlight = true)
+    {
+      var position = MapUtils.ToWorldPos(pos);
+      if (highlight)
+      {
+        if (_abilityRangeLayerDisabled.Count == 0)
+        {
+          _abilityRangeLayerEnabled[pos] = Instantiate(abilityRangeSelectionPrefab, position, Quaternion.identity, transform);
+        }
+        else
+        {
+          var tile = _targetPositionLayerDisabled[0];
+          _abilityRangeLayerDisabled.RemoveAt(0);
+          _abilityRangeLayerEnabled[pos] = tile;
+          tile.SetActive(true);
+          tile.transform.position = MapUtils.ToWorldPos(pos);
+        }
+      }
+      else if (_abilityRangeLayerEnabled.TryGetValue(pos, out var tile))
+      {
+        _abilityRangeLayerEnabled.Remove(pos);
+        tile.SetActive(false);
+        _abilityRangeLayerDisabled.Add(tile);
       }
     }
   }
