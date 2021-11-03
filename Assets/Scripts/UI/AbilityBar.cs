@@ -83,21 +83,18 @@ namespace UI
 
     private void RefreshAbilities()
     {
-      var abilityNumber = turnTaker.selectedAbilityNumber;
-
-      abilityButtonText1.text = "1";
-      abilityButtonText2.text = "2";
-      abilityButtonText3.text = "3";
-      abilityButtonText4.text = "S";
-
       var ability = turnTaker.abilities[1];
-      abilityButtonImage1.color = abilityNumber == 1 ? Color.yellow : ability is null ? Color.gray : Color.white;
+      abilityButtonImage1 = ability.icon;
+      abilityButtonText1.text = ability.title;
       ability = turnTaker.abilities[2];
-      abilityButtonImage2.color = abilityNumber == 2 ? Color.yellow : ability is null ? Color.gray : Color.white;
+      abilityButtonImage2 = ability.icon;
+      abilityButtonText2.text = ability.title;
       ability = turnTaker.abilities[3];
-      abilityButtonImage3.color = abilityNumber == 3 ? Color.yellow : ability is null ? Color.gray : Color.white;
+      abilityButtonImage3 = ability.icon;
+      abilityButtonText3.text = ability.title;
       ability = turnTaker.abilities[4];
-      abilityButtonImage4.color = abilityNumber == 4 ? Color.yellow : ability is null ? Color.gray : Color.blue;
+      abilityButtonImage4 = ability.icon;
+      abilityButtonText4.text = ability.title;
     }
   }
 }
