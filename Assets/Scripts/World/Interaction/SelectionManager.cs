@@ -82,6 +82,7 @@ namespace World.Interaction
 
     private void OnAbilityChange(IAbility ability, int index)
     {
+      TurnManager.instance.ActionPoints.ReservePoints(0);
       Clear();
 
       foreach (var pos in ability.GetValidTargetPositions())

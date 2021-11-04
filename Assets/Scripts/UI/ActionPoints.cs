@@ -44,13 +44,13 @@ namespace UI
         var actionPoint = _actionPoints[i - 1];
         var status = ActionPointStatus.Spent;
 
-        if (i > ap.ReservedActionPoints)
+        if (i <= ap.ReservedActionPoints)
         {
-          status = ActionPointStatus.Available;
+          status = ActionPointStatus.Reserved;
         }
         else if (i <= ap.ActionPoints)
         {
-          status = ActionPointStatus.Reserved;
+          status = ActionPointStatus.Available;
         }
         
         actionPoint.SetStatus(status);

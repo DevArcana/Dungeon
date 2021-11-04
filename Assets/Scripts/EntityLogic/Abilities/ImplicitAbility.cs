@@ -82,8 +82,7 @@ namespace EntityLogic.Abilities
 
     public IEnumerable<GridPos> GetEffectiveRange(GridPos pos)
     {
-      // todo: revert to single cell, just for show
-      return new[] { pos, pos.East, pos.North, pos.South, pos.West };
+      return new[] { pos };
     }
 
     public int GetEffectiveCost(GridPos pos)

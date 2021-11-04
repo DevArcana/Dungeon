@@ -38,7 +38,7 @@ namespace TurnSystem
       ActionPoints -= ReservedActionPoints;
       ReservedActionPoints = 0;
 
-      ActionPointsChanged?.Invoke(ReservedActionPoints);
+      ActionPointsChanged?.Invoke(ActionPoints);
       ActionPointsReserved?.Invoke(ReservedActionPoints);
       
       return true;
