@@ -34,10 +34,22 @@ namespace World.Interaction
       Clear();
 
       TurnManager.instance.TurnChanged += OnTurnChange;
+      TurnManager.instance.Transactions.TransactionsProcessed += Refresh;
+    }
+
+    private void Refresh()
+    {
+      if (_abilityProcessor != null)
+      {
+        OnAbilityChange(_abilityProcessor.SelectedAbility, _abilityProcessor.SelectedAbilityIndex);
+      }
     }
 
     private void OnDestroy()
     {
+      TurnManager.instance.TurnChanged -= OnTurnChange;
+      TurnManager.instance.Transactions.TransactionsProcessed -= Refresh;
+      
       if (_abilityProcessor != null)
       {
         _abilityProcessor.SelectedAbilityChanged -= OnAbilityChange;
@@ -92,11 +104,10 @@ namespace World.Interaction
       // TODO: limit to correct layer
       if (Input.GetMouseButtonDown(0) && Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out var hit))
       {
-        Debug.Log("ping");
         var pos = MapUtils.ToMapPos(hit.point);
         if (_selected.ContainsKey(pos))
         {
-          Debug.Log("pong");
+          Clear();
           _abilityProcessor.SelectedAbility.Execute(pos);
         }
       }

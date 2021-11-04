@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TurnSystem.Transactions;
 
 namespace TurnSystem
@@ -7,6 +8,9 @@ namespace TurnSystem
   {
     private TransactionBase _transaction;
     private readonly Queue<TransactionBase> _transactionQueue = new Queue<TransactionBase>();
+
+    public event Action TransactionsProcessed;
+    private bool _justFinished = false;
 
     /// <summary>
     /// Indicates whether there exists a pending transaction.
@@ -44,7 +48,13 @@ namespace TurnSystem
         if (_transaction.Run())
         {
           _transaction = null;
+          _justFinished = true;
         }
+      }
+      else if (_justFinished)
+      {
+        TransactionsProcessed?.Invoke();
+        _justFinished = false;
       }
     }
   }
