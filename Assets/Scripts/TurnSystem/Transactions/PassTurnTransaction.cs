@@ -1,7 +1,6 @@
 ﻿using EntityLogic;
-using TurnSystem;
 
-namespace Transactions
+namespace TurnSystem.Transactions
 {
     public class PassTurnTransaction : TransactionBase
     {

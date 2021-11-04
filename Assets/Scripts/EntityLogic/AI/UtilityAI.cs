@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using EntityLogic;
-using Transactions;
 using TurnSystem;
+using TurnSystem.Transactions;
 using UnityEngine;
 using World.Common;
 using Random = UnityEngine.Random;
 
-namespace AI
+namespace EntityLogic.AI
 {
     public class UtilityAI
     {

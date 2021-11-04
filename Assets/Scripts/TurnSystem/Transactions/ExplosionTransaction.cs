@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using World.Common;
 
-namespace Transactions
+namespace TurnSystem.Transactions
 {
   public class ExplosionTransaction : TransactionBase
   {

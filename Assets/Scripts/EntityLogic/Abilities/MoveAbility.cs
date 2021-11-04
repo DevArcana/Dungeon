@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AI;
+using EntityLogic.AI;
 using TurnSystem;
+using TurnSystem.Transactions;
 using World.Common;
 
-namespace Abilities
+namespace EntityLogic.Abilities
 {
-  public class MoveAbility : AbilityBase
+  public class MoveAbility : IAbility
   {
-    public override IEnumerable<GridPos> GetValidTargetPositions()
+    public IEnumerable<GridPos> GetValidTargetPositions()
     {
       var world = World.World.instance;
 
@@ -79,19 +80,26 @@ namespace Abilities
       return tiles.Select(x => x.Value.gridPos);
     }
 
-    public override IEnumerable<GridPos> GetEffectiveRange(GridPos pos)
+    public IEnumerable<GridPos> GetEffectiveRange(GridPos pos)
     {
       return new[] { pos };
     }
 
-    public override int GetEffectiveCost(GridPos pos)
+    public int GetEffectiveCost(GridPos pos)
     {
       var pathfinding = new Pathfinding();
       return pathfinding.FindPath(TurnManager.instance.CurrentTurnTaker.GridPos, pos).Item2;
     }
 
-    public override void Execute(GridPos pos)
+    public void Execute(GridPos pos)
     {
+      var pathfinding = new Pathfinding();
+      var path = pathfinding.FindPath(TurnManager.instance.CurrentTurnTaker.GridPos, pos).Item1;
+
+      foreach (var segment in path)
+      {
+        TurnManager.instance.Transactions.EnqueueTransaction(new MoveTransaction(TurnManager.instance.CurrentTurnTaker, segment));
+      }
     }
   }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AI
+namespace EntityLogic.AI
 {
     public class PathNode : IEquatable<PathNode>
     {

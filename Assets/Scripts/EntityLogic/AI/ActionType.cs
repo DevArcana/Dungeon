@@ -1,4 +1,4 @@
-﻿namespace AI
+﻿namespace EntityLogic.AI
 {
     public enum ActionType
     {

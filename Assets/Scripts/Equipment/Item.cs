@@ -1,5 +1,5 @@
 ﻿using System;
-using Abilities;
+using EntityLogic.Abilities;
 using JetBrains.Annotations;
 using UnityEngine.UIElements;
 

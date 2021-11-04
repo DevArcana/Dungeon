@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using EntityLogic;
 using TurnSystem;
 using UnityEngine;
 using World.Common;
 
-namespace AI
+namespace EntityLogic.AI
 {
     public class Pathfinding
     {

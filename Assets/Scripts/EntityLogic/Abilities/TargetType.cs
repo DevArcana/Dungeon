@@ -1,4 +1,4 @@
-﻿namespace Abilities
+﻿namespace EntityLogic.Abilities
 {
   public enum TargetType
   {

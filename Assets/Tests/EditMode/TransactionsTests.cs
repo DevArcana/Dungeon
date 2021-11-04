@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using Transactions;
+using TurnSystem.Transactions;
 
 namespace Tests.EditMode
 {

@@ -1,6 +1,6 @@
 ﻿using System;
-using Abilities;
 using EntityLogic;
+using EntityLogic.Abilities;
 using TMPro;
 using TurnSystem;
 using UnityEngine;
@@ -79,7 +79,8 @@ namespace UI
 
     private void SelectAbility(int abilityNumber)
     {
-      if (abilities.selectedAbilityNumber == abilityNumber)
+      // TODO: fix
+      if (abilities.SelectedAbilityIndex == abilityNumber)
       {
         abilities.DeselectAbility();
         return;
@@ -90,18 +91,19 @@ namespace UI
 
     private void RefreshAbilities()
     {
-      var ability = abilities.ability1;
-      abilityButtonImage1 = ability.icon;
-      abilityButtonText1.text = ability.title;
-      ability = abilities.ability2;
-      abilityButtonImage2 = ability.icon;
-      abilityButtonText2.text = ability.title;
-      ability = abilities.ability3;
-      abilityButtonImage3 = ability.icon;
-      abilityButtonText3.text = ability.title;
-      ability = abilities.abilitySpecial;
-      abilityButtonImage4 = ability.icon;
-      abilityButtonText4.text = ability.title;
+      // TODO: fix
+      // var ability = abilities.ability1;
+      // abilityButtonImage1 = ability.icon;
+      // abilityButtonText1.text = ability.title;
+      // ability = abilities.ability2;
+      // abilityButtonImage2 = ability.icon;
+      // abilityButtonText2.text = ability.title;
+      // ability = abilities.ability3;
+      // abilityButtonImage3 = ability.icon;
+      // abilityButtonText3.text = ability.title;
+      // ability = abilities.abilitySpecial;
+      // abilityButtonImage4 = ability.icon;
+      // abilityButtonText4.text = ability.title;
     }
   }
 }

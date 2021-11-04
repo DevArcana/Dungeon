@@ -1,5 +1,5 @@
-﻿using Transactions;
-using TurnSystem;
+﻿using TurnSystem;
+using TurnSystem.Transactions;
 using UnityEngine;
 
 namespace EntityLogic

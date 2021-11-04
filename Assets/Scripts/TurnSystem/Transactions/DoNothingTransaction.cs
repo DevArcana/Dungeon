@@ -1,6 +1,6 @@
 ﻿using EntityLogic;
 
-namespace Transactions
+namespace TurnSystem.Transactions
 {
   public class DoNothingTransaction : TransactionBase
   {

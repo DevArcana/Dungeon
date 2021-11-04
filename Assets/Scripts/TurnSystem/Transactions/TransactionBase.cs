@@ -1,4 +1,4 @@
-﻿namespace Transactions
+﻿namespace TurnSystem.Transactions
 {
   /// <summary>
   /// Transaction base class. All transactions must inherit from it.

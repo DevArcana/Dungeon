@@ -1,9 +1,9 @@
-﻿using Transactions;
-using TurnSystem;
+﻿using TurnSystem;
+using TurnSystem.Transactions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Triggers
+namespace World.Triggers
 {
   public class NextFloorPortal : MonoBehaviour
   {

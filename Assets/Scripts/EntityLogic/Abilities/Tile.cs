@@ -1,6 +1,6 @@
 ﻿using World.Common;
 
-namespace Abilities
+namespace EntityLogic.Abilities
 {
   public class Tile
   {

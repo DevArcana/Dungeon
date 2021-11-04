@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using EntityLogic;
 using UnityEngine;
 using World.Common;
 
-namespace Abilities
+namespace EntityLogic.Abilities
 {
   [CreateAssetMenu(fileName = "DoNothing", menuName = "Abilities/Do nothing", order = 1)]
   public class DoNothingAbility : AbilityBase

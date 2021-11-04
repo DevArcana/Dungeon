@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Abilities
+namespace EntityLogic.Abilities
 {
   [Serializable]
   public enum AbilityTag

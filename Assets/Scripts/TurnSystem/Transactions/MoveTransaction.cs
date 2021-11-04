@@ -1,10 +1,9 @@
-﻿using System;
-using EntityLogic;
+﻿using EntityLogic;
 using UnityEngine;
 using Utils;
 using World.Common;
 
-namespace Transactions
+namespace TurnSystem.Transactions
 {
   public class MoveTransaction : TransactionBase
   {

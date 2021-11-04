@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Abilities;
-using AI;
-using Transactions;
 using UnityEngine;
 using Utils;
 using World.Common;
 using EntityLogic;
+using EntityLogic.AI;
 
 
 namespace TurnSystem

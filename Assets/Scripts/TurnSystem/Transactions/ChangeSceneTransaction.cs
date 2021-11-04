@@ -1,7 +1,7 @@
 ﻿using UI;
 using UnityEngine;
 
-namespace Transactions
+namespace TurnSystem.Transactions
 {
   public class ChangeSceneTransaction : TransactionBase
   {

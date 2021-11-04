@@ -1,7 +1,6 @@
-﻿using UnityEngine;
-using EntityLogic;
+﻿using EntityLogic;
 
-namespace Transactions
+namespace TurnSystem.Transactions
 {
   public class AttackTransaction : TransactionBase
   {

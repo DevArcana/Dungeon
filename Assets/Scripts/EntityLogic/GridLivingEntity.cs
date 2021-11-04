@@ -1,4 +1,4 @@
-﻿using Abilities;
+﻿using EntityLogic.Abilities;
 using Equipment;
 using TurnSystem;
 using UnityEngine;

@@ -94,7 +94,6 @@ GameObject:
   - component: {fileID: 4692986789365586099}
   - component: {fileID: 3408863510572672949}
   - component: {fileID: 4389445747545231012}
-  - component: {fileID: 8706016168830317113}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -137,11 +136,52 @@ MonoBehaviour:
   highlight: {fileID: 0}
   autoRegister: 1
   initiative: 10
-  weapon:
-    power: 0
-    range: 20
-    attackPrefab: {fileID: 0}
-    isRanged: 1
+  equipment:
+    weapon:
+      level: 0
+      itemRarity: 0
+      name: 
+      description: 
+      ability: {fileID: 0}
+      power: 0
+      range: 0
+      attackPrefab: {fileID: 0}
+      isRanged: 0
+    helmet:
+      level: 0
+      itemRarity: 0
+      name: 
+      description: 
+      ability: {fileID: 0}
+      physicalDefense: 0
+      magicalDefense: 0
+    breastplate:
+      level: 0
+      itemRarity: 0
+      name: 
+      description: 
+      ability: {fileID: 0}
+      physicalDefense: 0
+      magicalDefense: 0
+    leggings:
+      level: 0
+      itemRarity: 0
+      name: 
+      description: 
+      ability: {fileID: 0}
+      physicalDefense: 0
+      magicalDefense: 0
+    boots:
+      level: 0
+      itemRarity: 0
+      name: 
+      description: 
+      ability: {fileID: 0}
+      physicalDefense: 0
+      magicalDefense: 0
+    backpack: []
+  abilities:
+    abilities: []
   projectilePrefab: {fileID: 4515601387615827983, guid: c7370499344ac5a46b59affeb22596b5, type: 3}
   impactPrefab: {fileID: 7333221102163219410, guid: 307c69a0d043933459b6cef6693e9d04, type: 3}
 --- !u!136 &4692986789365586099
@@ -186,18 +226,6 @@ MonoBehaviour:
   damageable:
     maxHealth: 100
     health: 100
---- !u!114 &8706016168830317113
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 775171587901771761}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1eff477be93a467688d8036be717d9af, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2020034595098972302
 GameObject:
   m_ObjectHideFlags: 0
