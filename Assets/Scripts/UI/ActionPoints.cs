@@ -14,6 +14,7 @@ namespace UI
     {
       Destroy(transform.GetChild(0).gameObject);
       TurnManager.instance.ActionPoints.ActionPointsChanged += OnActionPointsChanged;
+      TurnManager.instance.ActionPoints.ActionPointsReserved += OnActionPointsChanged;
 
       _actionPoints = new ActionPoint[ActionPointsProcessor.MaxActionPoints];
       for (var i = 0; i < ActionPointsProcessor.MaxActionPoints; i++)
@@ -27,6 +28,7 @@ namespace UI
     private void OnDestroy()
     {
       TurnManager.instance.ActionPoints.ActionPointsChanged -= OnActionPointsChanged;
+      TurnManager.instance.ActionPoints.ActionPointsReserved -= OnActionPointsChanged;
     }
 
     private void OnActionPointsChanged(int i)
@@ -42,7 +44,7 @@ namespace UI
         var actionPoint = _actionPoints[i - 1];
         var status = ActionPointStatus.Spent;
 
-        if (i <= ap.ActionPoints)
+        if (i > ap.ReservedActionPoints)
         {
           status = ActionPointStatus.Available;
         }

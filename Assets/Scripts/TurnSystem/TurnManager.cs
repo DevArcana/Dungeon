@@ -34,6 +34,14 @@ namespace TurnSystem
         return;
       }
 
+      Transactions.TransactionsProcessed += () =>
+      {
+        if (ActionPoints.ActionPoints == 0)
+        {
+          NextTurn();
+        }
+      };
+      
       SceneManager.sceneLoaded += OnSceneLoaded;
     }
 

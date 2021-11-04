@@ -91,6 +91,8 @@ namespace World.Interaction
 
       if (_hoverPos.HasValue)
       {
+        TurnManager.instance.ActionPoints.ReservePoints(ability.GetEffectiveCost(_hoverPos.Value));
+        
         foreach (var pos in ability.GetEffectiveRange(_hoverPos.Value))
         {
           Select(pos, Color.green);
@@ -134,7 +136,7 @@ namespace World.Interaction
         Refresh();
       }
 
-      if (Input.GetMouseButtonDown(0) && _hoverPos.HasValue)
+      if (Input.GetMouseButtonDown(0) && _hoverPos.HasValue && TurnManager.instance.ActionPoints.SpendReservedPoints())
       {
         _abilityProcessor.SelectedAbility.Execute(_hoverPos.Value);
         Clear();
