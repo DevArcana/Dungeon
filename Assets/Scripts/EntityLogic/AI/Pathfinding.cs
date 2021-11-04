@@ -20,8 +20,8 @@ namespace EntityLogic.AI
         public (List<GridPos>, int) FindPath(GridPos start, GridPos end)
         {
             var map = World.World.instance;
-            var startNode = new PathNode(start.x, start.y, map.GetHeightAt(start), map.IsWalkable(start));
-            var endNode = new PathNode(end.x, end.y, map.GetHeightAt(end), map.IsWalkable(end));
+            var startNode = new PathNode(start.x, start.y, map.GetHeightAt(start), map.IsOccupied(start));
+            var endNode = new PathNode(end.x, end.y, map.GetHeightAt(end), map.IsOccupied(end));
 
             _openList = new HashSet<PathNode> { startNode };
             _closedList = new HashSet<PathNode>();
@@ -121,7 +121,7 @@ namespace EntityLogic.AI
                 {
                     if (x == currentNode.x && y == currentNode.y) continue;
                     var pos = GridPos.At(x, y);
-                    var node = new PathNode(x, y, map.GetHeightAt(pos), map.IsWalkable(pos));
+                    var node = new PathNode(x, y, map.GetHeightAt(pos), map.IsOccupied(pos));
                     if (Math.Abs(node.gCost - default(float)) < 0.01f)
                     {
                         node.gCost = int.MaxValue;

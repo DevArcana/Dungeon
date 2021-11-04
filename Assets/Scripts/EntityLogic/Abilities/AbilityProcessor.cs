@@ -20,6 +20,11 @@ namespace EntityLogic.Abilities
       DeselectAbility();
     }
 
+    public AbilityBase GetAbility(int index)
+    {
+      return index >= 0 && index < abilities.Count ? abilities[index] : null;
+    }
+
     public void SelectAbility(int index)
     {
       if (index >= 0 && index < abilities.Count)

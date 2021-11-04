@@ -91,19 +91,21 @@ namespace UI
 
     private void RefreshAbilities()
     {
-      // TODO: fix
-      // var ability = abilities.ability1;
-      // abilityButtonImage1 = ability.icon;
-      // abilityButtonText1.text = ability.title;
-      // ability = abilities.ability2;
-      // abilityButtonImage2 = ability.icon;
-      // abilityButtonText2.text = ability.title;
-      // ability = abilities.ability3;
-      // abilityButtonImage3 = ability.icon;
-      // abilityButtonText3.text = ability.title;
-      // ability = abilities.abilitySpecial;
-      // abilityButtonImage4 = ability.icon;
-      // abilityButtonText4.text = ability.title;
+      var ability = abilities.GetAbility(0);
+      abilityButtonImage1 = ability?.icon;
+      abilityButtonText1.text = ability?.title ?? string.Empty;
+      
+      ability = abilities.GetAbility(1);
+      abilityButtonImage2 = ability?.icon;
+      abilityButtonText2.text = ability?.title ?? string.Empty;
+      
+      ability = abilities.GetAbility(2);
+      abilityButtonImage3 = ability?.icon;
+      abilityButtonText3.text = ability?.title ?? string.Empty;
+      
+      ability = abilities.GetAbility(3);
+      abilityButtonImage4 = ability?.icon;
+      abilityButtonText4.text = ability?.title ?? string.Empty;
     }
   }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using EntityLogic;
 using UnityEngine;
@@ -37,10 +38,16 @@ namespace World
     /// <remarks>Checks whether a tile contains colliders on the "entities" layer.</remarks>
     /// <param name="pos">position to check</param>
     /// <returns>boolean indicating whether a tile is walkable</returns>
-    public bool IsWalkable(GridPos pos)
+    public bool IsOccupied(GridPos pos)
     {
       var worldPos = MapUtils.ToWorldPos(pos);
       return !Physics.CheckBox(worldPos, Vector3.one * 0.5f, Quaternion.identity, LayerMask.GetMask("Entities"));
+    }
+    
+    public bool IsWalkable(GridPos pos)
+    {
+      var worldPos = MapUtils.ToWorldPos(pos);
+      return Math.Abs(worldPos.y - _mapDataProvider.settings.layers) > 0.01;
     }
 
     /// <summary>

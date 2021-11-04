@@ -15,9 +15,10 @@ namespace World.Interaction
     public HighlightedTile prefab;
 
     private Dictionary<GridPos, HighlightedTile> _selected;
+    private HashSet<GridPos> _availableTargets;
     private AbilityProcessor _abilityProcessor;
     private UnityEngine.Camera _camera;
-    private GridPos? _hoverPos = null;
+    private GridPos? _hoverPos;
 
     private void Awake()
     {
@@ -32,6 +33,7 @@ namespace World.Interaction
       }
 
       _selected = new Dictionary<GridPos, HighlightedTile>();
+      _availableTargets = new HashSet<GridPos>();
       Clear();
 
       TurnManager.instance.TurnChanged += OnTurnChange;
@@ -87,6 +89,7 @@ namespace World.Interaction
 
       foreach (var pos in ability.GetValidTargetPositions())
       {
+        _availableTargets.Add(pos);
         Select(pos);
       }
 
@@ -117,7 +120,7 @@ namespace World.Interaction
       if (Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out var hit))
       {
         var pos = MapUtils.ToMapPos(hit.point);
-        if (_selected.ContainsKey(pos))
+        if (_availableTargets.Contains(pos))
         {
           if (_hoverPos != pos)
           {
@@ -147,6 +150,7 @@ namespace World.Interaction
     public void Clear()
     {
       _selected.Clear();
+      _availableTargets.Clear();
       var childCount = transform.childCount;
       while (childCount > 0)
       {
