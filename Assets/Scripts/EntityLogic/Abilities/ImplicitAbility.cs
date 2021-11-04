@@ -82,26 +82,7 @@ namespace EntityLogic.Abilities
 
     public IEnumerable<GridPos> GetEffectiveRange(GridPos pos)
     {
-      var tiles = new List<GridPos>() {pos};
-      
-      if (World.World.instance.IsWalkable(pos.East))
-      {
-        tiles.Add(pos.East);
-      }
-      if (World.World.instance.IsWalkable(pos.West))
-      {
-        tiles.Add(pos.West);
-      }
-      if (World.World.instance.IsWalkable(pos.North))
-      {
-        tiles.Add(pos.North);
-      }
-      if (World.World.instance.IsWalkable(pos.South))
-      {
-        tiles.Add(pos.South);
-      }
-
-      return tiles;
+      return new[] { pos };
     }
 
     public int GetEffectiveCost(GridPos pos)
