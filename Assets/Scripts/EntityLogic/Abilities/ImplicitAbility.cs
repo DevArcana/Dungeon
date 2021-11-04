@@ -8,7 +8,7 @@ using World.Common;
 
 namespace EntityLogic.Abilities
 {
-  public class MoveAbility : IAbility
+  public class ImplicitAbility : IAbility
   {
     public IEnumerable<GridPos> GetValidTargetPositions()
     {
@@ -82,7 +82,8 @@ namespace EntityLogic.Abilities
 
     public IEnumerable<GridPos> GetEffectiveRange(GridPos pos)
     {
-      return new[] { pos };
+      // todo: revert to single cell, just for show
+      return new[] { pos, pos.East, pos.North, pos.South, pos.West };
     }
 
     public int GetEffectiveCost(GridPos pos)

@@ -6,7 +6,7 @@ namespace EntityLogic.Abilities
   [Serializable]
   public class AbilityProcessor
   {
-    public IAbility moveAbility = new MoveAbility();
+    public IAbility moveAbility = new ImplicitAbility();
     
     public List<AbilityBase> abilities = new List<AbilityBase>();
 

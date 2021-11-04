@@ -17,6 +17,7 @@ namespace World.Interaction
     private Dictionary<GridPos, HighlightedTile> _selected;
     private AbilityProcessor _abilityProcessor;
     private UnityEngine.Camera _camera;
+    private GridPos? _hoverPos = null;
 
     private void Awake()
     {
@@ -87,6 +88,14 @@ namespace World.Interaction
       {
         Select(pos);
       }
+
+      if (_hoverPos.HasValue)
+      {
+        foreach (var pos in ability.GetEffectiveRange(_hoverPos.Value))
+        {
+          Select(pos, Color.green);
+        }
+      }
     }
 
     private void Update()
@@ -102,14 +111,33 @@ namespace World.Interaction
       }
       
       // TODO: limit to correct layer
-      if (Input.GetMouseButtonDown(0) && Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out var hit))
+      if (Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out var hit))
       {
         var pos = MapUtils.ToMapPos(hit.point);
         if (_selected.ContainsKey(pos))
         {
-          Clear();
-          _abilityProcessor.SelectedAbility.Execute(pos);
+          if (_hoverPos != pos)
+          {
+            _hoverPos = pos;
+            Refresh();
+          }
         }
+        else
+        {
+          _hoverPos = null;
+          Refresh();
+        }
+      }
+      else if (_hoverPos.HasValue)
+      {
+        _hoverPos = null;
+        Refresh();
+      }
+
+      if (Input.GetMouseButtonDown(0) && _hoverPos.HasValue)
+      {
+        _abilityProcessor.SelectedAbility.Execute(_hoverPos.Value);
+        Clear();
       }
     }
 
