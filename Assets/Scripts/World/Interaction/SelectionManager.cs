@@ -99,7 +99,8 @@ namespace World.Interaction
         
         foreach (var pos in ability.GetEffectiveRange(_hoverPos.Value))
         {
-          Select(pos, Color.green);
+          var occupant = World.instance.GetOccupant(pos);
+          Select(pos, occupant is EnemyEntity ? Color.red : Color.green);
         }
       }
     }
@@ -143,6 +144,7 @@ namespace World.Interaction
       if (Input.GetMouseButtonDown(0) && _hoverPos.HasValue && TurnManager.instance.ActionPoints.SpendReservedPoints())
       {
         _abilityProcessor.SelectedAbility.Execute(_hoverPos.Value);
+        TurnManager.instance.CurrentTurnTaker.abilities.DeselectAbility();
         Clear();
       }
     }

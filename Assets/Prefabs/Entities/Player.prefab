@@ -181,9 +181,8 @@ MonoBehaviour:
       magicalDefense: 0
     backpack: []
   abilities:
-    abilities: []
-  projectilePrefab: {fileID: 4515601387615827983, guid: c7370499344ac5a46b59affeb22596b5, type: 3}
-  impactPrefab: {fileID: 7333221102163219410, guid: 307c69a0d043933459b6cef6693e9d04, type: 3}
+    abilities:
+    - {fileID: 11400000, guid: c76b923872d560c41ba697b33b016e49, type: 2}
 --- !u!136 &4692986789365586099
 CapsuleCollider:
   m_ObjectHideFlags: 0

@@ -32,19 +32,19 @@ namespace UI
     {
       abilityButton1.onClick.AddListener(() =>
       {
-        SelectAbility(1);
+        SelectAbility(0);
       });
       abilityButton2.onClick.AddListener(() =>
       {
-        SelectAbility(2);
+        SelectAbility(1);
       });
       abilityButton3.onClick.AddListener(() =>
       {
-        SelectAbility(3);
+        SelectAbility(2);
       });
       abilityButton4.onClick.AddListener(() =>
       {
-        SelectAbility(4);
+        SelectAbility(3);
       });
 
       var turnManager = TurnManager.instance;
@@ -92,19 +92,19 @@ namespace UI
     private void RefreshAbilities()
     {
       var ability = abilities.GetAbility(0);
-      abilityButtonImage1 = ability?.icon;
+      abilityButtonImage1.sprite = ability?.icon;
       abilityButtonText1.text = ability?.title ?? string.Empty;
       
       ability = abilities.GetAbility(1);
-      abilityButtonImage2 = ability?.icon;
+      abilityButtonImage2.sprite = ability?.icon;
       abilityButtonText2.text = ability?.title ?? string.Empty;
       
       ability = abilities.GetAbility(2);
-      abilityButtonImage3 = ability?.icon;
+      abilityButtonImage3.sprite = ability?.icon;
       abilityButtonText3.text = ability?.title ?? string.Empty;
       
       ability = abilities.GetAbility(3);
-      abilityButtonImage4 = ability?.icon;
+      abilityButtonImage4.sprite = ability?.icon;
       abilityButtonText4.text = ability?.title ?? string.Empty;
     }
   }

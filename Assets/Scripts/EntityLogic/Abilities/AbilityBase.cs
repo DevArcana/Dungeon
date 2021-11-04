@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using World.Common;
 
 namespace EntityLogic.Abilities
@@ -9,7 +8,7 @@ namespace EntityLogic.Abilities
   {
     public string title;
     public string description;
-    public Image icon;
+    public Sprite icon;
     public AbilityTag[] tags;
     public abstract IEnumerable<GridPos> GetValidTargetPositions();
     public abstract IEnumerable<GridPos> GetEffectiveRange(GridPos pos);

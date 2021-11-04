@@ -41,7 +41,15 @@ namespace World
     public bool IsOccupied(GridPos pos)
     {
       var worldPos = MapUtils.ToWorldPos(pos);
-      return !Physics.CheckBox(worldPos, Vector3.one * 0.5f, Quaternion.identity, LayerMask.GetMask("Entities"));
+      return Physics.CheckBox(worldPos, Vector3.one * 0.5f, Quaternion.identity, LayerMask.GetMask("Entities"));
+    }
+
+    public GridLivingEntity GetOccupant(GridPos pos)
+    {
+      var worldPos = MapUtils.ToWorldPos(pos);
+
+      var colliders = Physics.OverlapBox(worldPos, Vector3.one * 0.5f, Quaternion.identity, LayerMask.GetMask("Entities"));
+      return colliders?.Select(x => x.GetComponent<GridLivingEntity>()).FirstOrDefault(x => x != null);
     }
     
     public bool IsWalkable(GridPos pos)

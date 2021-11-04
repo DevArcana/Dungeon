@@ -15,7 +15,7 @@ namespace EntityLogic.Abilities
       var world = World.World.instance;
 
       var turnTaker = TurnManager.instance.CurrentTurnTaker;
-      
+
       var pos = turnTaker.GridPos;
       var cost = 0;
       var height = world.GetHeightAt(pos);
@@ -66,7 +66,7 @@ namespace EntityLogic.Abilities
 
               var neighbour = new Tile(pos, height, tile.cost + heightDifference + 1);
 
-              if (!world.IsOccupied(pos)) continue;
+              if (world.IsOccupied(pos)) continue;
 
               if (neighbour.cost <= TurnManager.instance.ActionPoints.ActionPoints)
               {
@@ -77,7 +77,7 @@ namespace EntityLogic.Abilities
           }
         }
       }
-      return tiles.Select(x => x.Value.gridPos);
+      return tiles.Where(x => !(x.Value.gridPos.x == turnTaker.GridPos.x && x.Value.gridPos.y == turnTaker.GridPos.y)).Select(x => x.Value.gridPos);
     }
 
     public IEnumerable<GridPos> GetEffectiveRange(GridPos pos)
@@ -93,12 +93,23 @@ namespace EntityLogic.Abilities
 
     public void Execute(GridPos pos)
     {
-      var pathfinding = new Pathfinding();
-      var path = pathfinding.FindPath(TurnManager.instance.CurrentTurnTaker.GridPos, pos).Item1;
+      var turnManager = TurnManager.instance;
+      var turnTaker = turnManager.CurrentTurnTaker;
+      var occupant = World.World.instance.GetOccupant(pos);
 
-      foreach (var segment in path)
+      if ((occupant is EnemyEntity && turnTaker is PlayerEntity || occupant is PlayerEntity && turnTaker is EnemyEntity) && pos.OneDimDistance(turnTaker.GridPos) == 1)
       {
-        TurnManager.instance.Transactions.EnqueueTransaction(new MoveTransaction(TurnManager.instance.CurrentTurnTaker, segment));
+        turnManager.Transactions.EnqueueTransaction(new AttackTransaction(turnTaker, occupant, 10));
+      }
+      else
+      {
+        var pathfinding = new Pathfinding();
+        var path = pathfinding.FindPath(turnTaker.GridPos, pos).Item1;
+
+        foreach (var segment in path)
+        {
+          turnManager.Transactions.EnqueueTransaction(new MoveTransaction(TurnManager.instance.CurrentTurnTaker, segment));
+        }
       }
     }
   }
