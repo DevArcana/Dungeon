@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using World.Common;
 
@@ -8,19 +9,26 @@ namespace World.Generation
   {
     private readonly SerializableMap<bool> _map;
     private readonly RegionsMap _regions;
+    private readonly List<GridPos> _unallocated;
 
     private readonly int _maxRegionSize;
+    private readonly int _minRegionSize;
+
+    private readonly Random _random;
 
     private int _regionIndex;
 
     public RegionsMap Regions => _regions;
 
-    public MapRegions(SerializableMap<bool> map, int maxRegionSize)
+    public MapRegions(SerializableMap<bool> map, int maxRegionSize, int minRegionSize)
     {
       _map = map;
       _maxRegionSize = maxRegionSize;
+      _minRegionSize = minRegionSize;
       _regions = new RegionsMap(map.width, map.height);
-
+      _unallocated = new List<GridPos>();
+      _random = new Random();
+      
       ScanRegions();
     }
 
@@ -32,6 +40,7 @@ namespace World.Generation
       _regionIndex++;
 
       var size = 0;
+      var cells = new List<GridPos>();
 
       while (queue.Count > 0)
       {
@@ -50,6 +59,7 @@ namespace World.Generation
         {
           _regions[pos] = _regionIndex;
           size++;
+          cells.Add(pos);
 
           if (size > _maxRegionSize)
           {
@@ -60,6 +70,15 @@ namespace World.Generation
           queue.Enqueue(pos.East);
           queue.Enqueue(pos.South);
           queue.Enqueue(pos.West);
+        }
+      }
+
+      if (size < _minRegionSize)
+      {
+        foreach (var cell in cells)
+        {
+          _regions[cell] = -2;
+          _unallocated.Add(cell);
         }
       }
     }
@@ -80,42 +99,62 @@ namespace World.Generation
           }
         }
       }
+      
+      FillUnallocatedRegions();
     }
 
-    private int DecideRegion(int sx, int sy)
+    private void FillUnallocatedRegions()
     {
-      var neighbours = new Dictionary<int, int>
+      if (_unallocated.Count == 0)
       {
-        [_regions[sx, sy]] = 1
-      };
+        return;
+      }
       
-      for (var y = sy - 1; y <= sy + 1; y++)
+      var choices = new List<int>(4);
+      var allocated = new List<GridPos>(_unallocated.Count);
+      
+      while (_unallocated.Count > 0)
       {
-        for (var x = sx - 1; x <= sx + 1; x++)
+        foreach (var pos in _unallocated)
         {
-          if (x == sx && y == sy)
+          choices.Clear();
+          var choice = _regions[pos.North];
+          if (choice > 0)
           {
-            continue;
+            choices.Add(choice);
+          }
+          
+          choice = _regions[pos.East];
+          if (choice > 0)
+          {
+            choices.Add(choice);
+          }
+          
+          choice = _regions[pos.South];
+          if (choice > 0)
+          {
+            choices.Add(choice);
+          }
+          
+          choice = _regions[pos.West];
+          if (choice > 0)
+          {
+            choices.Add(choice);
           }
 
-          if (!_regions.WithinBounds(x, y) || _map[x, y])
+          if (choices.Count > 0)
           {
-            continue;
-          }
-
-          var region = _regions[x, y];
-          if (neighbours.ContainsKey(region))
-          {
-            neighbours[region]++;
-          }
-          else
-          {
-            neighbours[region] = 1;
+            _regions[pos] = choices[_random.Next(choices.Count)];
+            allocated.Add(pos);
           }
         }
-      }
 
-      return neighbours.OrderBy(x => x.Value).FirstOrDefault().Key;
+        foreach (var pos in allocated)
+        {
+          _unallocated.Remove(pos);
+        }
+        allocated.Clear();
+      }
     }
   }
 }
