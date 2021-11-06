@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using Utils;
 using World.Common;
 
 namespace World.Generation
@@ -10,15 +11,20 @@ namespace World.Generation
 
     private readonly SerializableMap<bool> _map;
 
+    private readonly SerializableMap<Color> _colorMap;
+
     private readonly List<Vector3> _vertices = new List<Vector3>();
+
+    private readonly List<Color> _colors = new List<Color>();
 
     private readonly List<Vector2> _uvs = new List<Vector2>();
 
     private readonly List<int> _triangles = new List<int>();
 
-    public MarchingSquaresMesh(SerializableMap<bool> map, bool generateWalls)
+    public MarchingSquaresMesh(SerializableMap<bool> map, bool generateWalls, SerializableMap<Color> colorMap)
     {
       _generateWalls = generateWalls;
+      _colorMap = colorMap;
       _map = map;
     }
 
@@ -26,11 +32,13 @@ namespace World.Generation
     {
       public int vertexIndex;
       public readonly Vector3 position;
+      public readonly Color color;
 
-      public VoxelNode(Vector3 position)
+      public VoxelNode(Vector3 position, Color color)
       {
         vertexIndex = -1;
         this.position = position;
+        this.color = color;
       }
     }
 
@@ -42,12 +50,14 @@ namespace World.Generation
       public readonly VoxelNode corner;
       public readonly VoxelNode right;
 
-      public Voxel(Vector3 position, bool filled)
+      public Voxel(Vector3 position, bool filled, Color color)
       {
         this.filled = filled;
-        up = new VoxelNode(position + Vector3.forward * 0.5f);
-        corner = new VoxelNode(position);
-        right = new VoxelNode(position + Vector3.right * 0.5f);
+
+        var pos = MapUtils.ToMapPos(position);
+        up = new VoxelNode(position + Vector3.forward * 0.5f, color);
+        corner = new VoxelNode(position, color);
+        right = new VoxelNode(position + Vector3.right * 0.5f, color);
       }
     }
 
@@ -72,7 +82,7 @@ namespace World.Generation
       {
         for (var x = -1; x <= _width; x++)
         {
-          _voxels[x + 1, y + 1] = new Voxel(new Vector3(x, 0.0f, y), !_map.WithinBounds(x, y) || _map[x, y]);
+          _voxels[x + 1, y + 1] = new Voxel(new Vector3(x, 0.0f, y), !_map.WithinBounds(x, y) || _map[x, y], _colorMap.WithinBounds(x, y) ? _colorMap[x, y] : Color.white);
         }
       }
     }
@@ -85,7 +95,7 @@ namespace World.Generation
       }
 
       var position = node.position;
-      node.vertexIndex = AddVertex(position, new Vector2(position.x, position.z));
+      node.vertexIndex = AddVertex(position, new Vector2(position.x, position.z), node.color);
     }
 
     private void Fill(params VoxelNode[] nodes)
@@ -107,9 +117,10 @@ namespace World.Generation
       }
     }
 
-    private int AddVertex(Vector3 position, Vector2 uv)
+    private int AddVertex(Vector3 position, Vector2 uv, Color color)
     {
       _vertices.Add(position);
+      _colors.Add(color);
       _uvs.Add(uv);
       return _vertices.Count - 1;
     }
@@ -123,10 +134,10 @@ namespace World.Generation
       
       var dir = (to.position - from.position).normalized;
 
-      var topLeft = AddVertex(from.position, new Vector2(dir.x * from.position.x + dir.z * from.position.z, 1.0f));
-      var topRight = AddVertex(to.position, new Vector2(dir.x * to.position.x + dir.z * to.position.z, 1.0f));
-      var bottomRight = AddVertex(to.position + Vector3.down, new Vector2(dir.x * (to.position + Vector3.down).x + dir.z * (to.position + Vector3.down).z, 0.0f));
-      var bottomLeft = AddVertex(from.position + Vector3.down, new Vector2(dir.x * (from.position + Vector3.down).x + dir.z * (from.position + Vector3.down).z, 0.0f));
+      var topLeft = AddVertex(from.position, new Vector2(dir.x * from.position.x + dir.z * from.position.z, 1.0f), Color.white);
+      var topRight = AddVertex(to.position, new Vector2(dir.x * to.position.x + dir.z * to.position.z, 1.0f), Color.white);
+      var bottomRight = AddVertex(to.position + Vector3.down, new Vector2(dir.x * (to.position + Vector3.down).x + dir.z * (to.position + Vector3.down).z, 0.0f), Color.white);
+      var bottomLeft = AddVertex(from.position + Vector3.down, new Vector2(dir.x * (from.position + Vector3.down).x + dir.z * (from.position + Vector3.down).z, 0.0f), Color.white);
       
       _triangles.Add(topLeft);
       _triangles.Add(topRight);
@@ -243,7 +254,8 @@ namespace World.Generation
       {
         vertices = _vertices.ToArray(),
         uv = _uvs.ToArray(),
-        triangles = _triangles.ToArray()
+        triangles = _triangles.ToArray(),
+        colors = _colors.ToArray()
       };
 
       mesh.RecalculateNormals();

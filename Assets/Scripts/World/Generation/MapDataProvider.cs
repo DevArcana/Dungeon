@@ -56,13 +56,25 @@ namespace World.Generation
 
     private void BuildMesh()
     {
+      var colors = new SerializableMap<Color>(regions.width, regions.height);
+
+      foreach (var region in regions.AllRegions())
+      {
+        var color = UnityEngine.Random.ColorHSV(0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+        foreach (var cell in region.cells)
+        {
+          colors[cell] = color;
+        }
+      }
+      
       for (byte i = 0; i <= settings.layers && i < layers.Length; i++)
       {
         var obj = new GameObject($"Layer {i}");
         obj.transform.SetParent(transform);
         obj.transform.localPosition = Vector3.up * i;
-          
-        var meshProvider = new MarchingSquaresMesh(heightmap.SliceAt(i), i != 0);
+
+        var slice = heightmap.SliceAt(i);
+        var meshProvider = new MarchingSquaresMesh(slice, i != 0, colors);
         var mesh = meshProvider.CreateMesh();
           
         obj.AddComponent<MeshRenderer>().material = layers[i];
