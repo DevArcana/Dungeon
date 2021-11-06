@@ -82,7 +82,8 @@ namespace EntityLogic.Abilities
 
     public IEnumerable<GridPos> GetEffectiveRange(GridPos pos)
     {
-      return new[] { pos };
+      var pathfinding = new Pathfinding();
+      return pathfinding.FindPath(TurnManager.instance.CurrentTurnTaker.GridPos, pos).Item1;
     }
 
     public int GetEffectiveCost(GridPos pos)
