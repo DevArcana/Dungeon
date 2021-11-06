@@ -96,5 +96,27 @@ namespace World
 
       currentFloor.CurrentValue++;
     }
+
+    public int GetRegionIndex(GridPos pos)
+    {
+      return _mapDataProvider.regions.WithinBounds(pos) ? _mapDataProvider.regions[pos] : -1;
+    }
+    
+    public Region GetRegion(int index)
+    {
+      return _mapDataProvider.regions.GetRegion(index);
+    }
+
+    public Dictionary<int, Region> AllRegions()
+    {
+      var regions = new Dictionary<int, Region>();
+
+      foreach (var region in _mapDataProvider.regions.AllRegions())
+      {
+        regions[region.index] = region;
+      }
+      
+      return regions;
+    }
   }
 }

@@ -8,6 +8,7 @@ namespace World.Common
   {
     public readonly int index;
     public readonly List<GridPos> cells;
+    public int Size => cells.Count;
 
     public Region(int i)
     {
@@ -47,6 +48,26 @@ namespace World.Common
       }
 
       return regions.Values.OrderByDescending(x => x.cells.Count);
+    }
+
+    public Region GetRegion(int index)
+    {
+      var region = new Region(index);
+      
+      for (var y = 0; y < height; y++)
+      {
+        for (var x = 0; x < width; x++)
+        {
+          var i = this[x, y];
+
+          if (i == index)
+          {
+            region.cells.Add(GridPos.At(x, y));
+          }
+        }
+      }
+
+      return region;
     }
   }
 }
