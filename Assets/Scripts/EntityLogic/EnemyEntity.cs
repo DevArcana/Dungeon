@@ -13,11 +13,13 @@ namespace TurnSystem
   {
     private Queue<GridPos> _path;
     private GridPos _target;
-
+    
     private void Update()
     {
       if (TurnManager.instance.CurrentTurnTaker == this && !TurnManager.instance.Transactions.HasPendingTransactions)
       {
+        TurnManager.instance.NextTurn();
+        return;
         // var pos = MapUtils.ToMapPos(transform.position);
         // Debug.Log($"Enemy - {pos.x}, {pos.y}");
         // if (TurnManager.instance.ActionPoints.RemainingActionPoints == ActionPointsHolder.MaxActionPoints)

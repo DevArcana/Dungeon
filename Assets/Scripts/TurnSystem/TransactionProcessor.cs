@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using TurnSystem.Transactions;
+using UnityEngine;
 
 namespace TurnSystem
 {
@@ -48,7 +49,11 @@ namespace TurnSystem
         if (_transaction.Run())
         {
           _transaction = null;
-          _justFinished = true;
+
+          if (_transactionQueue.Count == 0)
+          {
+            _justFinished = true;
+          }
         }
       }
       else if (_justFinished)

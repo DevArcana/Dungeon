@@ -60,6 +60,7 @@ namespace World.Interaction
           TurnManager.instance.Transactions.EnqueueTransaction(new PanCameraTransaction(MapUtils.ToWorldPos(pos), false));
           TurnManager.instance.Transactions.EnqueueTransaction(new SpawnEnemyTransaction(spawnList[_random.Next(spawnList.Count)], pos));
         }
+        _enemies[region].Clear();
         TurnManager.instance.Transactions.EnqueueTransaction(new PanCameraTransaction());
       }
     }

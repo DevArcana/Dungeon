@@ -53,7 +53,7 @@ namespace TurnSystem
       ActionPoints.ResetPoints();
       Transactions.Clear();
     }
-
+    
     private void Update()
     {
       Transactions.ProcessTransactions();

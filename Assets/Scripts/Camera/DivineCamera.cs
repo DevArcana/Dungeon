@@ -104,7 +104,7 @@ namespace Camera
             _smoothOrigin = Vector3.SmoothDamp(_smoothOrigin, _origin, ref _smoothingVelocity, smoothing);
             _distanceSmooth = Mathf.SmoothDamp(_distanceSmooth, _distance, ref _distanceVelocity, smoothing);
 
-            _isMoving = _smoothOrigin != _origin || Math.Abs(_distanceSmooth - _distance) > 0.001f;
+            _isMoving = (_smoothOrigin - _origin).sqrMagnitude > 0.001f || Math.Abs(_distanceSmooth - _distance) > 0.001f;
             var updateCamera = _isMoving;
 
             var moveRight = Input.GetAxisRaw("Horizontal");
