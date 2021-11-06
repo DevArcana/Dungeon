@@ -120,7 +120,7 @@ namespace World.Interaction
       }
       
       // TODO: limit to correct layer
-      if (Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out var hit, float.MaxValue, layerMask: LayerMask.GetMask("UI")))
+      if (Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out var hit, float.MaxValue, layerMask: LayerMask.GetMask("Selections")))
       {
         var pos = MapUtils.ToMapPos(hit.point);
 
@@ -189,7 +189,7 @@ namespace World.Interaction
 
     public void Select(GridPos pos)
     {
-      Select(pos, new Color(1.0f, 1.0f, 1.0f, 0.5f));
+      Select(pos, World.instance.IsOccupied(pos) ? new Color(1.0f, 0.5f, 0.0f, 0.5f) : new Color(1.0f, 1.0f, 1.0f, 0.5f));
     }
     
     public void Select(GridPos pos, Color color)
