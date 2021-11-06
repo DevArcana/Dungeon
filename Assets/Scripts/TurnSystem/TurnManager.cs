@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using EntityLogic;
+using TurnSystem.Transactions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Utils;
 
 namespace TurnSystem
 {
@@ -144,6 +146,7 @@ namespace TurnSystem
       }
 
       ActionPoints.ResetPoints();
+      Transactions.EnqueueTransaction(new PanCameraTransaction(MapUtils.ToWorldPos(CurrentTurnTaker.GridPos)));
       OnTurnChanged(CurrentTurnTaker);
     }
 
