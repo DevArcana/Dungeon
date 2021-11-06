@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using EntityLogic;
 using TurnSystem;
+using TurnSystem.Transactions;
 using UnityEngine;
 using Utils;
 using World.Common;
@@ -15,25 +15,33 @@ namespace World.Interaction
     
     private int _currentRegion;
     private Dictionary<int, Region> _regions;
-    private Dictionary<int, List<GridLivingEntity>> _enemies;
+    private Dictionary<int, List<GridPos>> _enemies;
     private Random _random;
 
     private void Start()
     {
       _currentRegion = -1;
       _random = new Random();
-      TurnManager.instance.ActionPoints.ActionPointsChanged += OnActionPointsChanged;
+      TurnManager.instance.Transactions.TransactionsProcessed += OnTransactionsProcessed;
+      TurnManager.instance.TurnChanged += OnTurnChanged;
       _regions = World.instance.AllRegions();
-      _enemies = new Dictionary<int, List<GridLivingEntity>>();
+      _enemies = new Dictionary<int, List<GridPos>>();
       PopulateRegions();
+      OnTransactionsProcessed();
+    }
+
+    private void OnTurnChanged(object sender, TurnManager.TurnEventArgs e)
+    {
+      OnTransactionsProcessed();
     }
 
     private void OnDestroy()
     {
-      TurnManager.instance.ActionPoints.ActionPointsChanged -= OnActionPointsChanged;
+      TurnManager.instance.Transactions.TransactionsProcessed -= OnTransactionsProcessed;
+      TurnManager.instance.TurnChanged -= OnTurnChanged;
     }
 
-    private void OnActionPointsChanged(int points)
+    private void OnTransactionsProcessed()
     {
       var entity = TurnManager.instance.CurrentTurnTaker;
 
@@ -47,11 +55,12 @@ namespace World.Interaction
       if (region != _currentRegion)
       {
         _currentRegion = region;
-        foreach (var enemy in _enemies[region])
+        foreach (var pos in _enemies[region])
         {
-          enemy.gameObject.SetActive(true);
-          TurnManager.instance.RegisterTurnBasedEntity(enemy);
+          TurnManager.instance.Transactions.EnqueueTransaction(new PanCameraTransaction(MapUtils.ToWorldPos(pos), false));
+          TurnManager.instance.Transactions.EnqueueTransaction(new SpawnEnemyTransaction(spawnList[_random.Next(spawnList.Count)], pos));
         }
+        TurnManager.instance.Transactions.EnqueueTransaction(new PanCameraTransaction());
       }
     }
 
@@ -77,12 +86,9 @@ namespace World.Interaction
             count++;
             if (!_enemies.ContainsKey(region.index))
             {
-              _enemies[region.index] = new List<GridLivingEntity>();
+              _enemies[region.index] = new List<GridPos>();
             }
-            
-            var enemy = Instantiate(spawnList[_random.Next(spawnList.Count)], MapUtils.ToWorldPos(position), Quaternion.identity);
-            enemy.gameObject.SetActive(false);
-            _enemies[region.index].Add(enemy);
+            _enemies[region.index].Add(position);
           }
         }
       }

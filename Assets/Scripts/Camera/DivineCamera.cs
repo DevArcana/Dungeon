@@ -26,6 +26,9 @@ namespace Camera
 
         private Vector2 _lastMousePos;
 
+        private bool _isMoving;
+        private bool _isLocked;
+
         private void Start()
         {
             _origin = transform.position;
@@ -36,7 +39,11 @@ namespace Camera
             AdjustOriginToGround();
             _smoothOrigin = _origin;
             LookAtOrigin();
+            FindPlayer();
+        }
 
+        private void FindPlayer()
+        {
             var player = GameObject.FindGameObjectWithTag("Player");
             if (player != null)
             {
@@ -63,17 +70,47 @@ namespace Camera
             transform.LookAt(_smoothOrigin);
         }
 
+        public void LockMovement()
+        {
+            _isLocked = true;
+        }
+
+        public void UnlockMovement()
+        {
+            _isLocked = false;
+        }
+
+        public void PanToLocation(Vector3? location)
+        {
+            if (location.HasValue)
+            {
+                _origin = location.Value;
+            }
+            else
+            {
+                FindPlayer();
+            }
+            
+            _isMoving = true;
+        }
+
+        public bool IsMoving()
+        {
+            return _isMoving;
+        }
+
         private void Update()
         {
             _smoothOrigin = Vector3.SmoothDamp(_smoothOrigin, _origin, ref _smoothingVelocity, smoothing);
             _distanceSmooth = Mathf.SmoothDamp(_distanceSmooth, _distance, ref _distanceVelocity, smoothing);
-            
-            var updateCamera = _smoothOrigin != _origin || Math.Abs(_distanceSmooth - _distance) > 0.001f;
+
+            _isMoving = _smoothOrigin != _origin || Math.Abs(_distanceSmooth - _distance) > 0.001f;
+            var updateCamera = _isMoving;
 
             var moveRight = Input.GetAxisRaw("Horizontal");
             var moveForward = Input.GetAxisRaw("Vertical");
 
-            if (moveRight != 0.0f || moveForward != 0.0f)
+            if (!_isLocked && (moveRight != 0.0f || moveForward != 0.0f))
             {
                 var move = Vector3.Normalize(_towardsCamera * -moveForward + _right * moveRight);
                 _origin += move * (speed * _distanceSmooth * Time.deltaTime);
