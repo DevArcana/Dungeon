@@ -76,18 +76,10 @@ namespace UI
         return;
       }
       
-      // for (var i = 0; i < _currentAbilityProcessor.abilities.Count; i++)
-      // {
-      //   var ability = _currentAbilityProcessor.abilities[i];
-      //
-      //   _abilities[i].image.sprite = ability.icon;
-      //   _abilities[i].image.enabled = true;
-      // }
-      
-      for (var i = 0; i < 6; i++)
+      for (var i = 0; i < _currentAbilityProcessor.abilities.Count; i++)
       {
-        var ability = _currentAbilityProcessor.abilities[0];
-
+        var ability = _currentAbilityProcessor.abilities[i];
+      
         _abilities[i].image.sprite = ability.icon;
         _abilities[i].image.enabled = true;
       }
