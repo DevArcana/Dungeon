@@ -70,7 +70,7 @@ namespace EntityLogic.Abilities
               if (occupant is PlayerEntity) continue;
 
               if ((occupant == null && neighbour.cost <= TurnManager.instance.ActionPoints.ActionPoints) ||
-                  (occupant != null && neighbour.cost <= TurnManager.instance.ActionPoints.ActionPoints + 2))
+                  (occupant != null && neighbour.cost + 2 <= TurnManager.instance.ActionPoints.ActionPoints))
               {
                 tiles[pos] = neighbour;
                 queue.Enqueue(neighbour.gridPos);
