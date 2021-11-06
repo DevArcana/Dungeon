@@ -112,31 +112,32 @@ namespace World.Generation
       
       var choices = new List<int>(4);
       var allocated = new List<GridPos>(_unallocated.Count);
-      
+      var lastCount = _unallocated.Count;
+
       while (_unallocated.Count > 0)
       {
         foreach (var pos in _unallocated)
         {
           choices.Clear();
-          var choice = _regions[pos.North];
+          var choice = _regions.GetOrDefault(pos.North, -1);
           if (choice > 0)
           {
             choices.Add(choice);
           }
           
-          choice = _regions[pos.East];
+          choice = _regions.GetOrDefault(pos.East, -1);
           if (choice > 0)
           {
             choices.Add(choice);
           }
           
-          choice = _regions[pos.South];
+          choice = _regions.GetOrDefault(pos.South, -1);
           if (choice > 0)
           {
             choices.Add(choice);
           }
           
-          choice = _regions[pos.West];
+          choice = _regions.GetOrDefault(pos.West, -1);
           if (choice > 0)
           {
             choices.Add(choice);
@@ -154,6 +155,13 @@ namespace World.Generation
           _unallocated.Remove(pos);
         }
         allocated.Clear();
+
+        if (lastCount == _unallocated.Count)
+        {
+          break;
+        }
+
+        lastCount = _unallocated.Count;
       }
     }
   }

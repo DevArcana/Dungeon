@@ -43,6 +43,16 @@ namespace World.Common
       return x >= 0 && x < width && y >= 0 && y < height;
     }
 
+    public T GetOrDefault(GridPos pos, T fallback = default)
+    {
+      return GetOrDefault(pos.x, pos.y, fallback);
+    }
+
+    private T GetOrDefault(int x, int y, T fallback = default)
+    {
+      return WithinBounds(x, y) ? this[x, y] : fallback;
+    }
+
     public T this[int x, int y]
     {
       get => data[x + y * width];
