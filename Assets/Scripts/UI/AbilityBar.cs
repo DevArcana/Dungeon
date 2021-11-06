@@ -1,4 +1,5 @@
-﻿using EntityLogic.Abilities;
+﻿using System.Collections.Generic;
+using EntityLogic.Abilities;
 using TurnSystem;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ namespace UI
   {
     public Ability abilityPrefab;
 
-    private Ability[] _abilities;
+    private List<Ability> _abilities;
 
     private AbilityProcessor _currentAbilityProcessor;
     
@@ -20,16 +21,7 @@ namespace UI
       turnManager.ActionPoints.ActionPointsChanged += OnActionPointsChanged;
       turnManager.TurnChanged += OnTurnChanged;
 
-      _abilities = new Ability[6];
-      for (var i = 0; i < 6; i++)
-      {
-        _abilities[i] = Instantiate(abilityPrefab, transform);
-        var index = i;
-        _abilities[i].button.onClick.AddListener(() =>
-        {
-          SelectAbility(index);
-        });
-      }
+      _abilities = new List<Ability>();
       
       var turnTaker = turnManager.CurrentTurnTaker;
 
@@ -55,6 +47,11 @@ namespace UI
 
     private void OnActionPointsChanged(int points)
     {
+      if (!(TurnManager.instance.CurrentTurnTaker is PlayerEntity))
+      {
+        return;
+      }
+      
       RefreshAbilities();
     }
 
@@ -71,17 +68,26 @@ namespace UI
 
     private void RefreshAbilities()
     {
+      ClearAbilities();
+      
       if (_currentAbilityProcessor?.abilities is null)
       {
         return;
       }
-      
+
       for (var i = 0; i < _currentAbilityProcessor.abilities.Count; i++)
       {
         var ability = _currentAbilityProcessor.abilities[i];
-      
-        _abilities[i].image.sprite = ability.icon;
-        _abilities[i].image.enabled = true;
+        
+        var instantiatedAbility = Instantiate(abilityPrefab, transform);
+        var index = i;
+        instantiatedAbility.button.onClick.AddListener(() =>
+        {
+          SelectAbility(index);
+        });
+        instantiatedAbility.image.sprite = ability.icon;
+        
+        _abilities.Add(instantiatedAbility);
       }
     }
 
@@ -89,8 +95,10 @@ namespace UI
     {
       foreach (var ability in _abilities)
       {
-        ability.image.enabled = false;
+        Destroy(ability.gameObject);
       }
+      
+      _abilities.Clear();
     }
   }
 }
