@@ -350,6 +350,7 @@ GameObject:
   - component: {fileID: 527564245098237591}
   - component: {fileID: 5989213044304283006}
   - component: {fileID: 4481143655912953565}
+  - component: {fileID: 506159981}
   m_Layer: 6
   m_Name: Enemy
   m_TagString: Untagged
@@ -394,11 +395,52 @@ MonoBehaviour:
   highlight: {fileID: 0}
   autoRegister: 0
   initiative: 0
-  weapon:
-    power: 0
-    range: 20
-    attackPrefab: {fileID: 0}
-    isRanged: 0
+  equipment:
+    weapon:
+      level: 0
+      itemRarity: 0
+      name: 
+      description: 
+      ability: {fileID: 0}
+      power: 0
+      range: 0
+      attackPrefab: {fileID: 0}
+      isRanged: 0
+    helmet:
+      level: 0
+      itemRarity: 0
+      name: 
+      description: 
+      ability: {fileID: 0}
+      physicalDefense: 0
+      magicalDefense: 0
+    breastplate:
+      level: 0
+      itemRarity: 0
+      name: 
+      description: 
+      ability: {fileID: 0}
+      physicalDefense: 0
+      magicalDefense: 0
+    leggings:
+      level: 0
+      itemRarity: 0
+      name: 
+      description: 
+      ability: {fileID: 0}
+      physicalDefense: 0
+      magicalDefense: 0
+    boots:
+      level: 0
+      itemRarity: 0
+      name: 
+      description: 
+      ability: {fileID: 0}
+      physicalDefense: 0
+      magicalDefense: 0
+    backpack: []
+  abilities:
+    abilities: []
 --- !u!136 &527564245098237591
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -441,6 +483,21 @@ MonoBehaviour:
   damageable:
     maxHealth: 100
     health: 100
+--- !u!114 &506159981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7704167482467389149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2ff230935304f0597ec61718e317447, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  aggressiveness: 0
+  teamwork: 0
+  personality: {fileID: 0}
 --- !u!1 &8387361508847544691
 GameObject:
   m_ObjectHideFlags: 0

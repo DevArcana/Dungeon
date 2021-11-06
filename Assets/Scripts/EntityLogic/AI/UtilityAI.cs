@@ -10,6 +10,21 @@ namespace EntityLogic.AI
 {
     public class UtilityAI
     {
+        private List<GridLivingEntity> _enemies;
+        private List<GridLivingEntity> _players;
+        public UtilityAI()
+        {
+            _enemies = new List<GridLivingEntity>();
+            _players = new List<GridLivingEntity>();
+            
+            var entities = TurnManager.instance.PeekQueue();
+            foreach (var entity in entities)
+            {
+                if (entity is PlayerEntity) _players.Add(entity);
+                else if (entity is EnemyEntity) _enemies.Add(entity);
+            }
+        }
+        
         private ActionType ChooseNextAction(EnemyEntity entity)
         {
             var targetEntity = Pathfinding.FindClosestPlayer(entity.GridPos);
