@@ -33,6 +33,17 @@ namespace World.Common
       return copy;
     }
 
+    public void Clear()
+    {
+      for (var y = 0; y < height; y++)
+      {
+        for (var x = 0; x < width; x++)
+        {
+          this[x, y] = default;
+        }
+      }
+    }
+
     public bool WithinBounds(GridPos pos)
     {
       return WithinBounds(pos.x, pos.y);

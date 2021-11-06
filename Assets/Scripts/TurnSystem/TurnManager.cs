@@ -69,11 +69,17 @@ namespace TurnSystem
     }
 
     public event EventHandler<TurnEventArgs> TurnEntityAdded;
+    public event EventHandler<TurnEventArgs> TurnEntityRemoved;
     public event EventHandler<TurnEventArgs> TurnChanged;
-
+    
     private void OnTurnEntityAdded(GridLivingEntity entity)
     {
       TurnEntityAdded?.Invoke(this, new TurnEventArgs {Entity = entity});
+    }
+    
+    private void OnTurnEntityRemoved(GridLivingEntity entity)
+    {
+      TurnEntityRemoved?.Invoke(this, new TurnEventArgs {Entity = entity});
     }
     
     private void OnTurnChanged(GridLivingEntity entity)
@@ -157,6 +163,7 @@ namespace TurnSystem
     public void UnregisterTurnBasedEntity(GridLivingEntity entity)
     {
       _entities.Remove(entity);
+      OnTurnEntityRemoved(entity);
     }
   }
 }
