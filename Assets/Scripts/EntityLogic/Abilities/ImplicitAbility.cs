@@ -97,20 +97,22 @@ namespace EntityLogic.Abilities
       var turnManager = TurnManager.instance;
       var turnTaker = turnManager.CurrentTurnTaker;
       var occupant = World.World.instance.GetOccupant(pos);
+      
+      var pathfinding = new Pathfinding();
+      var path = pathfinding.FindPath(turnTaker.GridPos, pos).Item1;
 
-      if ((occupant is EnemyEntity && turnTaker is PlayerEntity || occupant is PlayerEntity && turnTaker is EnemyEntity) && pos.OneDimDistance(turnTaker.GridPos) == 1)
+      foreach (var segment in path.Take(path.Count - 1))
+      {
+        turnManager.Transactions.EnqueueTransaction(new MoveTransaction(TurnManager.instance.CurrentTurnTaker, segment));
+      }
+      
+      if (occupant is EnemyEntity && turnTaker is PlayerEntity || occupant is PlayerEntity && turnTaker is EnemyEntity)
       {
         turnManager.Transactions.EnqueueTransaction(new AttackTransaction(turnTaker, occupant, 10));
       }
       else
       {
-        var pathfinding = new Pathfinding();
-        var path = pathfinding.FindPath(turnTaker.GridPos, pos).Item1;
-
-        foreach (var segment in path)
-        {
-          turnManager.Transactions.EnqueueTransaction(new MoveTransaction(TurnManager.instance.CurrentTurnTaker, segment));
-        }
+        turnManager.Transactions.EnqueueTransaction(new MoveTransaction(TurnManager.instance.CurrentTurnTaker, path.Last()));
       }
     }
   }
