@@ -7,15 +7,14 @@ using UnityEngine.SceneManagement;
 using Utils;
 using World.Common;
 using World.Generation;
+using World.Triggers;
 
 namespace World
 {
   public class World : MonoBehaviour
   {
     public static World instance;
-
     private MapDataProvider _mapDataProvider;
-    private readonly Dictionary<GridPos, List<GridEntity>> _entities = new Dictionary<GridPos, List<GridEntity>>();
 
     /// <summary>
     /// Gets height of the heightmap at specified coordinates.
@@ -48,8 +47,15 @@ namespace World
     {
       var worldPos = MapUtils.ToWorldPos(pos);
 
-      var colliders = Physics.OverlapBox(worldPos, Vector3.one * 0.5f, Quaternion.identity, LayerMask.GetMask("Entities"));
+      var colliders = Physics.OverlapBox(worldPos, Vector3.one * 0.25f, Quaternion.identity, LayerMask.GetMask("Entities"));
       return colliders?.Select(x => x.GetComponent<GridLivingEntity>()).FirstOrDefault(x => x != null);
+    }
+    
+    public IEnumerable<GridTriggerEntity> GetTriggers(GridPos pos)
+    {
+      var worldPos = MapUtils.ToWorldPos(pos);
+      var colliders = Physics.OverlapBox(worldPos, Vector3.one * 0.25f, Quaternion.identity, LayerMask.GetMask("Triggers"));
+      return colliders?.Select(x => x.GetComponent<GridTriggerEntity>()).Where(x => x != null);
     }
     
     public bool IsWalkable(GridPos pos)
@@ -85,8 +91,6 @@ namespace World
 
     private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
     {
-      _entities.Clear();
-
       _mapDataProvider = FindObjectOfType<MapDataProvider>();
 
       if (_mapDataProvider != null)

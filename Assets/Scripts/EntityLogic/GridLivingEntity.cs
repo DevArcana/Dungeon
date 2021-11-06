@@ -40,5 +40,10 @@ namespace EntityLogic
     {
       highlight.SetActive(active);
     }
+
+    public virtual string GetTooltip()
+    {
+      return "this is an entity";
+    }
   }
 }

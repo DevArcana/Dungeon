@@ -1,15 +1,15 @@
-﻿using TurnSystem;
+﻿using EntityLogic;
+using TurnSystem;
 using TurnSystem.Transactions;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace World.Triggers
 {
-  public class NextFloorPortal : MonoBehaviour
+  public class NextFloorPortal : GridTriggerEntity
   {
-    private void OnTriggerEnter(Collider other)
+    public override void OnTileEntered(GridLivingEntity entity)
     {
-      if (!other.CompareTag("Player"))
+      if (entity == null || !(entity is PlayerEntity))
       {
         return;
       }

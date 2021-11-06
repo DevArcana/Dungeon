@@ -30,5 +30,10 @@ namespace TurnSystem
     {
       TurnManager.instance.Transactions.EnqueueTransaction(new ChangeSceneTransaction("DeathScene"));
     }
+
+    public override string GetTooltip()
+    {
+      return $"HP: {_damageable.damageable.Health}/{_damageable.damageable.MaxHealth}";
+    }
   }
 }

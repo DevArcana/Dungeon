@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using EntityLogic;
 using EntityLogic.Abilities;
 using TurnSystem;
+using UI;
 using UnityEngine;
 using Utils;
 using World.Common;
@@ -118,9 +120,10 @@ namespace World.Interaction
       }
       
       // TODO: limit to correct layer
-      if (Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out var hit))
+      if (Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out var hit, float.MaxValue, layerMask: LayerMask.GetMask("UI")))
       {
         var pos = MapUtils.ToMapPos(hit.point);
+
         if (_availableTargets.Contains(pos))
         {
           if (_hoverPos != pos)
