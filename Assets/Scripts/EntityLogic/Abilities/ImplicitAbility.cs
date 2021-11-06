@@ -64,13 +64,11 @@ namespace EntityLogic.Abilities
 
               if (heightDifference > 1) continue;
 
-              var neighbour = new Tile(pos, height, tile.cost + heightDifference + 1);
-
               var occupant = world.GetOccupant(pos);
               if (occupant is PlayerEntity) continue;
+              var neighbour = new Tile(pos, height, tile.cost + heightDifference + 1 + (occupant ? 1 : 0));
 
-              if ((occupant == null && neighbour.cost <= TurnManager.instance.ActionPoints.ActionPoints) ||
-                  (occupant != null && neighbour.cost + 1 <= TurnManager.instance.ActionPoints.ActionPoints))
+              if (neighbour.cost <= TurnManager.instance.ActionPoints.ActionPoints)
               {
                 tiles[pos] = neighbour;
                 queue.Enqueue(neighbour.gridPos);
@@ -91,7 +89,7 @@ namespace EntityLogic.Abilities
     public int GetEffectiveCost(GridPos pos)
     {
       var pathfinding = new Pathfinding();
-      return pathfinding.FindPath(TurnManager.instance.CurrentTurnTaker.GridPos, pos).Item2 + (World.World.instance.IsOccupied(pos) ? 2 : 0);
+      return pathfinding.FindPath(TurnManager.instance.CurrentTurnTaker.GridPos, pos).Item2 + (World.World.instance.IsOccupied(pos) ? 1 : 0);
     }
 
     public void Execute(GridPos pos)
