@@ -17,6 +17,9 @@ namespace World
     private MapDataProvider _mapDataProvider;
     private readonly Dictionary<GridPos, List<GridEntity>> _entities = new Dictionary<GridPos, List<GridEntity>>();
 
+    public int MapWidth => _mapDataProvider.heightmap.width;
+    public int MapHeight => _mapDataProvider.heightmap.height;
+
     /// <summary>
     /// Gets height of the heightmap at specified coordinates.
     /// </summary>
