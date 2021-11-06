@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using TurnSystem;
+using UnityEngine;
 using Utils;
 using World.Common;
 
@@ -25,6 +27,16 @@ namespace UI
       _instance = this;
     }
 
+    private void Start()
+    {
+      TurnManager.instance.Transactions.TransactionsProcessed += UpdateTooltip;
+    }
+
+    private void OnDestroy()
+    {
+      TurnManager.instance.Transactions.TransactionsProcessed -= UpdateTooltip;
+    }
+
     private void Update()
     {
       if (Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out var hit, float.MaxValue, layerMask: LayerMask.GetMask("Default")))
@@ -34,16 +46,21 @@ namespace UI
         if (_pos != pos)
         {
           _pos = pos;
-          var occupant = World.World.instance.GetOccupant(pos);
-          if (occupant)
-          {
-            Show(occupant.entityName, occupant.GetTooltip());
-          }
-          else
-          {
-            Hide();
-          }
+          UpdateTooltip();
         }
+      }
+      else
+      {
+        Hide();
+      }
+    }
+
+    private void UpdateTooltip()
+    {
+      var occupant = World.World.instance.GetOccupant(_pos);
+      if (occupant)
+      {
+        Show(occupant.entityName, occupant.GetTooltip());
       }
       else
       {
