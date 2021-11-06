@@ -16,6 +16,9 @@ namespace World
     public static World instance;
     private MapDataProvider _mapDataProvider;
 
+    public int MapWidth => _mapDataProvider.heightmap.width;
+    public int MapHeight => _mapDataProvider.heightmap.height;
+
     /// <summary>
     /// Gets height of the heightmap at specified coordinates.
     /// </summary>
