@@ -56,7 +56,7 @@ namespace World.Generation
 
     private void BuildMesh()
     {
-      var colors = new SerializableMap<Color>(regions.width, regions.height);
+      var colors = new SerializableMap<Color>(regions.width, regions.height, Color.white);
 
       foreach (var region in regions.AllRegions())
       {
