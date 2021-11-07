@@ -14,7 +14,6 @@ namespace World.Common
     {
       this.width = width;
       this.height = height;
-
       data = new T[width * height];
     }
 

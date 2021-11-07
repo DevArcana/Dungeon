@@ -1,111 +1,104 @@
-﻿using System;
-using EntityLogic;
+﻿using System.Collections.Generic;
 using EntityLogic.Abilities;
-using TMPro;
 using TurnSystem;
 using UnityEngine;
-using UnityEngine.UI;
-using World.Interaction;
 
 namespace UI
 {
   public class AbilityBar : MonoBehaviour
   {
-    public Button abilityButton1;
-    public Button abilityButton2;
-    public Button abilityButton3;
-    public Button abilityButton4;
+    public Ability abilityPrefab;
 
-    public Image abilityButtonImage1;
-    public Image abilityButtonImage2;
-    public Image abilityButtonImage3;
-    public Image abilityButtonImage4;
+    private List<Ability> _abilities;
 
-    public TextMeshProUGUI abilityButtonText1;
-    public TextMeshProUGUI abilityButtonText2;
-    public TextMeshProUGUI abilityButtonText3;
-    public TextMeshProUGUI abilityButtonText4;
-
-    public AbilityProcessor abilities;
+    private AbilityProcessor _currentAbilityProcessor;
     
     private void Start()
     {
-      abilityButton1.onClick.AddListener(() =>
-      {
-        SelectAbility(0);
-      });
-      abilityButton2.onClick.AddListener(() =>
-      {
-        SelectAbility(1);
-      });
-      abilityButton3.onClick.AddListener(() =>
-      {
-        SelectAbility(2);
-      });
-      abilityButton4.onClick.AddListener(() =>
-      {
-        SelectAbility(3);
-      });
+      Destroy(transform.GetChild(0).gameObject);
 
       var turnManager = TurnManager.instance;
       turnManager.ActionPoints.ActionPointsChanged += OnActionPointsChanged;
+      turnManager.TurnChanged += OnTurnChanged;
 
+      _abilities = new List<Ability>();
+      
       var turnTaker = turnManager.CurrentTurnTaker;
 
-      if (!(turnTaker is null))
+      if (turnTaker is PlayerEntity)
       {
-        abilities = turnTaker.abilities;
+        _currentAbilityProcessor = turnTaker.abilities;
+        RefreshAbilities();
       }
-
-      turnManager.TurnChanged += OnTurnChanged;
     }
 
     private void OnTurnChanged(object sender, TurnManager.TurnEventArgs e)
     {
+      ClearAbilities();
+      
       if (!(e.Entity is PlayerEntity player))
       {
         return;
       }
 
-      abilities = player.abilities;
-      
+      _currentAbilityProcessor = player.abilities;
       RefreshAbilities();
     }
 
     private void OnActionPointsChanged(int points)
     {
+      if (!(TurnManager.instance.CurrentTurnTaker is PlayerEntity))
+      {
+        return;
+      }
+      
       RefreshAbilities();
     }
 
     private void SelectAbility(int abilityNumber)
     {
-      // TODO: fix
-      if (abilities.SelectedAbilityIndex == abilityNumber)
+      if (_currentAbilityProcessor.SelectedAbilityIndex == abilityNumber)
       {
-        abilities.DeselectAbility();
+        _currentAbilityProcessor.DeselectAbility();
         return;
       }
 
-      abilities.SelectAbility(abilityNumber);
+      _currentAbilityProcessor.SelectAbility(abilityNumber);
     }
 
     private void RefreshAbilities()
     {
-      var ability = abilities.GetAbility(0);
-      abilityButtonImage1.sprite = ability?.icon;
-      abilityButtonText1.text = ability?.title ?? string.Empty;
+      ClearAbilities();
       
-      ability = abilities.GetAbility(1);
-      abilityButtonImage2.sprite = ability?.icon;
-      abilityButtonText2.text = ability?.title ?? string.Empty;
+      if (_currentAbilityProcessor?.abilities is null)
+      {
+        return;
+      }
+
+      for (var i = 0; i < _currentAbilityProcessor.abilities.Count; i++)
+      {
+        var ability = _currentAbilityProcessor.abilities[i];
+        
+        var instantiatedAbility = Instantiate(abilityPrefab, transform);
+        var index = i;
+        instantiatedAbility.button.onClick.AddListener(() =>
+        {
+          SelectAbility(index);
+        });
+        instantiatedAbility.image.sprite = ability.icon;
+        
+        _abilities.Add(instantiatedAbility);
+      }
+    }
+
+    private void ClearAbilities()
+    {
+      foreach (var ability in _abilities)
+      {
+        Destroy(ability.gameObject);
+      }
       
-      ability = abilities.GetAbility(2);
-      abilityButtonImage3.sprite = ability?.icon;
-      abilityButtonText3.text = ability?.title ?? string.Empty;
-      
-      ability = abilities.GetAbility(3);
-      abilityButtonImage4.sprite = ability?.icon;
-      abilityButtonText4.text = ability?.title ?? string.Empty;
+      _abilities.Clear();
     }
   }
 }
