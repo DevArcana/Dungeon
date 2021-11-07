@@ -15,6 +15,9 @@ namespace World.Generation
 
     public float fillPercent = 45.0f;
     
+    public int maxRegionSize = 200;
+    public int minRegionSize = 100;
+    
     public Transform playerPrefab;
     public Transform staircasePrefab;
   }
