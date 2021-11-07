@@ -10,11 +10,16 @@ namespace World.Common
 
     public T[] data;
 
-    public SerializableMap(int width, int height)
+    public SerializableMap(int width, int height, T initial = default)
     {
       this.width = width;
       this.height = height;
       data = new T[width * height];
+
+      for (var i = 0; i < data.Length; i++)
+      {
+        data[i] = initial;
+      }
     }
 
     public SerializableMap<T> Copy()

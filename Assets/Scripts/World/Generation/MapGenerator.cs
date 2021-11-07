@@ -48,7 +48,7 @@ namespace World.Generation
       map = ca.Result;
       
       // step 3, split into regions
-      var regions = new MapRegions(map, 50, 20);
+      var regions = new MapRegions(map, _settings.maxRegionSize, _settings.minRegionSize);
 
       // finally, apply to heightmap
       heightmap.ApplyAt(map, _settings.layers);

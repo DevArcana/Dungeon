@@ -50,11 +50,33 @@ namespace World.Generation
       public readonly VoxelNode corner;
       public readonly VoxelNode right;
 
-      public Voxel(Vector3 position, bool filled, Color color)
+      public Voxel(Vector3 position, bool filled, SerializableMap<Color> colors)
       {
         this.filled = filled;
-
+        
         var pos = MapUtils.ToMapPos(position);
+        var color = colors.GetOrDefault(pos, Color.white);
+
+        if (colors.GetOrDefault(pos.East, Color.white) != color)
+        {
+          color = Color.white;
+        }
+        
+        if (colors.GetOrDefault(pos.West, Color.white) != color)
+        {
+          color = Color.white;
+        }
+        
+        if (colors.GetOrDefault(pos.South, Color.white) != color)
+        {
+          color = Color.white;
+        }
+        
+        if (colors.GetOrDefault(pos.North, Color.white) != color)
+        {
+          color = Color.white;
+        }
+
         up = new VoxelNode(position + Vector3.forward * 0.5f, color);
         corner = new VoxelNode(position, color);
         right = new VoxelNode(position + Vector3.right * 0.5f, color);
@@ -82,7 +104,7 @@ namespace World.Generation
       {
         for (var x = -1; x <= _width; x++)
         {
-          _voxels[x + 1, y + 1] = new Voxel(new Vector3(x, 0.0f, y), !_map.WithinBounds(x, y) || _map[x, y], _colorMap.WithinBounds(x, y) ? _colorMap[x, y] : Color.white);
+          _voxels[x + 1, y + 1] = new Voxel(new Vector3(x, 0.0f, y), !_map.WithinBounds(x, y) || _map[x, y], _colorMap);
         }
       }
     }
