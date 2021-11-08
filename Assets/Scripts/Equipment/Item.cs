@@ -2,7 +2,6 @@
 using EntityLogic.Abilities;
 using JetBrains.Annotations;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Equipment
 {
@@ -20,7 +19,7 @@ namespace Equipment
         public ItemRarity itemRarity;
         public string itemName;
         public string description;
-        public Image icon;
+        public Sprite icon;
         [CanBeNull] public AbilityBase ability;
     }
 }
