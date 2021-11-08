@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace Equipment
 {
-    [Serializable]
     public class Armor : Item
     {
         public int physicalDefense;

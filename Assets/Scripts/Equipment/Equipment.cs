@@ -7,10 +7,10 @@ namespace Equipment
     public class EntityEquipment
     {
         public Weapon weapon;
-        public Armor helmet;
-        public Armor breastplate;
-        public Armor leggings;
-        public Armor boots;
+        public Helmet helmet;
+        public Breastplate breastplate;
+        public Leggings leggings;
+        public Boots boots;
         public List<Item> backpack;
     }
 }
