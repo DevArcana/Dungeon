@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 116cf69793994f26b08e71fea9b97c5b, type: 3}
   m_Name: Rusty Chainmail
   m_EditorClassIdentifier: 
-  level: 0
+  level: 1
   itemRarity: 0
-  itemName: 
-  description: 
-  icon: {fileID: 0}
+  itemName: Rusty Chain Mail
+  description: Old Rusty Chainmail
+  icon: {fileID: 21300000, guid: 3e0251ee3f4fa6546bee979f0b6c1f73, type: 3}
   ability: {fileID: 0}
-  physicalDefense: 0
+  physicalDefense: 5
   magicalDefense: 0
