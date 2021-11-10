@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Equipment
 {
@@ -27,6 +28,7 @@ namespace Equipment
         private void Start()
         {
             _numberOfSlots = 28;
+            backpack.Capacity = _numberOfSlots;
             _slots = new GameObject[_numberOfSlots];
 
             for (var i = 0; i < _numberOfSlots; i++)
@@ -40,6 +42,13 @@ namespace Equipment
             if (Input.GetKeyDown(KeyCode.I))
             {
                 isEnabled = !isEnabled;
+                if (isEnabled)
+                {
+                    for (var i = 0; i < backpack.Count; i++)
+                    {
+                        _slots[i].GetComponent<Image>().sprite = backpack[i].icon;
+                    }
+                }
             }
 
             inventory.SetActive(isEnabled);
