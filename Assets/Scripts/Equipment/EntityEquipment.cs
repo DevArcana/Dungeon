@@ -17,12 +17,16 @@ namespace Equipment
         public Breastplate breastplate;
         public Leggings leggings;
         public Boots boots;
+        public Necklace necklace;
+        public Ring leftRing;
+        public Ring rightRing;
+        public Gloves gloves;
         public List<Item> backpack;
 
 
         private void Start()
         {
-            _numberOfSlots = 21;
+            _numberOfSlots = 28;
             _slots = new GameObject[_numberOfSlots];
 
             for (var i = 0; i < _numberOfSlots; i++)

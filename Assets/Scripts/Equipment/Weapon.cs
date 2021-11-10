@@ -7,5 +7,6 @@ namespace Equipment
     {
         public int damage;
         public int range;
+        public bool isRanged;
     }
 }

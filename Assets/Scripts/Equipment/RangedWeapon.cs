@@ -4,7 +4,10 @@ namespace Equipment
 {
     public class RangedWeapon : Weapon
     {
-        private bool isRanged = true;
+        public RangedWeapon()
+        {
+            isRanged = true;
+        }
         public Sprite projectilePrefab;
     }
 }

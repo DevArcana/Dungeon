@@ -2,6 +2,9 @@
 {
     public class MeleeWeapon : Weapon
     {
-        private bool isRanged = false;
+        public MeleeWeapon()
+        {
+            isRanged = false;
+        }
     }
 }
