@@ -5,7 +5,6 @@ namespace Equipment
 {
     public class Armor : Item
     {
-        public int physicalDefense;
-        public int magicalDefense;
+        public int damageReduction;
     }
 }

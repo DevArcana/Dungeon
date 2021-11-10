@@ -5,9 +5,7 @@ namespace Equipment
 {
     public class Weapon : Item
     {
-        public int power;
+        public int damage;
         public int range;
-        public Sprite attackPrefab;
-        public bool isRanged;
     }
 }
