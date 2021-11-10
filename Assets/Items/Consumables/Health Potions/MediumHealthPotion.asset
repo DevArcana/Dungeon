@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   level: 1
   itemRarity: 0
-  itemName: 
-  description: 
-  icon: {fileID: 0}
+  itemName: Medium Helath Potion
+  description: Health Potion that heals medium amount of health
+  icon: {fileID: 21300000, guid: 233275641285309418e091e332752591, type: 3}
   ability: {fileID: 0}
   amountToHeal: 0

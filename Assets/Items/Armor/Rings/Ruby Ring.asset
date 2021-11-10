@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b1c36424458493ebf04a3af08ad17b6, type: 3}
   m_Name: Ruby Ring
   m_EditorClassIdentifier: 
-  level: 0
+  level: 1
   itemRarity: 0
-  itemName: 
-  description: 
-  icon: {fileID: 0}
+  itemName: Ruby Ring
+  description: Ruby Ring
+  icon: {fileID: 21300000, guid: 460eeb347ef649442adfe7a19a822d74, type: 3}
   ability: {fileID: 0}
-  damageReduction: 0
+  damageReduction: 2

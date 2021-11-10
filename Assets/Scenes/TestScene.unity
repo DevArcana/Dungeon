@@ -1796,7 +1796,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 132, y: 0}
+  m_AnchoredPosition: {x: 132, y: 0.0009765625}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &483499295
@@ -6238,7 +6238,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh41902
+  m_Name: pb_Mesh21272
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -6677,10 +6677,22 @@ MonoBehaviour:
   breastplate: {fileID: 11400000, guid: b044889912473e64a8f1689e3fa121d2, type: 2}
   leggings: {fileID: 11400000, guid: efd9b08af844d4f4080d4827c5423190, type: 2}
   boots: {fileID: 11400000, guid: 15bd137899db58d428ba2d9e1996fd35, type: 2}
+  necklace: {fileID: 11400000, guid: dc5fc3b3d91917a4686ba57b93615999, type: 2}
+  leftRing: {fileID: 11400000, guid: 634a1b04b6a66bb43ac8cd744efb0000, type: 2}
+  rightRing: {fileID: 11400000, guid: cc1c6f9c0f92a52468e1889bc8471c0b, type: 2}
+  gloves: {fileID: 11400000, guid: 8cb87086c79255542bc38b5595c51e99, type: 2}
   backpack:
   - {fileID: 11400000, guid: da064680a7fc87d4c934127ef6ba2caf, type: 2}
   - {fileID: 11400000, guid: 80f1559e44d407a48be99c80ec764296, type: 2}
   - {fileID: 11400000, guid: 15bd137899db58d428ba2d9e1996fd35, type: 2}
+  - {fileID: 11400000, guid: bed33d9e21cc6464a943dbbd898c1c4b, type: 2}
+  - {fileID: 11400000, guid: ba370c1dfb940d846990613427a7f203, type: 2}
+  - {fileID: 11400000, guid: 60946f2e9c17d3848919dbcb7d436a89, type: 2}
+  - {fileID: 11400000, guid: 7ed86065f33b8a54891aef9a76d71099, type: 2}
+  - {fileID: 11400000, guid: 8892495a893f1f644abb5cb6694e1fc1, type: 2}
+  - {fileID: 11400000, guid: 0e95db44b81f8d64dbe350bfa9827bf6, type: 2}
+  - {fileID: 11400000, guid: 6e57c2d70983b83478ace389fc3c4cee, type: 2}
+  - {fileID: 11400000, guid: 4ed2f0f81f3a02f4f91212c15127bd05, type: 2}
 --- !u!1001 &1822195740
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6791,7 +6803,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 1
+  m_UiScaleMode: 2
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
