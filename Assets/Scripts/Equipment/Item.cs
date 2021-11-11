@@ -1,7 +1,7 @@
 ﻿using System;
 using EntityLogic.Abilities;
 using JetBrains.Annotations;
-using UnityEngine.UIElements;
+using UnityEngine;
 
 namespace Equipment
 {
@@ -13,14 +13,13 @@ namespace Equipment
         Legendary,
         Mythic
     }
-    [Serializable]
-    public class Item
+    public class Item : ScriptableObject
     {
         public int level;
         public ItemRarity itemRarity;
-        public string name;
+        public string itemName;
         public string description;
-        public Image icon;
+        public Sprite icon;
         [CanBeNull] public AbilityBase ability;
     }
 }
