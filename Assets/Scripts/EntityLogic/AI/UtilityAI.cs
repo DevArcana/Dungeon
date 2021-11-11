@@ -25,33 +25,7 @@ namespace EntityLogic.AI
                 (ActionType.Pass, PassTurnUtility(entity))
             }.Where(x => x.Item2 != 0f).OrderByDescending(x => x.Item2).ToList();
 
-            Debug.Log("Scores:");
-            foreach (var (action, score) in utilities)
-            {
-                Debug.Log($"{action} - {score}");
-            }
-
-            var (_, bestUtilityScore) = utilities.First();
-            var bestUtilities = utilities
-                .Where(x => x.Item2 >= bestUtilityScore * 0.9f)
-                .ToList();
-            var totalScore = 0f;
-
-            foreach (var (_, score) in bestUtilities)
-            {
-                totalScore += score;
-            }
-
-            var choice = Random.Range(0f, totalScore);
-            var accumulator = 0f;
-            
-            foreach (var (action, score) in bestUtilities)
-            {
-                accumulator += score;
-                if (choice < accumulator) return action;
-            }
-
-            return ActionType.Pass;
+            return WeightedRandom(utilities);
         }
 
         public void PerformNextAction(EnemyEntity entity)
@@ -80,6 +54,31 @@ namespace EntityLogic.AI
             }
             
             TurnManager.instance.Transactions.EnqueueTransaction(transaction);
+        }
+
+        private static ActionType WeightedRandom(List<(ActionType, float)> utilities)
+        {
+            var (_, bestUtilityScore) = utilities.First();
+            var bestUtilities = utilities
+                .Where(x => x.Item2 >= bestUtilityScore * 0.9f)
+                .ToList();
+            var totalScore = 0f;
+
+            foreach (var (_, score) in bestUtilities)
+            {
+                totalScore += score;
+            }
+
+            var choice = Random.Range(0f, totalScore);
+            var accumulator = 0f;
+            
+            foreach (var (action, score) in bestUtilities)
+            {
+                accumulator += score;
+                if (choice < accumulator) return action;
+            }
+            
+            return ActionType.Pass;
         }
 
         private float MeleeAttackUtility(GridLivingEntity entity, GridLivingEntity targetEntity)
