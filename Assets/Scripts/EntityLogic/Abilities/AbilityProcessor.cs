@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EntityLogic.Abilities
 {
@@ -37,6 +38,20 @@ namespace EntityLogic.Abilities
       {
         DeselectAbility();
       }
+    }
+
+    public bool SelectAbility(Type ability)
+    {
+      for (var i = 0; i < abilities.Count; i++)
+      {
+        if (abilities[i].GetType() != ability) continue;
+        SelectedAbilityIndex = i;
+        SelectedAbility = abilities[i];
+        SelectedAbilityChanged?.Invoke(SelectedAbility, SelectedAbilityIndex);
+        return true;
+      }
+
+      return false;
     }
 
     public void DeselectAbility()

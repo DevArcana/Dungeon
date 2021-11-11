@@ -26,34 +26,42 @@ namespace EntityLogic.AI
             }.Where(x => x.Item2 != 0f).OrderByDescending(x => x.Item2).ToList();
 
             return WeightedRandom(utilities);
+            
         }
 
         public void PerformNextAction(EnemyEntity entity)
         {
-            TransactionBase transaction;
             var targetEntity = Pathfinding.FindClosestPlayer(entity.GridPos);
 
             switch (ChooseNextAction(entity))
             {
                 case ActionType.Attack:
-                    transaction = new AttackTransaction(entity, targetEntity, 5);
-                    break;
+                {
+                    var ability = entity.abilities.SelectedAbility;
+                    TurnManager.instance.ActionPoints.ReservePoints(ability.GetEffectiveCost(targetEntity.GridPos));
+                    TurnManager.instance.ActionPoints.SpendReservedPoints();
+                    ability.Execute(targetEntity.GridPos);
+                    return;
+                }
                 case ActionType.Run:
+                {
                     var pathfinding = new Pathfinding();
                     var (path, _) = pathfinding.FindPath(entity.GridPos, targetEntity.GridPos);
-                    path.RemoveAt(path.Count - 1);
-                    transaction = new MoveTransaction(entity, GridPos.At(path[0].x, path[0].y));
-                    break;
+                    var target = path[path.Count - 2];
+                    var ability = entity.abilities.SelectedAbility;
+                    TurnManager.instance.ActionPoints.ReservePoints(ability.GetEffectiveCost(target));
+                    TurnManager.instance.ActionPoints.SpendReservedPoints();
+                    ability.Execute(target);
+                    return;
+                }
                 case ActionType.Pass:
-                    transaction = new PassTurnTransaction(entity);
-                    break;
+                    TurnManager.instance.NextTurn();
+                    return;
                 default:
                     Debug.Log("No action found");
-                    transaction = new PassTurnTransaction(entity);
-                    break;
+                    TurnManager.instance.NextTurn();
+                    return;
             }
-            
-            TurnManager.instance.Transactions.EnqueueTransaction(transaction);
         }
 
         private static ActionType WeightedRandom(List<(ActionType, float)> utilities)
@@ -83,19 +91,24 @@ namespace EntityLogic.AI
 
         private float MeleeAttackUtility(GridLivingEntity entity, GridLivingEntity targetEntity)
         {
-            var testTransaction = new AttackTransaction(entity, targetEntity, 0);
-            //TODO: fix if (!TurnManager.instance.CanProcessTransaction(testTransaction)) return 0f;
-            return 1f;
+            var availableActionPoints = TurnManager.instance.ActionPoints.ActionPoints;
+            var pathfinding = new Pathfinding();
+            if (entity.GridPos.OneDimDistance(targetEntity.GridPos) == 1
+                && pathfinding.FindPath(entity.GridPos, targetEntity.GridPos, 1).Item2 == 1
+                && availableActionPoints >= entity.abilities.SelectedAbility.GetEffectiveCost(targetEntity.GridPos))
+            {
+                return 1f;
+            }
+            return 0f;
         }
 
         private float RushPlayerUtility(GridLivingEntity entity, GridLivingEntity targetEntity)
         {
-            var pathfinding = new Pathfinding();
-            var (_, cost) = pathfinding.FindPath(entity.GridPos, targetEntity.GridPos);
-            const int maxCost = ActionPointsProcessor.MaxActionPoints;
-            var map = World.World.instance;
-            var heightDifference = Mathf.Abs(map.GetHeightAt(entity.GridPos) - map.GetHeightAt(targetEntity.GridPos));
-            if (cost > maxCost || cost == 1 || heightDifference == 1 && cost == 2) return 0f;
+            if (entity.GridPos.OneDimDistance(targetEntity.GridPos) == 1) return 0f;
+            var availableActionPoints = TurnManager.instance.ActionPoints.ActionPoints;
+            var maxCost = availableActionPoints + 2;
+            var cost = entity.abilities.SelectedAbility.GetEffectiveCost(targetEntity.GridPos);
+            if (cost > maxCost) return 0f;
             return Mathf.Pow(cost / (float) maxCost, 0.333f);
         }
 

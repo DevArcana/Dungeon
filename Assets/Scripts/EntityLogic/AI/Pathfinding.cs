@@ -17,7 +17,7 @@ namespace EntityLogic.AI
         private HashSet<PathNode> _openList;
         private HashSet<PathNode> _closedList;
 
-        public (List<GridPos>, int) FindPath(GridPos start, GridPos end)
+        public (List<GridPos>, int) FindPath(GridPos start, GridPos end, int maxCost = ActionPointsProcessor.MaxActionPoints * 3)
         {
             var map = World.World.instance;
             var startNode = new PathNode(start.x, start.y, map.GetHeightAt(start), !map.IsOccupied(start));
@@ -53,7 +53,7 @@ namespace EntityLogic.AI
                     var tempGCost = currentNode.gCost + CalculateDistanceCost(currentNode, neighbourNode);
                     if (tempGCost >= neighbourNode.gCost
                         || Mathf.Abs(currentNode.height - neighbourNode.height) > 1
-                        || Mathf.Floor(tempGCost) > ActionPointsProcessor.MaxActionPoints * 3) continue;
+                        || Mathf.Floor(tempGCost) > maxCost) continue;
                     neighbourNode.previousNode = currentNode;
                     neighbourNode.gCost = tempGCost;
                     neighbourNode.hCost = CalculateDistanceCost(neighbourNode, endNode);
