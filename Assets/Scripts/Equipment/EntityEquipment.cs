@@ -7,12 +7,13 @@ namespace Equipment
 {
     public class EntityEquipment : MonoBehaviour
     {
-        public bool isEnabled;
+        public static bool isEnabled;
+        public static bool iconsGenerated;
         public GameObject inventory;
         private int _numberOfSlots;
         private GameObject[] _slots;
         public GameObject slotHolder;
-        
+
         public Weapon weapon;
         public Helmet helmet;
         public Breastplate breastplate;
@@ -27,6 +28,8 @@ namespace Equipment
 
         private void Start()
         {
+            iconsGenerated = false;
+            isEnabled = false;
             _numberOfSlots = 28;
             backpack.Capacity = _numberOfSlots;
             _slots = new GameObject[_numberOfSlots];
@@ -35,6 +38,7 @@ namespace Equipment
             {
                 _slots[i] = slotHolder.transform.GetChild(i).gameObject;
             }
+            
         }
 
         private void Update()
@@ -42,13 +46,17 @@ namespace Equipment
             if (Input.GetKeyDown(KeyCode.I))
             {
                 isEnabled = !isEnabled;
-                if (isEnabled)
+                iconsGenerated = false;
+
+            }
+            if (isEnabled && !iconsGenerated)
+            {
+                for (var i = 0; i < backpack.Count; i++)
                 {
-                    for (var i = 0; i < backpack.Count; i++)
-                    {
-                        _slots[i].GetComponent<Image>().sprite = backpack[i].icon;
-                    }
+                    _slots[i].GetComponent<Image>().sprite = backpack[i].icon;
                 }
+
+                iconsGenerated = true;
             }
 
             inventory.SetActive(isEnabled);
