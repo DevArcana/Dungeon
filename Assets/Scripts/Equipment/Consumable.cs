@@ -1,4 +1,6 @@
-﻿namespace Equipment
+﻿using System;
+
+namespace Equipment
 {
     public class Consumable : Item
     {
@@ -7,6 +9,12 @@
             itemRarity = ItemRarity.Common;
             level = 1;
             ability = null;
+        }
+
+        public void Use()
+        {
+            //Todo
+            EntityEquipment.isItemDescriptionEnabled = false;
         }
     }
 }

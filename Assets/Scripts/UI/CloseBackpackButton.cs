@@ -1,4 +1,5 @@
-﻿using Equipment;
+﻿using Codice.Client.BaseCommands;
+using Equipment;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,6 +14,7 @@ namespace UI
             backpackButton.onClick.AddListener(() =>
             {
                 EntityEquipment.isEnabled = false;
+                EntityEquipment.isItemDescriptionEnabled = false;
             });
         }
     }
