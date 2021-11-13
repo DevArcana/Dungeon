@@ -123,7 +123,7 @@ namespace EntityLogic.AI
 
         private float PassTurnUtility(EnemyEntity entity)
         {
-            return 1f;
+            return 0.05f;
         }
     }
 }
