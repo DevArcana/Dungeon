@@ -65,6 +65,7 @@ namespace TurnSystem
 
     public class TurnEventArgs : EventArgs
     {
+      public GridLivingEntity PreviousEntity { get; set; }
       public GridLivingEntity Entity { get; set; }
     }
 
@@ -82,9 +83,9 @@ namespace TurnSystem
       TurnEntityRemoved?.Invoke(this, new TurnEventArgs {Entity = entity});
     }
     
-    private void OnTurnChanged(GridLivingEntity entity)
+    private void OnTurnChanged(GridLivingEntity previousEntity, GridLivingEntity entity)
     {
-      TurnChanged?.Invoke(this, new TurnEventArgs {Entity = entity});
+      TurnChanged?.Invoke(this, new TurnEventArgs {PreviousEntity = previousEntity, Entity = entity});
     }
 
     public IEnumerable<GridLivingEntity> PeekQueue(int count)
@@ -133,7 +134,7 @@ namespace TurnSystem
       if (current != CurrentTurnTaker)
       {
         ActionPoints.ResetPoints();
-        OnTurnChanged(CurrentTurnTaker);
+        OnTurnChanged(current, CurrentTurnTaker);
       }
 
       OnTurnEntityAdded(entity);
@@ -153,7 +154,7 @@ namespace TurnSystem
 
       ActionPoints.ResetPoints();
       Transactions.EnqueueTransaction(new PanCameraTransaction(MapUtils.ToWorldPos(CurrentTurnTaker.GridPos)));
-      OnTurnChanged(CurrentTurnTaker);
+      OnTurnChanged(current, CurrentTurnTaker);
     }
 
     /// <summary>

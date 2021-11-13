@@ -36,6 +36,11 @@ namespace World.Common
       return !left.Equals(right);
     }
 
+    public override string ToString()
+    {
+      return $"({x}, {y})";
+    }
+
     public int x;
     public int y;
 

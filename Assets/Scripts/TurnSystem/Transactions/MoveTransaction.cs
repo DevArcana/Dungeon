@@ -1,4 +1,5 @@
 ﻿using EntityLogic;
+using EntityLogic.AI;
 using UnityEngine;
 using Utils;
 using World.Common;
@@ -42,6 +43,11 @@ namespace TurnSystem.Transactions
 
     protected override void End()
     {
+      var influencers = InfluenceMap.instance.GetInfluencersOnPos(_targetEntity.GridPos);
+      foreach (var entity in influencers)
+      {
+        InfluenceMap.instance.AddEntityInfluence(entity);
+      }
       var triggers = World.World.instance.GetTriggers(_targetEntity.GridPos);
 
       if (triggers != null)
