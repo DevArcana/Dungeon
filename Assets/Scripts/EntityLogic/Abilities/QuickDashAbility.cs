@@ -16,7 +16,7 @@ namespace EntityLogic.Abilities
     public override IEnumerable<GridPos> GetValidTargetPositions()
     {
       var turnManager = TurnManager.instance;
-      return turnManager.CurrentTurnTaker.GridPos.Pattern(Pattern.Cardinal, (int)(turnManager.ActionPoints.ActionPoints / CostPerTile), true, false);
+      return turnManager.CurrentTurnTaker.GridPos.CardinalPattern((int)(turnManager.ActionPoints.ActionPoints / CostPerTile), wallsBlock: true, enemiesBlock: true, includeStart: false);
     }
 
     public override IEnumerable<GridPos> GetEffectiveRange(GridPos pos)

@@ -134,50 +134,7 @@ MonoBehaviour:
   highlight: {fileID: 0}
   autoRegister: 1
   initiative: 10
-  equipment:
-    weapon:
-      level: 0
-      itemRarity: 0
-      name: 
-      description: 
-      ability: {fileID: 0}
-      power: 0
-      range: 0
-      attackPrefab: {fileID: 0}
-      isRanged: 0
-    helmet:
-      level: 0
-      itemRarity: 0
-      name: 
-      description: 
-      ability: {fileID: 0}
-      physicalDefense: 0
-      magicalDefense: 0
-    breastplate:
-      level: 0
-      itemRarity: 0
-      name: 
-      description: 
-      ability: {fileID: 0}
-      physicalDefense: 0
-      magicalDefense: 0
-    leggings:
-      level: 0
-      itemRarity: 0
-      name: 
-      description: 
-      ability: {fileID: 0}
-      physicalDefense: 0
-      magicalDefense: 0
-    boots:
-      level: 0
-      itemRarity: 0
-      name: 
-      description: 
-      ability: {fileID: 0}
-      physicalDefense: 0
-      magicalDefense: 0
-    backpack: []
+  equipment: {fileID: 0}
   abilities:
     abilities:
     - {fileID: 11400000, guid: c76b923872d560c41ba697b33b016e49, type: 2}

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using EntityLogic;
 using UnityEngine;
 
 namespace World.Common
@@ -55,19 +54,14 @@ namespace World.Common
     public GridPos East => At(x + 1, y );
     public GridPos South => At(x, y - 1);
     public GridPos West => At(x - 1, y);
+    
     public int OneDimDistance(GridPos other) => Mathf.Max(Mathf.Abs(this.x - other.x), Mathf.Abs(this.y - other.y));
+    public float TwoDimDistance(GridPos other) => Mathf.Sqrt(Mathf.Abs(x - other.x) * Mathf.Abs(x - other.x) + Mathf.Abs(y - other.y) * Mathf.Abs(y - other.y));
 
-    public IEnumerable<GridPos> Pattern(Pattern pattern, int radius, bool respectWalls = false, bool includeStart = true)
+    public IEnumerable<GridPos> CardinalPattern(int radius, bool wallsBlock = false, bool enemiesBlock = false, bool includeStart = true)
     {
-      return pattern switch
-      {
-        Common.Pattern.Cardinal => CardinalPattern(radius, respectWalls, includeStart),
-        _ => Array.Empty<GridPos>()
-      };
-    }
-
-    private IEnumerable<GridPos> CardinalPattern(int radius, bool respectWalls = false, bool includeStart = true)
-    {
+      var world = World.instance;
+      
       var tiles = new List<GridPos>();
       if (includeStart)
       {
@@ -78,11 +72,16 @@ namespace World.Common
       for (var i = 0; i < radius; i++)
       {
         currentTile = currentTile.East;
-        if (World.instance.IsWalkable(currentTile))
+        if (world.IsOccupied(currentTile) && enemiesBlock)
+        {
+          break;
+        }
+
+        if (world.IsWalkable(currentTile))
         {
           tiles.Add(currentTile);
         }
-        else if (respectWalls)
+        else if (wallsBlock)
         {
           break;
         }
@@ -92,11 +91,16 @@ namespace World.Common
       for (var i = 0; i < radius; i++)
       {
         currentTile = currentTile.West;
-        if (World.instance.IsWalkable(currentTile))
+        if (world.IsOccupied(currentTile) && enemiesBlock)
+        {
+          break;
+        }
+
+        if (world.IsWalkable(currentTile))
         {
           tiles.Add(currentTile);
         }
-        else if (respectWalls)
+        else if (wallsBlock)
         {
           break;
         }
@@ -106,11 +110,16 @@ namespace World.Common
       for (var i = 0; i < radius; i++)
       {
         currentTile = currentTile.North;
-        if (World.instance.IsWalkable(currentTile))
+        if (world.IsOccupied(currentTile) && enemiesBlock)
+        {
+          break;
+        }
+
+        if (world.IsWalkable(currentTile))
         {
           tiles.Add(currentTile);
         }
-        else if (respectWalls)
+        else if (wallsBlock)
         {
           break;
         }
@@ -120,11 +129,16 @@ namespace World.Common
       for (var i = 0; i < radius; i++)
       {
         currentTile = currentTile.South;
-        if (World.instance.IsWalkable(currentTile))
+        if (world.IsOccupied(currentTile) && enemiesBlock)
+        {
+          break;
+        }
+
+        if (world.IsWalkable(currentTile))
         {
           tiles.Add(currentTile);
         }
-        else if (respectWalls)
+        else if (wallsBlock)
         {
           break;
         }
@@ -132,10 +146,43 @@ namespace World.Common
 
       return tiles;
     }
-  }
 
-  public enum Pattern
-  {
-    Cardinal
+    public IEnumerable<GridPos> SquarePattern(int radius)
+    {
+      var world = World.instance;
+      
+      var tiles = new List<GridPos>();
+
+      for (var iy = y - radius; iy <= y + radius; iy++)
+      {
+        for (var ix = x - radius; ix <= x + radius; ix++)
+        {
+          var currentTile = At(ix, iy);
+          if (world.IsWalkable(currentTile))
+          {
+            tiles.Add(currentTile);
+          }
+        }
+      }
+
+      return tiles;
+    }
+
+    public IEnumerable<GridPos> CirclePattern(int radius)
+    {
+      var boundingBox = SquarePattern(radius);
+
+      var tiles = new List<GridPos>();
+      // ReSharper disable once LoopCanBeConvertedToQuery - it cannot lol
+      foreach (var tile in boundingBox)
+      {
+        if (TwoDimDistance(tile) <= radius + 0.5)
+        {
+          tiles.Add(tile);
+        }
+      }
+
+      return tiles;
+    }
   }
 }
