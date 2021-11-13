@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using TurnSystem;
-using UI;
+using Unity.Plastic.Newtonsoft.Json.Serialization;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using World.Common;
 
 namespace EntityLogic.AI
@@ -12,26 +11,14 @@ namespace EntityLogic.AI
     {
         public InfluenceMap instance;
         
-        private Dictionary<GridPos, Dictionary<GridLivingEntity, float>> _influencedPoints;
+        private Dictionary<GridPos, Dictionary<GridLivingEntity, int>> _influencedPoints;
         private Dictionary<GridLivingEntity, List<GridPos>> _entityInfluence;
         private SerializableMap<float> _influenceMap;
-        private List<GridLivingEntity> _enemies;
-        private List<GridLivingEntity> _players;
 
         public InfluenceMap()
         {
-            _enemies = new List<GridLivingEntity>();
-            _players = new List<GridLivingEntity>();
-            
-            var entities = TurnManager.instance.PeekQueue();
-            foreach (var entity in entities)
-            {
-                if (entity is PlayerEntity) _players.Add(entity);
-                else if (entity is EnemyEntity) _enemies.Add(entity);
-            }
-            
             var map = World.World.instance;
-            _influencedPoints = new Dictionary<GridPos, Dictionary<GridLivingEntity, float>>();
+            _influencedPoints = new Dictionary<GridPos, Dictionary<GridLivingEntity, int>>();
             _entityInfluence = new Dictionary<GridLivingEntity, List<GridPos>>();
             _influenceMap = new SerializableMap<float>(map.MapWidth, map.MapHeight);
         }
@@ -48,7 +35,6 @@ namespace EntityLogic.AI
                 return;
             }
 
-            SceneManager.sceneLoaded += OnSceneLoaded;
             TurnManager.instance.TurnEntityAdded += TurnEntityAdded;
             TurnManager.instance.TurnEntityRemoved += TurnEntityRemoved;
         }
@@ -67,14 +53,41 @@ namespace EntityLogic.AI
 
         private void AddEntityInfluence(GridLivingEntity entity)
         {
+            var maxDistance = TurnManager.instance.CurrentTurnTaker == entity
+                ? TurnManager.instance.ActionPoints.ActionPoints
+                : ActionPointsProcessor.MaxActionPoints;
+            var pathFinding = new Pathfinding();
+            var shortestPathTree =
+                pathFinding.GetShortestPathTree(entity.GridPos, maxDistance);
+
+            var pointsOfInfluence = new List<GridPos>();
             
+            foreach (var pathNode in shortestPathTree)
+            {
+                var pos = GridPos.At(pathNode.x, pathNode.y);
+                pointsOfInfluence.Add(pos);
+                _influencedPoints[pos][entity] = (int) pathNode.gCost;
+                CalculateInfluenceOnPos(pos);
+            }
+
+            _entityInfluence[entity] = pointsOfInfluence;
         }
 
         private void CalculateInfluenceOnPos(GridPos pos)
         {
-            
+            var sum = 0.0f;
+            foreach (var point in _influencedPoints[pos])
+            {
+                var side = point.Key is EnemyEntity ? 1 : -1;
+                var maxDistance = TurnManager.instance.CurrentTurnTaker == point.Key
+                    ? TurnManager.instance.ActionPoints.ActionPoints
+                    : ActionPointsProcessor.MaxActionPoints;
+                sum += side * (1 - point.Value / maxDistance);
+            }
+
+            _influenceMap[pos.x, pos.y] = sum;
         }
-        
+
         private void TurnEntityRemoved(object sender, TurnManager.TurnEventArgs e)
         {
             RemoveEntityInfluence(e.Entity);
@@ -85,24 +98,11 @@ namespace EntityLogic.AI
             AddEntityInfluence(e.Entity);
         }
 
-        private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
-        {
-            _influencedPoints.Clear();
-            _entityInfluence.Clear();
-            _influenceMap.Clear();
-            InitializeMap();
-        }
-
         private void OnDestroy()
         {
-            SceneManager.sceneLoaded -= OnSceneLoaded;
             TurnManager.instance.TurnEntityAdded -= TurnEntityAdded;
             TurnManager.instance.TurnEntityRemoved -= TurnEntityRemoved;
         }
-
-        private void InitializeMap()
-        {
-            throw new System.NotImplementedException();
-        }
+        
     }
 }

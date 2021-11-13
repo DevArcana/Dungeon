@@ -1,4 +1,5 @@
-﻿using EntityLogic;
+﻿using System;
+using EntityLogic;
 using TurnSystem.Transactions;
 using UnityEngine;
 using Utils;
@@ -34,6 +35,11 @@ namespace TurnSystem
     public override string GetTooltip()
     {
       return $"HP: {_damageable.damageable.Health}/{_damageable.damageable.MaxHealth}";
+    }
+
+    private void Update()
+    {
+      Debug.Log($"{GridPos.x}, {GridPos.y}");
     }
   }
 }

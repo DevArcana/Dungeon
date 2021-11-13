@@ -12,72 +12,101 @@ namespace EntityLogic.Abilities
   {
     public IEnumerable<GridPos> GetValidTargetPositions()
     {
-      var world = World.World.instance;
-
+      // var world = World.World.instance;
+      //
+      // var turnTaker = TurnManager.instance.CurrentTurnTaker;
+      //
+      // var pos = turnTaker.GridPos;
+      // var cost = 0;
+      // var height = world.GetHeightAt(pos);
+      //
+      // var tiles = new Dictionary<GridPos, Tile>
+      // {
+      //   [pos] = new Tile(pos, height, cost)
+      // };
+      //
+      // var queue = new Queue<GridPos>();
+      // queue.Enqueue(pos);
+      //
+      // while (queue.Any())
+      // {
+      //   var tile = tiles[queue.Dequeue()];
+      //
+      //   for (var x = -1; x <= 1; x++)
+      //   {
+      //     for (var y = -1; y <= 1; y++)
+      //     {
+      //       if (x == 0 && y == 0) continue;
+      //
+      //       pos = GridPos.At(x + tile.gridPos.x, y + tile.gridPos.y);
+      //       if (pos == turnTaker.GridPos) continue;
+      //
+      //       if (tiles.ContainsKey(pos))
+      //       {
+      //         var neighbour = tiles[pos];
+      //         var heightDifference = Math.Abs(tile.height - neighbour.height);
+      //         if (heightDifference > 1) continue;
+      //
+      //         cost = tile.cost + heightDifference + 1;
+      //         if (cost < neighbour.cost)
+      //         {
+      //           neighbour.cost = cost;
+      //           if (neighbour.cost <= TurnManager.instance.ActionPoints.ActionPoints)
+      //           {
+      //             queue.Enqueue(neighbour.gridPos);
+      //           }
+      //         }
+      //       }
+      //       else
+      //       {
+      //         height = world.GetHeightAt(pos);
+      //         var heightDifference = Math.Abs(tile.height - height);
+      //
+      //         if (heightDifference > 1) continue;
+      //
+      //         var occupant = world.GetOccupant(pos);
+      //         if (occupant is PlayerEntity) continue;
+      //         var neighbour = new Tile(pos, height, tile.cost + heightDifference + 1 + (occupant ? 1 : 0));
+      //
+      //         if (neighbour.cost <= TurnManager.instance.ActionPoints.ActionPoints)
+      //         {
+      //           tiles[pos] = neighbour;
+      //           queue.Enqueue(neighbour.gridPos);
+      //         }
+      //       }
+      //     }
+      //   }
+      // }
+      // return tiles.Where(x => !(x.Value.gridPos.x == turnTaker.GridPos.x && x.Value.gridPos.y == turnTaker.GridPos.y)).Select(x => x.Value.gridPos);
       var turnTaker = TurnManager.instance.CurrentTurnTaker;
-
       var pos = turnTaker.GridPos;
-      var cost = 0;
-      var height = world.GetHeightAt(pos);
-
-      var tiles = new Dictionary<GridPos, Tile>
+      var maxCost = TurnManager.instance.ActionPoints.ActionPoints;
+      var world = World.World.instance;
+      
+      var pathFinding = new Pathfinding();
+      var tiles = pathFinding.GetShortestPathTree(pos, maxCost);
+      var filteredTiles = new List<GridPos>();
+      foreach (var tile in tiles)
       {
-        [pos] = new Tile(pos, height, cost)
-      };
-
-      var queue = new Queue<GridPos>();
-      queue.Enqueue(pos);
-
-      while (queue.Any())
-      {
-        var tile = tiles[queue.Dequeue()];
-
-        for (var x = -1; x <= 1; x++)
+        var currentPos = GridPos.At(tile.x, tile.y);
+        if (currentPos == turnTaker.GridPos) continue;
+        var occupant = world.GetOccupant(currentPos);
+        if (occupant is EnemyEntity && turnTaker is PlayerEntity ||
+            occupant is PlayerEntity && turnTaker is EnemyEntity)
         {
-          for (var y = -1; y <= 1; y++)
+          if (tile.gCost + 1 <= maxCost)
           {
-            if (x == 0 && y == 0) continue;
-
-            pos = GridPos.At(x + tile.gridPos.x, y + tile.gridPos.y);
-            if (pos == turnTaker.GridPos) continue;
-
-            if (tiles.ContainsKey(pos))
-            {
-              var neighbour = tiles[pos];
-              var heightDifference = Math.Abs(tile.height - neighbour.height);
-              if (heightDifference > 1) continue;
-
-              cost = tile.cost + heightDifference + 1;
-              if (cost < neighbour.cost)
-              {
-                neighbour.cost = cost;
-                if (neighbour.cost <= TurnManager.instance.ActionPoints.ActionPoints)
-                {
-                  queue.Enqueue(neighbour.gridPos);
-                }
-              }
-            }
-            else
-            {
-              height = world.GetHeightAt(pos);
-              var heightDifference = Math.Abs(tile.height - height);
-
-              if (heightDifference > 1) continue;
-
-              var occupant = world.GetOccupant(pos);
-              if (occupant is PlayerEntity) continue;
-              var neighbour = new Tile(pos, height, tile.cost + heightDifference + 1 + (occupant ? 1 : 0));
-
-              if (neighbour.cost <= TurnManager.instance.ActionPoints.ActionPoints)
-              {
-                tiles[pos] = neighbour;
-                queue.Enqueue(neighbour.gridPos);
-              }
-            }
+            filteredTiles.Add(currentPos);
+            continue;
           }
         }
+      
+        if (!(occupant is null)) continue;
+        filteredTiles.Add(currentPos);
       }
-      return tiles.Where(x => !(x.Value.gridPos.x == turnTaker.GridPos.x && x.Value.gridPos.y == turnTaker.GridPos.y)).Select(x => x.Value.gridPos);
+      
+      return filteredTiles;
+      return tiles.Select(a => GridPos.At(a.x, a.y));
     }
 
     public IEnumerable<GridPos> GetEffectiveRange(GridPos pos)

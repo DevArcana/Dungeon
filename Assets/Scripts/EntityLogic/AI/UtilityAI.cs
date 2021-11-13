@@ -1,18 +1,27 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using TurnSystem;
-using TurnSystem.Transactions;
 using UnityEngine;
-using World.Common;
 using Random = UnityEngine.Random;
 
 namespace EntityLogic.AI
 {
     public class UtilityAI
     {
+        private List<GridLivingEntity> _enemies;
+        private List<GridLivingEntity> _players;
+        
         public UtilityAI()
         {
+            _enemies = new List<GridLivingEntity>();
+            _players = new List<GridLivingEntity>();
             
+            var entities = TurnManager.instance.PeekQueue();
+            foreach (var entity in entities)
+            {
+                if (entity is PlayerEntity) _players.Add(entity);
+                else if (entity is EnemyEntity) _enemies.Add(entity);
+            }
         }
         
         private ActionType ChooseNextAction(EnemyEntity entity)
@@ -114,7 +123,7 @@ namespace EntityLogic.AI
 
         private float PassTurnUtility(EnemyEntity entity)
         {
-            return 0.05f;
+            return 1f;
         }
     }
 }

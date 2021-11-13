@@ -13,9 +13,6 @@ namespace EntityLogic.AI
         private const int RegularMoveCost = 1;
         private const float DiagonalPenalizedCost = 1.0001f;
         private const int ClimbCost = 1;
-        
-        private HashSet<PathNode> _openList;
-        private HashSet<PathNode> _closedList;
 
         public (List<GridPos>, int) FindPath(GridPos start, GridPos end, int maxCost = ActionPointsProcessor.MaxActionPoints * 3)
         {
@@ -23,31 +20,32 @@ namespace EntityLogic.AI
             var startNode = new PathNode(start.x, start.y, map.GetHeightAt(start), !map.IsOccupied(start));
             var endNode = new PathNode(end.x, end.y, map.GetHeightAt(end), !map.IsOccupied(end));
 
-            _openList = new HashSet<PathNode> { startNode };
-            _closedList = new HashSet<PathNode>();
+            var openList = new Dictionary<PathNode, PathNode> { {startNode, startNode} };
+            var closedList = new HashSet<PathNode>();
 
             startNode.gCost = 0;
             startNode.hCost = CalculateDistanceCost(startNode, endNode);
             startNode.CalculateFCost();
 
-            while (_openList.Any())
+            while (openList.Any())
             {
-                var currentNode = GetLowestFCostNode(_openList);
+                var currentNode = GetLowestFCostNode(openList.Keys);
                 if (currentNode == endNode)
                 {
                     var path = GetPath(currentNode);
                     return (path.Select(node => GridPos.At(node.x, node.y)).ToList(), Mathf.FloorToInt(currentNode.gCost));
                 }
 
-                _openList.Remove(currentNode);
-                _closedList.Add(currentNode);
+                openList.Remove(currentNode);
+                closedList.Add(currentNode);
 
-                foreach (var neighbourNode in GetNeighbourNodes(currentNode))
+                foreach (var neighbour in GetNeighbourNodes(currentNode))
                 {
-                    if (_closedList.Contains(neighbourNode)) continue;
+                    if (closedList.Contains(neighbour)) continue;
+                    var neighbourNode = openList.ContainsKey(neighbour) ? openList[neighbour] : neighbour;
                     if (!neighbourNode.isWalkable && neighbourNode != endNode)
                     {
-                        _closedList.Add(neighbourNode);
+                        closedList.Add(neighbourNode);
                         continue;
                     }
                     var tempGCost = currentNode.gCost + CalculateDistanceCost(currentNode, neighbourNode);
@@ -59,13 +57,67 @@ namespace EntityLogic.AI
                     neighbourNode.hCost = CalculateDistanceCost(neighbourNode, endNode);
                     neighbourNode.CalculateFCost();
                     
-                    _openList.Add(neighbourNode);
+                    openList[neighbourNode] = neighbourNode;
                 }
             }
 
             return (null, 0);
         }
 
+        public HashSet<PathNode> GetShortestPathTree(GridPos start, int maxCost = ActionPointsProcessor.MaxActionPoints)
+        {
+            var map = World.World.instance;
+            var startNode = new PathNode(start.x, start.y, map.GetHeightAt(start), !map.IsOccupied(start));
+            
+            var openList = new Dictionary<PathNode, PathNode> { {startNode, startNode} };
+            var resultList = new HashSet<PathNode> { startNode };
+            var closedList = new HashSet<PathNode>();
+            
+            startNode.gCost = startNode.fCost = 0;
+            
+            while (openList.Any())
+            {
+                var currentNode = GetLowestFCostNode(openList.Keys);
+                openList.Remove(currentNode);
+                closedList.Add(currentNode);
+                
+                foreach (var neighbour in GetNeighbourNodes(currentNode))
+                {
+                    if (closedList.Contains(neighbour)) continue;
+                    var neighbourNode = openList.ContainsKey(neighbour) ? openList[neighbour] : neighbour;
+                    var isOccupied = !(map.GetOccupant(GridPos.At(neighbourNode.x, neighbourNode.y)) is null);
+                    if (!neighbourNode.isWalkable && !isOccupied)
+                    {
+                        closedList.Add(neighbourNode);
+                        continue;
+                    }
+                    var tempGCost = currentNode.gCost + CalculateDistanceCost(currentNode, neighbourNode);
+                    // if a position is occupied and is on a different height than the neighbour, it might be problematic since
+                    // here we are assuming that we sort of treat occupied positions as walkable, so when this function will be
+                    // used in highlighting available moves and melee attacks, the shortest path might be the one that requires
+                    // changing the height right before the attack action which is not possible. This of course does not interfere
+                    // with the attack itself, but it might cause some visual bugs in highlighting. I leave it here to investigate
+                    // if it will be actually observed and problematic, because I do not need to adjust for such a problem for now.
+                    if (tempGCost >= neighbourNode.gCost
+                        || Mathf.Abs(currentNode.height - neighbourNode.height) > 1
+                        || Mathf.Floor(tempGCost) > maxCost) continue;
+                    neighbourNode.previousNode = currentNode;
+                    neighbourNode.gCost = neighbourNode.fCost = tempGCost;
+
+                    if (!isOccupied) openList[neighbourNode] = neighbourNode;
+                    resultList.Add(neighbourNode);
+                }
+                
+            }
+
+            foreach (var pathNode in resultList)
+            {
+                pathNode.gCost = Mathf.FloorToInt(pathNode.gCost);
+            }
+
+            return resultList;
+        }
+        
         private static float CalculateDistanceCost(PathNode a, PathNode b)
         {
             var xDistance = Mathf.Abs(a.x - b.x);
@@ -77,7 +129,7 @@ namespace EntityLogic.AI
             return straightMoves * RegularMoveCost + diagonalMoves * DiagonalPenalizedCost + heightDifference * ClimbCost;
         }
 
-        private static PathNode GetLowestFCostNode(HashSet<PathNode> pathNodes)
+        private static PathNode GetLowestFCostNode(IEnumerable<PathNode> pathNodes)
         {
             PathNode lowestFCostNode = null;
             foreach (var node in pathNodes)
