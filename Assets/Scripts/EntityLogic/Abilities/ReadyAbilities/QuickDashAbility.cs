@@ -31,6 +31,11 @@ namespace EntityLogic.Abilities.ReadyAbilities
       return (int) Math.Ceiling(distance * CostPerTile);
     }
 
+    public override int GetMinimumPossibleCost()
+    {
+      return 1;
+    }
+
     public override bool CanExecute(GridPos pos)
     {
       // TODO

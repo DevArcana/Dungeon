@@ -19,9 +19,16 @@ namespace EntityLogic
     public EntityEquipment equipment;
 
     public List<AbilityBase> abilities;
+    public List<int> AbilityCooldowns { get; private set; }
 
     protected virtual void Start()
     {
+      AbilityCooldowns = new List<int>();
+      foreach (var _ in abilities)
+      {
+        AbilityCooldowns.Add(0);
+      }
+      
       highlight = transform.Find("Highlight").gameObject;
       Highlighted(false);
       

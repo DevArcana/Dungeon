@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using EntityLogic.AI;
 using TurnSystem;
 using TurnSystem.Transactions;
+using UnityEngine;
 using World.Common;
 
 namespace EntityLogic.Abilities
 {
-  public class ImplicitAbility : IAbility
+  [CreateAssetMenu(fileName = "Implicit", menuName = "Abilities/Implicit", order = 1)]
+  public class ImplicitAbility : AbilityBase
   {
-    public IEnumerable<GridPos> GetValidTargetPositions()
+    public override IEnumerable<GridPos> GetValidTargetPositions()
     {
       var turnTaker = TurnManager.instance.CurrentTurnTaker;
       var pos = turnTaker.GridPos;
@@ -42,25 +43,29 @@ namespace EntityLogic.Abilities
       return filteredTiles;
     }
 
-    public IEnumerable<GridPos> GetEffectiveRange(GridPos pos)
+    public override IEnumerable<GridPos> GetEffectiveRange(GridPos pos)
     {
       var pathfinding = new Pathfinding();
       return pathfinding.FindPath(TurnManager.instance.CurrentTurnTaker.GridPos, pos).Item1;
     }
 
-    public int GetEffectiveCost(GridPos pos)
+    public override int GetEffectiveCost(GridPos pos)
     {
       var pathfinding = new Pathfinding();
       return pathfinding.FindPath(TurnManager.instance.CurrentTurnTaker.GridPos, pos).Item2 + (World.World.instance.IsOccupied(pos) ? 1 : 0);
     }
 
-    public bool CanExecute(GridPos pos)
+    public override int GetMinimumPossibleCost()
     {
-      // TODO
+      return 1;
+    }
+
+    public override bool CanExecute(GridPos pos)
+    {
       return true;
     }
 
-    public void Execute(GridPos pos)
+    public override void Execute(GridPos pos)
     {
       var turnManager = TurnManager.instance;
       var turnTaker = turnManager.CurrentTurnTaker;

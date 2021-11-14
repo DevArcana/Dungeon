@@ -136,9 +136,9 @@ namespace World.Interaction
       var abilityProcessor = AbilityProcessor.instance;
       if (Input.GetMouseButtonDown(0) && _hoverPos.HasValue && TurnManager.instance.CurrentTurnTaker is PlayerEntity && abilityProcessor.CanExecute(_hoverPos.Value))
       {
+        Clear();
         abilityProcessor.Execute(_hoverPos!.Value);
         _hoverPos = null;
-        Refresh();
       }
     }
 

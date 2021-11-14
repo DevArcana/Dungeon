@@ -26,6 +26,11 @@ namespace EntityLogic.Abilities.ReadyAbilities
       return 2;
     }
 
+    public override int GetMinimumPossibleCost()
+    {
+      return 2;
+    }
+
     public override bool CanExecute(GridPos pos)
     {
       // TODO

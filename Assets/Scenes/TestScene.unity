@@ -6458,10 +6458,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1423500857}
   - component: {fileID: 1423500856}
+  - component: {fileID: 1423500861}
   - component: {fileID: 1423500855}
   - component: {fileID: 1423500858}
   - component: {fileID: 1423500859}
-  - component: {fileID: 1423500861}
   - component: {fileID: 1423500860}
   m_Layer: 0
   m_Name: Managers
@@ -6565,6 +6565,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 219d18080bc544db83be39f2a3ff692a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  implicitAbility: {fileID: 11400000, guid: c43c5e0826e633c4c9d948c20313ff8c, type: 2}
 --- !u!1 &1424544290
 GameObject:
   m_ObjectHideFlags: 0
@@ -8869,6 +8870,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 34136f8b4de701440a976deb4cbfa6e5, type: 2}
   - {fileID: 11400000, guid: cf19840d6ba96ed42ba8e3e3d4a602aa, type: 2}
   - {fileID: 11400000, guid: e2a382e43b657e745a18dcf98ccae067, type: 2}
+  - {fileID: 11400000, guid: fe1c60c20955cc74ca3d1313b93a3a8f, type: 2}
 --- !u!114 &1811829759
 MonoBehaviour:
   m_ObjectHideFlags: 0

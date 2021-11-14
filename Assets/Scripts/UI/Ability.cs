@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI
@@ -7,5 +8,6 @@ namespace UI
   {
     public Image image;
     public Button button;
+    public TextMeshProUGUI text;
   }
 }

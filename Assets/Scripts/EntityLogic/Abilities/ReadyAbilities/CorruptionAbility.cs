@@ -28,6 +28,11 @@ namespace EntityLogic.Abilities.ReadyAbilities
       return 3;
     }
 
+    public override int GetMinimumPossibleCost()
+    {
+      return 3;
+    }
+
     public override bool CanExecute(GridPos pos)
     {
       // TODO
@@ -43,15 +48,10 @@ namespace EntityLogic.Abilities.ReadyAbilities
       var entities = GetEffectiveRange(pos).Where(x =>
       {
         var occupant = world.GetOccupant(x);
-        return !(occupant is null) && AreEnemies(turnTaker, occupant);
+        return !(occupant is null) && AbilityUtilities.AreEnemies(turnTaker, occupant);
       }).Select(x => world.GetOccupant(x));
       
       turnManager.Transactions.EnqueueTransaction(new CorruptionTransaction(turnTaker, entities, damage));
-    }
-
-    private static bool AreEnemies(GridLivingEntity first, GridLivingEntity second)
-    {
-      return first is EnemyEntity && second is PlayerEntity || first is PlayerEntity && second is EnemyEntity;
     }
   }
 }

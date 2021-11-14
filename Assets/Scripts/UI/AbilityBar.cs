@@ -32,20 +32,12 @@ namespace UI
 
     private void OnAbilityStartedExecution()
     {
-      foreach (var ability in _abilities)
-      {
-        ability.button.enabled = false;
-        ability.button.interactable = false;
-      }
+      Refresh();
     }
 
     private void OnAbilityFinishedExecution()
     {
-      foreach (var ability in _abilities)
-      {
-        ability.button.enabled = true;
-        ability.button.interactable = true;
-      }
+      Refresh();
     }
 
     private void OnTurnChanged(object sender, TurnManager.TurnEventArgs e)
@@ -73,13 +65,38 @@ namespace UI
 
     private void Refresh()
     {
-      var turnTaker = TurnManager.instance.CurrentTurnTaker;
-      
-      if (_abilityOwner == turnTaker)
+      var turnManager = TurnManager.instance;
+      var turnTaker = turnManager.CurrentTurnTaker;
+
+      if (_abilityOwner != turnTaker)
+      {
+        Repopulate();
+      }
+
+      if (!(turnTaker is PlayerEntity))
       {
         return;
       }
+      
+      var abilityProcessor = AbilityProcessor.instance;
+      
+      for (var i = 0; i < turnTaker.abilities.Count; i++)
+      {
+        var ability = turnTaker.abilities[i];
+        var offCooldown = turnTaker.AbilityCooldowns[i] == 0;
+        var canAfford = ability.GetMinimumPossibleCost() <= turnManager.ActionPoints.ActionPoints;
+        var castable = !abilityProcessor.AbilityInExecution;
+        
+        _abilities[i].button.enabled = offCooldown && canAfford && castable;
+        _abilities[i].button.interactable = offCooldown && canAfford && castable;
+        _abilities[i].text.text = !offCooldown && castable ? turnTaker.AbilityCooldowns[i].ToString() : string.Empty;
+      }
+    }
 
+    private void Repopulate()
+    {
+      var turnTaker = TurnManager.instance.CurrentTurnTaker;
+      
       Clear();
       _abilityOwner = null;
 
