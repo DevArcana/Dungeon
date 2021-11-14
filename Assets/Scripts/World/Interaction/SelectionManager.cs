@@ -34,10 +34,32 @@ namespace World.Interaction
       _selected = new Dictionary<GridPos, HighlightedTile>();
       _availableTargets = new HashSet<GridPos>();
 
-      TurnManager.instance.TurnChanged += OnTurnChange;
-      TurnManager.instance.Transactions.TransactionsProcessed += Refresh;
-      AbilityProcessor.instance.SelectedAbilityChanged += OnAbilityChange;
+      TurnManager.instance.TurnChanged += OnTurnChanged;
+      TurnManager.instance.Transactions.TransactionsProcessed += OnTransactionsProcessed;
+      AbilityProcessor.instance.SelectedAbilityChanged += OnSelectedAbilityChanged;
       
+      Refresh();
+    }
+
+    private void OnDestroy()
+    {
+      TurnManager.instance.TurnChanged -= OnTurnChanged;
+      TurnManager.instance.Transactions.TransactionsProcessed -= Refresh;
+      AbilityProcessor.instance.SelectedAbilityChanged -= OnAbilityChange;
+    }
+
+    private void OnTurnChanged(object sender, TurnManager.TurnEventArgs e)
+    {
+      Refresh();
+    }
+
+    private void OnTransactionsProcessed()
+    {
+      Refresh();
+    }
+    
+    private void OnSelectedAbilityChanged(IAbility arg1, int arg2)
+    {
       Refresh();
     }
 
@@ -53,18 +75,6 @@ namespace World.Interaction
       
       var abilityProcessor = AbilityProcessor.instance;
       OnAbilityChange(abilityProcessor.SelectedAbility, abilityProcessor.SelectedAbilityIndex);
-    }
-
-    private void OnDestroy()
-    {
-      TurnManager.instance.TurnChanged -= OnTurnChange;
-      TurnManager.instance.Transactions.TransactionsProcessed -= Refresh;
-      AbilityProcessor.instance.SelectedAbilityChanged -= OnAbilityChange;
-    }
-
-    private void OnTurnChange(object sender, TurnManager.TurnEventArgs e)
-    {
-      Refresh();
     }
 
     private void OnAbilityChange(IAbility ability, int index)
@@ -126,7 +136,8 @@ namespace World.Interaction
       var abilityProcessor = AbilityProcessor.instance;
       if (Input.GetMouseButtonDown(0) && _hoverPos.HasValue && TurnManager.instance.CurrentTurnTaker is PlayerEntity && abilityProcessor.CanExecute(_hoverPos.Value))
       {
-        abilityProcessor.Execute(_hoverPos.Value);
+        abilityProcessor.Execute(_hoverPos!.Value);
+        _hoverPos = null;
         Refresh();
       }
     }
