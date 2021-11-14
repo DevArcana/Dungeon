@@ -10,9 +10,11 @@ namespace EntityLogic.Abilities
     public string description;
     public Sprite icon;
     public AbilityTag[] tags;
+    
     public abstract IEnumerable<GridPos> GetValidTargetPositions();
     public abstract IEnumerable<GridPos> GetEffectiveRange(GridPos pos);
     public abstract int GetEffectiveCost(GridPos pos);
+    public abstract bool CanExecute(GridPos pos);
     public abstract void Execute(GridPos pos);
   }
 }

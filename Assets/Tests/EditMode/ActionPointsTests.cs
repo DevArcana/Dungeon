@@ -47,7 +47,7 @@ namespace Tests.EditMode
 
       sut.ReservePoints(reserved);
 
-      Assert.That(sut.SpendReservedPoints(), Is.True);
+      Assert.That(sut.CanSpendReservedPoints(), Is.True);
     }
 
     [TestCase(ActionPointsProcessor.MaxActionPoints + 1)]
@@ -58,7 +58,7 @@ namespace Tests.EditMode
 
       sut.ReservePoints(reserved);
 
-      Assert.That(sut.SpendReservedPoints(), Is.False);
+      Assert.That(sut.CanSpendReservedPoints(), Is.False);
     }
     
     [Test]
@@ -66,7 +66,7 @@ namespace Tests.EditMode
     {
       var sut = new ActionPointsProcessor();
       sut.ReservePoints(0);
-      Assert.That(sut.SpendReservedPoints(), Is.False);
+      Assert.That(sut.CanSpendReservedPoints(), Is.False);
     }
 
     [Test]
@@ -100,8 +100,8 @@ namespace Tests.EditMode
       };
       
       sut.ReservePoints(ActionPointsProcessor.MaxActionPoints - 1);
-
-      Assert.That(sut.SpendReservedPoints(), Is.True);
+      sut.SpendReservedPoints();
+      
       Assert.That(reserved, Is.EqualTo(0));
       Assert.That(remaining, Is.EqualTo(1));
     }

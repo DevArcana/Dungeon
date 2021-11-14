@@ -5,7 +5,7 @@ using TurnSystem.Transactions;
 using UnityEngine;
 using World.Common;
 
-namespace EntityLogic.Abilities
+namespace EntityLogic.Abilities.ReadyAbilities
 {
   [CreateAssetMenu(fileName = "HealAlly", menuName = "Abilities/Heal Ally", order = 1)]
   public class HealAllyAbility : AbilityBase
@@ -34,6 +34,12 @@ namespace EntityLogic.Abilities
     public override int GetEffectiveCost(GridPos pos)
     {
       return 2;
+    }
+
+    public override bool CanExecute(GridPos pos)
+    {
+      // TODO
+      return true;
     }
 
     public override void Execute(GridPos pos)

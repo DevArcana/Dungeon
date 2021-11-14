@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using TurnSystem;
 using TurnSystem.Transactions;
 using UnityEngine;
 using World.Common;
 
-namespace EntityLogic.Abilities
+namespace EntityLogic.Abilities.ReadyAbilities
 {
   [CreateAssetMenu(fileName = "QuickDash", menuName = "Abilities/Quick Dash", order = 1)]
   public class QuickDashAbility : AbilityBase
@@ -30,6 +29,12 @@ namespace EntityLogic.Abilities
 
       var distance = Math.Max(Math.Abs(turnTakerPos.x - pos.x), Math.Abs(turnTakerPos.y - pos.y));
       return (int) Math.Ceiling(distance * CostPerTile);
+    }
+
+    public override bool CanExecute(GridPos pos)
+    {
+      // TODO
+      return true;
     }
 
     public override void Execute(GridPos pos)

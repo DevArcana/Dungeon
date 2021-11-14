@@ -28,11 +28,16 @@ namespace TurnSystem
       ActionPointsReserved?.Invoke(ReservedActionPoints);
     }
 
-    public bool SpendReservedPoints()
+    public bool CanSpendReservedPoints()
     {
-      if (ReservedActionPoints > ActionPoints || ReservedActionPoints == 0)
+      return ReservedActionPoints <= ActionPoints && ReservedActionPoints != 0;
+    }
+
+    public void SpendReservedPoints()
+    {
+      if (!CanSpendReservedPoints())
       {
-        return false;
+        return;
       }
       
       ActionPoints -= ReservedActionPoints;
@@ -40,8 +45,6 @@ namespace TurnSystem
 
       ActionPointsChanged?.Invoke(ActionPoints);
       ActionPointsReserved?.Invoke(ReservedActionPoints);
-      
-      return true;
     }
 
     public void ResetPoints()

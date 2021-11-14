@@ -6462,6 +6462,7 @@ GameObject:
   - component: {fileID: 1423500860}
   - component: {fileID: 1423500858}
   - component: {fileID: 1423500859}
+  - component: {fileID: 1423500860}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -6549,7 +6550,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1423500854}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea93ee20da1b4862b64d26e5671e68b1, type: 3}
+  m_Script: {fileID: 11500000, guid: 219d18080bc544db83be39f2a3ff692a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1424544290
@@ -8852,11 +8853,10 @@ MonoBehaviour:
   initiative: 10
   equipment: {fileID: 0}
   abilities:
-    abilities:
-    - {fileID: 11400000, guid: c76b923872d560c41ba697b33b016e49, type: 2}
-    - {fileID: 11400000, guid: 34136f8b4de701440a976deb4cbfa6e5, type: 2}
-    - {fileID: 11400000, guid: cf19840d6ba96ed42ba8e3e3d4a602aa, type: 2}
-    - {fileID: 11400000, guid: e2a382e43b657e745a18dcf98ccae067, type: 2}
+  - {fileID: 11400000, guid: c76b923872d560c41ba697b33b016e49, type: 2}
+  - {fileID: 11400000, guid: 34136f8b4de701440a976deb4cbfa6e5, type: 2}
+  - {fileID: 11400000, guid: cf19840d6ba96ed42ba8e3e3d4a602aa, type: 2}
+  - {fileID: 11400000, guid: e2a382e43b657e745a18dcf98ccae067, type: 2}
 --- !u!114 &1811829759
 MonoBehaviour:
   m_ObjectHideFlags: 0

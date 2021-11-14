@@ -8,6 +8,7 @@ namespace EntityLogic.Abilities
     IEnumerable<GridPos> GetValidTargetPositions();
     IEnumerable<GridPos> GetEffectiveRange(GridPos pos);
     int GetEffectiveCost(GridPos pos);
+    bool CanExecute(GridPos pos);
     void Execute(GridPos pos);
   }
 }
