@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using EntityLogic;
 using EntityLogic.Abilities;
 using TurnSystem;
-using UI;
 using UnityEngine;
 using Utils;
 using World.Common;
@@ -18,7 +16,6 @@ namespace World.Interaction
 
     private Dictionary<GridPos, HighlightedTile> _selected;
     private HashSet<GridPos> _availableTargets;
-    private AbilityProcessor _abilityProcessor;
     private UnityEngine.Camera _camera;
     private GridPos? _hoverPos;
 
@@ -36,58 +33,42 @@ namespace World.Interaction
 
       _selected = new Dictionary<GridPos, HighlightedTile>();
       _availableTargets = new HashSet<GridPos>();
-      Clear();
 
       TurnManager.instance.TurnChanged += OnTurnChange;
       TurnManager.instance.Transactions.TransactionsProcessed += Refresh;
+      AbilityProcessor.instance.SelectedAbilityChanged += OnAbilityChange;
+      
+      Refresh();
     }
 
     private void Refresh()
     {
-      if (_abilityProcessor != null)
+      TurnManager.instance.ActionPoints.ReservePoints(0);
+      Clear();
+      
+      if (!(TurnManager.instance.CurrentTurnTaker is PlayerEntity))
       {
-        OnAbilityChange(_abilityProcessor.SelectedAbility, _abilityProcessor.SelectedAbilityIndex);
+        return;
       }
+      
+      var abilityProcessor = AbilityProcessor.instance;
+      OnAbilityChange(abilityProcessor.SelectedAbility, abilityProcessor.SelectedAbilityIndex);
     }
 
     private void OnDestroy()
     {
       TurnManager.instance.TurnChanged -= OnTurnChange;
       TurnManager.instance.Transactions.TransactionsProcessed -= Refresh;
-      
-      if (_abilityProcessor != null)
-      {
-        _abilityProcessor.SelectedAbilityChanged -= OnAbilityChange;
-      }
+      AbilityProcessor.instance.SelectedAbilityChanged -= OnAbilityChange;
     }
 
     private void OnTurnChange(object sender, TurnManager.TurnEventArgs e)
     {
-      Clear();
-
-      if (_abilityProcessor != null)
-      {
-        _abilityProcessor.SelectedAbilityChanged -= OnAbilityChange;
-        _abilityProcessor = null;
-      }
-      
-      var entity = e.Entity;
-
-      if (!(entity is PlayerEntity))
-      {
-        return;
-      }
-      
-      _abilityProcessor = entity.abilities;
-      _abilityProcessor.SelectedAbilityChanged += OnAbilityChange;
-      OnAbilityChange(_abilityProcessor.SelectedAbility, _abilityProcessor.SelectedAbilityIndex);
+      Refresh();
     }
 
     private void OnAbilityChange(IAbility ability, int index)
     {
-      TurnManager.instance.ActionPoints.ReservePoints(0);
-      Clear();
-
       foreach (var pos in ability.GetValidTargetPositions())
       {
         _availableTargets.Add(pos);
@@ -108,11 +89,11 @@ namespace World.Interaction
 
     private void Update()
     {
-      if (_abilityProcessor == null)
+      if (!(TurnManager.instance.CurrentTurnTaker is PlayerEntity))
       {
         return;
       }
-
+      
       if (TurnManager.instance.Transactions.HasPendingTransactions)
       {
         return;
@@ -142,11 +123,11 @@ namespace World.Interaction
         Refresh();
       }
 
-      if (Input.GetMouseButtonDown(0) && _hoverPos.HasValue && TurnManager.instance.ActionPoints.SpendReservedPoints())
+      var abilityProcessor = AbilityProcessor.instance;
+      if (Input.GetMouseButtonDown(0) && _hoverPos.HasValue && TurnManager.instance.CurrentTurnTaker is PlayerEntity && abilityProcessor.CanExecute(_hoverPos.Value))
       {
-        _abilityProcessor.SelectedAbility.Execute(_hoverPos.Value);
-        TurnManager.instance.CurrentTurnTaker.abilities.DeselectAbility();
-        Clear();
+        abilityProcessor.Execute(_hoverPos.Value);
+        Refresh();
       }
     }
 

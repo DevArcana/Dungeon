@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using EntityLogic;
 using EntityLogic.Abilities;
 using TurnSystem;
 using UnityEngine;
@@ -10,8 +11,7 @@ namespace UI
     public Ability abilityPrefab;
 
     private List<Ability> _abilities;
-
-    private AbilityProcessor _currentAbilityProcessor;
+    private GridLivingEntity _abilityOwner;
     
     private void Start()
     {
@@ -20,64 +20,79 @@ namespace UI
       var turnManager = TurnManager.instance;
       turnManager.ActionPoints.ActionPointsChanged += OnActionPointsChanged;
       turnManager.TurnChanged += OnTurnChanged;
+      
+      var abilityProcessor = AbilityProcessor.instance;
+      abilityProcessor.AbilityStartedExecution += OnAbilityStartedExecution;
+      abilityProcessor.AbilityFinishedExecution += OnAbilityFinishedExecution;
 
       _abilities = new List<Ability>();
       
-      var turnTaker = turnManager.CurrentTurnTaker;
+      Refresh();
+    }
 
-      if (turnTaker is PlayerEntity)
+    private void OnAbilityStartedExecution()
+    {
+      foreach (var ability in _abilities)
       {
-        _currentAbilityProcessor = turnTaker.abilities;
-        RefreshAbilities();
+        ability.button.enabled = false;
+        ability.button.interactable = false;
+      }
+    }
+
+    private void OnAbilityFinishedExecution()
+    {
+      foreach (var ability in _abilities)
+      {
+        ability.button.enabled = true;
+        ability.button.interactable = true;
       }
     }
 
     private void OnTurnChanged(object sender, TurnManager.TurnEventArgs e)
     {
-      ClearAbilities();
-      
-      if (!(e.Entity is PlayerEntity player))
-      {
-        return;
-      }
-
-      _currentAbilityProcessor = player.abilities;
-      RefreshAbilities();
+      Refresh();
     }
 
     private void OnActionPointsChanged(int points)
     {
-      if (!(TurnManager.instance.CurrentTurnTaker is PlayerEntity))
-      {
-        return;
-      }
-      
-      RefreshAbilities();
+      Refresh();
     }
 
     private void SelectAbility(int abilityNumber)
     {
-      if (_currentAbilityProcessor.SelectedAbilityIndex == abilityNumber)
+      var abilityProcessor = AbilityProcessor.instance;
+      
+      if (abilityProcessor.SelectedAbilityIndex == abilityNumber)
       {
-        _currentAbilityProcessor.DeselectAbility();
+        abilityProcessor.DeselectAbility();
         return;
       }
 
-      _currentAbilityProcessor.SelectAbility(abilityNumber);
+      abilityProcessor.SelectAbility(abilityNumber);
     }
 
-    private void RefreshAbilities()
+    private void Refresh()
     {
-      ClearAbilities();
+      var turnTaker = TurnManager.instance.CurrentTurnTaker;
       
-      if (_currentAbilityProcessor?.abilities is null)
+      if (_abilityOwner == turnTaker)
       {
         return;
       }
 
-      for (var i = 0; i < _currentAbilityProcessor.abilities.Count; i++)
+      Clear();
+      _abilityOwner = null;
+
+      if (!(turnTaker is PlayerEntity))
       {
-        var ability = _currentAbilityProcessor.abilities[i];
+        return;
+      }
+      
+      _abilityOwner = turnTaker;
+
+      for (var i = 0; i < turnTaker.abilities.Count; i++)
+      {
+        var ability = turnTaker.abilities[i];
         
         var instantiatedAbility = Instantiate(abilityPrefab, transform);
         var index = i;
@@ -91,7 +106,7 @@ namespace UI
       }
     }
 
-    private void ClearAbilities()
+    private void Clear()
     {
       foreach (var ability in _abilities)
       {

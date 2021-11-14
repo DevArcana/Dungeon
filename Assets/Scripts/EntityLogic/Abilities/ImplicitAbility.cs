@@ -56,6 +56,7 @@ namespace EntityLogic.Abilities
 
     public bool CanExecute(GridPos pos)
     {
+      // TODO
       return true;
     }
 

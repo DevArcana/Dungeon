@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using EntityLogic.Abilities;
 using TurnSystem;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -42,13 +43,15 @@ namespace EntityLogic.AI
 
         public void PerformNextAction(EnemyEntity entity)
         {
+            var abilityProcessor = AbilityProcessor.instance;
+            
             var targetEntity = Pathfinding.FindClosestPlayer(entity.GridPos);
 
             switch (ChooseNextAction(entity))
             {
                 case ActionType.Attack:
                 {
-                    var ability = entity.abilities.SelectedAbility;
+                    var ability = abilityProcessor.SelectedAbility;
                     TurnManager.instance.ActionPoints.ReservePoints(ability.GetEffectiveCost(targetEntity.GridPos));
                     TurnManager.instance.ActionPoints.SpendReservedPoints();
                     ability.Execute(targetEntity.GridPos);
@@ -59,7 +62,7 @@ namespace EntityLogic.AI
                     var pathfinding = new Pathfinding();
                     var (path, _) = pathfinding.FindPath(entity.GridPos, targetEntity.GridPos);
                     var target = path[path.Count - 2];
-                    var ability = entity.abilities.SelectedAbility;
+                    var ability = abilityProcessor.SelectedAbility;
                     TurnManager.instance.ActionPoints.ReservePoints(ability.GetEffectiveCost(target));
                     TurnManager.instance.ActionPoints.SpendReservedPoints();
                     ability.Execute(target);
@@ -102,11 +105,13 @@ namespace EntityLogic.AI
 
         private float MeleeAttackUtility(GridLivingEntity entity, GridLivingEntity targetEntity)
         {
+            var abilityProcessor = AbilityProcessor.instance;
+            
             var availableActionPoints = TurnManager.instance.ActionPoints.ActionPoints;
             var pathfinding = new Pathfinding();
             if (entity.GridPos.OneDimDistance(targetEntity.GridPos) == 1
                 && pathfinding.FindPath(entity.GridPos, targetEntity.GridPos, 1).Item2 == 1
-                && availableActionPoints >= entity.abilities.SelectedAbility.GetEffectiveCost(targetEntity.GridPos))
+                && availableActionPoints >= abilityProcessor.SelectedAbility.GetEffectiveCost(targetEntity.GridPos))
             {
                 return 1f;
             }
@@ -115,10 +120,12 @@ namespace EntityLogic.AI
 
         private float RushPlayerUtility(GridLivingEntity entity, GridLivingEntity targetEntity)
         {
+            var abilityProcessor = AbilityProcessor.instance;
+            
             if (entity.GridPos.OneDimDistance(targetEntity.GridPos) == 1) return 0f;
             var availableActionPoints = TurnManager.instance.ActionPoints.ActionPoints;
             var maxCost = availableActionPoints + 2;
-            var cost = entity.abilities.SelectedAbility.GetEffectiveCost(targetEntity.GridPos);
+            var cost = abilityProcessor.SelectedAbility.GetEffectiveCost(targetEntity.GridPos);
             if (cost > maxCost) return 0f;
             return Mathf.Pow(cost / (float) maxCost, 0.333f);
         }

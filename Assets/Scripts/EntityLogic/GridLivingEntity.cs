@@ -1,4 +1,5 @@
-﻿using EntityLogic.Abilities;
+﻿using System.Collections.Generic;
+using EntityLogic.Abilities;
 using Equipment;
 using TurnSystem;
 using UnityEngine;
@@ -17,7 +18,7 @@ namespace EntityLogic
 
     public EntityEquipment equipment;
 
-    public AbilityProcessor abilities;
+    public List<AbilityBase> abilities;
 
     protected virtual void Start()
     {

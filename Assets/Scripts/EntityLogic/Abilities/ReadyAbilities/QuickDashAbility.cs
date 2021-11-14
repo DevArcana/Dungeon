@@ -33,7 +33,8 @@ namespace EntityLogic.Abilities.ReadyAbilities
 
     public override bool CanExecute(GridPos pos)
     {
-      throw new NotImplementedException();
+      // TODO
+      return true;
     }
 
     public override void Execute(GridPos pos)
