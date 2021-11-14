@@ -10,7 +10,7 @@ namespace EntityLogic.Abilities.ReadyAbilities
   [CreateAssetMenu(fileName = "QuickDash", menuName = "Abilities/Quick Dash", order = 1)]
   public class QuickDashAbility : AbilityBase
   {
-    private const double CostPerTile = 0.4;
+    private const double CostPerTile = 0.5;
     
     public override IEnumerable<GridPos> GetValidTargetPositions()
     {
