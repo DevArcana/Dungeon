@@ -1,5 +1,4 @@
 ﻿using TurnSystem;
-using TurnSystem.Transactions;
 using UnityEngine;
 using UnityEngine.UI;
 

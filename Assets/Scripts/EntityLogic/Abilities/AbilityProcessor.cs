@@ -51,6 +51,8 @@ namespace EntityLogic.Abilities
 
     private void OnTurnChanged(object sender, TurnManager.TurnEventArgs e)
     {
+      DeselectAbility();
+      
       for (var i = 0; i < e.Entity.AbilityCooldowns.Count; i++)
       {
         var currentValue = e.Entity.AbilityCooldowns[i];
