@@ -54,6 +54,11 @@ namespace EntityLogic.Abilities
       return pathfinding.FindPath(TurnManager.instance.CurrentTurnTaker.GridPos, pos).Item2 + (World.World.instance.IsOccupied(pos) ? 1 : 0);
     }
 
+    public bool CanExecute(GridPos pos)
+    {
+      return true;
+    }
+
     public void Execute(GridPos pos)
     {
       var turnManager = TurnManager.instance;
