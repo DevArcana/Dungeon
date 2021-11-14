@@ -9,18 +9,19 @@ namespace EntityLogic.AI
 {
     public class InfluenceMap : MonoBehaviour
     {
-        public InfluenceMap instance;
+        public static InfluenceMap instance;
         
-        private Dictionary<GridPos, Dictionary<GridLivingEntity, int>> _influencedPoints;
-        private Dictionary<GridLivingEntity, List<GridPos>> _entityInfluence;
-        private SerializableMap<float> _influenceMap;
+        public Dictionary<GridPos, Dictionary<GridLivingEntity, int>> _influencedPoints;
+        public Dictionary<GridLivingEntity, List<GridPos>> _entityInfluence;
+        public float[,] _influenceMap;
 
         public InfluenceMap()
         {
-            var map = World.World.instance;
+            // var map = World.World.instance;
             _influencedPoints = new Dictionary<GridPos, Dictionary<GridLivingEntity, int>>();
             _entityInfluence = new Dictionary<GridLivingEntity, List<GridPos>>();
-            _influenceMap = new SerializableMap<float>(map.MapWidth, map.MapHeight);
+            // _influenceMap = new SerializableMap<float>(map.MapWidth, map.MapHeight);
+            _influenceMap = new float[300, 300];
         }
 
         private void Awake()
@@ -37,10 +38,12 @@ namespace EntityLogic.AI
 
             TurnManager.instance.TurnEntityAdded += TurnEntityAdded;
             TurnManager.instance.TurnEntityRemoved += TurnEntityRemoved;
+            TurnManager.instance.TurnChanged += TurnChanged;
         }
 
         private void RemoveEntityInfluence(GridLivingEntity entity)
         {
+            if (!_entityInfluence.ContainsKey(entity)) return;
             var positions = _entityInfluence[entity];
             foreach (var position in positions)
             {
@@ -51,8 +54,9 @@ namespace EntityLogic.AI
             }
         }
 
-        private void AddEntityInfluence(GridLivingEntity entity)
+        public void AddEntityInfluence(GridLivingEntity entity)
         {
+            RemoveEntityInfluence(entity);
             var maxDistance = TurnManager.instance.CurrentTurnTaker == entity
                 ? TurnManager.instance.ActionPoints.ActionPoints
                 : ActionPointsProcessor.MaxActionPoints;
@@ -66,6 +70,10 @@ namespace EntityLogic.AI
             {
                 var pos = GridPos.At(pathNode.x, pathNode.y);
                 pointsOfInfluence.Add(pos);
+                if (!_influencedPoints.ContainsKey(pos))
+                {
+                    _influencedPoints[pos] = new Dictionary<GridLivingEntity, int>();
+                }
                 _influencedPoints[pos][entity] = (int) pathNode.gCost;
                 CalculateInfluenceOnPos(pos);
             }
@@ -82,10 +90,16 @@ namespace EntityLogic.AI
                 var maxDistance = TurnManager.instance.CurrentTurnTaker == point.Key
                     ? TurnManager.instance.ActionPoints.ActionPoints
                     : ActionPointsProcessor.MaxActionPoints;
-                sum += side * (1 - point.Value / maxDistance);
+                if (maxDistance == 0) continue;
+                sum += side * (1 - point.Value / (float) maxDistance);
             }
 
             _influenceMap[pos.x, pos.y] = sum;
+        }
+        
+        public List<GridLivingEntity> GetInfluencersOnPos(GridPos pos)
+        {
+            return _influencedPoints.ContainsKey(pos) ? _influencedPoints[pos].Keys.ToList() : new List<GridLivingEntity>();
         }
 
         private void TurnEntityRemoved(object sender, TurnManager.TurnEventArgs e)
@@ -97,11 +111,18 @@ namespace EntityLogic.AI
         {
             AddEntityInfluence(e.Entity);
         }
+        
+        private void TurnChanged(object sender, TurnManager.TurnEventArgs e)
+        {
+            if (e.PreviousEntity is null) return;
+            AddEntityInfluence(e.PreviousEntity);
+        }
 
         private void OnDestroy()
         {
             TurnManager.instance.TurnEntityAdded -= TurnEntityAdded;
             TurnManager.instance.TurnEntityRemoved -= TurnEntityRemoved;
+            TurnManager.instance.TurnChanged -= TurnChanged;
         }
         
     }

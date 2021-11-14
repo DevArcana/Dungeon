@@ -10,11 +10,13 @@ namespace EntityLogic.AI
     {
         private List<GridLivingEntity> _enemies;
         private List<GridLivingEntity> _players;
+        private InfluenceMap _influenceMap;
         
         public UtilityAI()
         {
             _enemies = new List<GridLivingEntity>();
             _players = new List<GridLivingEntity>();
+            _influenceMap = InfluenceMap.instance;
             
             var entities = TurnManager.instance.PeekQueue();
             foreach (var entity in entities)
