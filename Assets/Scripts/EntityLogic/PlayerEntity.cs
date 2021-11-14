@@ -40,8 +40,7 @@ namespace TurnSystem
 
     private void Update()
     {
-      var influenceMap = InfluenceMap.instance;
-      Debug.Log($"{GridPos.x}, {GridPos.y}");
+      Debug.Log(GridPos);
     }
   }
 }

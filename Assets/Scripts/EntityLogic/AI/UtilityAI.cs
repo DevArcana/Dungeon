@@ -119,7 +119,7 @@ namespace EntityLogic.AI
             var availableActionPoints = TurnManager.instance.ActionPoints.ActionPoints;
             var maxCost = availableActionPoints + 2;
             var cost = entity.abilities.SelectedAbility.GetEffectiveCost(targetEntity.GridPos);
-            if (cost > maxCost) return 0f;
+            if (cost <= 0 || cost > maxCost) return 0f;
             return Mathf.Pow(cost / (float) maxCost, 0.333f);
         }
 

@@ -13,7 +13,7 @@ namespace EntityLogic.AI
         
         public Dictionary<GridPos, Dictionary<GridLivingEntity, int>> _influencedPoints;
         public Dictionary<GridLivingEntity, List<GridPos>> _entityInfluence;
-        public float[,] _influenceMap;
+        public Influence[,] _influenceMap;
 
         public InfluenceMap()
         {
@@ -21,7 +21,7 @@ namespace EntityLogic.AI
             _influencedPoints = new Dictionary<GridPos, Dictionary<GridLivingEntity, int>>();
             _entityInfluence = new Dictionary<GridLivingEntity, List<GridPos>>();
             // _influenceMap = new SerializableMap<float>(map.MapWidth, map.MapHeight);
-            _influenceMap = new float[300, 300];
+            _influenceMap = new Influence[300, 300];
         }
 
         private void Awake()
@@ -83,18 +83,28 @@ namespace EntityLogic.AI
 
         private void CalculateInfluenceOnPos(GridPos pos)
         {
-            var sum = 0.0f;
+            var playerInfluence = 0f;
+            var enemyInfluence = 0f;
             foreach (var point in _influencedPoints[pos])
             {
-                var side = point.Key is EnemyEntity ? 1 : -1;
                 var maxDistance = TurnManager.instance.CurrentTurnTaker == point.Key
                     ? TurnManager.instance.ActionPoints.ActionPoints
                     : ActionPointsProcessor.MaxActionPoints;
                 if (maxDistance == 0) continue;
-                sum += side * (1 - point.Value / (float) maxDistance);
+                var influence = 1 - point.Value / (float)maxDistance;
+                if (point.Key is EnemyEntity)
+                {
+                    enemyInfluence += influence;
+                }
+                else
+                {
+                    playerInfluence += influence;
+                }
             }
 
-            _influenceMap[pos.x, pos.y] = sum;
+            var overallInfluence = enemyInfluence - playerInfluence;
+
+            _influenceMap[pos.x, pos.y] = new Influence(playerInfluence, enemyInfluence, overallInfluence);
         }
         
         public List<GridLivingEntity> GetInfluencersOnPos(GridPos pos)

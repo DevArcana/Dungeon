@@ -61,7 +61,7 @@ namespace EntityLogic.AI
                 }
             }
 
-            return (null, 0);
+            return (null, int.MinValue);
         }
 
         public HashSet<PathNode> GetShortestPathTree(GridPos start, int maxCost = ActionPointsProcessor.MaxActionPoints)
