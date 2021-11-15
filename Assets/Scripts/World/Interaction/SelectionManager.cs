@@ -140,6 +140,11 @@ namespace World.Interaction
         abilityProcessor.Execute(_hoverPos!.Value);
         _hoverPos = null;
       }
+
+      if (Input.GetMouseButtonDown(1) && _hoverPos.HasValue)
+      {
+        Debug.Log(_hoverPos);
+      }
     }
 
     public void Clear()

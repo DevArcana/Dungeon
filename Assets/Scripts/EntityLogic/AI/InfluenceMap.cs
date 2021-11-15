@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using TurnSystem;
 using Unity.Plastic.Newtonsoft.Json.Serialization;
@@ -15,15 +16,6 @@ namespace EntityLogic.AI
         public Dictionary<GridLivingEntity, List<GridPos>> _entityInfluence;
         public Influence[,] _influenceMap;
 
-        public InfluenceMap()
-        {
-            // var map = World.World.instance;
-            _influencedPoints = new Dictionary<GridPos, Dictionary<GridLivingEntity, int>>();
-            _entityInfluence = new Dictionary<GridLivingEntity, List<GridPos>>();
-            // _influenceMap = new SerializableMap<float>(map.MapWidth, map.MapHeight);
-            _influenceMap = new Influence[300, 300];
-        }
-
         private void Awake()
         {
             if (instance == null)
@@ -39,6 +31,14 @@ namespace EntityLogic.AI
             TurnManager.instance.TurnEntityAdded += TurnEntityAdded;
             TurnManager.instance.TurnEntityRemoved += TurnEntityRemoved;
             TurnManager.instance.TurnChanged += TurnChanged;
+        }
+
+        private void Start()
+        {
+            var map = World.World.instance;
+            _influencedPoints = new Dictionary<GridPos, Dictionary<GridLivingEntity, int>>();
+            _entityInfluence = new Dictionary<GridLivingEntity, List<GridPos>>();
+            _influenceMap = new Influence[map.MapWidth, map.MapHeight];
         }
 
         private void RemoveEntityInfluence(GridLivingEntity entity)
@@ -140,11 +140,27 @@ namespace EntityLogic.AI
             return _influenceMap[entityGridPos.x, entityGridPos.y];
         }
 
-        public List<GridPos> GetEntityInfluencedPos(EnemyEntity entity)
+        public List<GridPos> GetEntityInfluencedPos(GridLivingEntity entity)
         {
             return !_entityInfluence.ContainsKey(entity) ? new List<GridPos>() : _entityInfluence[entity];
         }
-        
-        // public HashSet<GridPos> 
+
+        public HashSet<GridPos> GetInfluencedPosOfCost(GridLivingEntity entity, int cost)
+        {
+            var influencedPosOfCost = new HashSet<GridPos>();
+            if (!_entityInfluence.ContainsKey(entity))
+            {
+                return influencedPosOfCost;
+            }
+
+            var influencedPos = _entityInfluence[entity];
+
+            foreach (var pos in influencedPos.Where(pos => _influencedPoints[pos][entity] == cost))
+            {
+                influencedPosOfCost.Add(pos);
+            }
+
+            return influencedPosOfCost;
+        }
     }
 }

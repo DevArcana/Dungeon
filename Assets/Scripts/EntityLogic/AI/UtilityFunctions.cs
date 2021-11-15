@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using EntityLogic.Abilities;
 using EntityLogic.Abilities.ReadyAbilities;
 using TurnSystem;
 using UnityEngine;
+using World.Common;
 
 namespace EntityLogic.AI
 {
@@ -54,7 +56,7 @@ namespace EntityLogic.AI
             return healthFactor * (1 - threat);
         }
 
-        public static float RetreatUtility(EnemyEntity entity)
+        public static float RetreatUtility(EnemyEntity entity, Dictionary<GridPos, CoverType> coverMap)
         {
             var abilityProcessor = AbilityProcessor.instance;
             var influenceMap = InfluenceMap.instance;
