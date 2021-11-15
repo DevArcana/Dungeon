@@ -9,6 +9,7 @@ namespace UI
   public class AbilityBar : MonoBehaviour
   {
     public Ability abilityPrefab;
+    public AbilityTooltip tooltip;
 
     private List<Ability> _abilities;
     private GridLivingEntity _abilityOwner;
@@ -17,6 +18,8 @@ namespace UI
     {
       Destroy(transform.GetChild(0).gameObject);
 
+      tooltip.Hide(null);
+      
       var turnManager = TurnManager.instance;
       turnManager.ActionPoints.ActionPointsChanged += OnActionPointsChanged;
       turnManager.TurnChanged += OnTurnChanged;
@@ -136,6 +139,8 @@ namespace UI
         });
         instantiatedAbility.image.sprite = ability.icon;
         instantiatedAbility.Available();
+        instantiatedAbility.tooltip = tooltip;
+        instantiatedAbility.ability = ability;
         
         _abilities.Add(instantiatedAbility);
       }

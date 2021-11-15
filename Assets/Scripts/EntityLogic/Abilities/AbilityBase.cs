@@ -18,5 +18,6 @@ namespace EntityLogic.Abilities
     public abstract int GetMinimumPossibleCost();
     public abstract bool CanExecute(GridPos pos);
     public abstract void Execute(GridPos pos);
+    public abstract string GetCostForTooltip();
   }
 }

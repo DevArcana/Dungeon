@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 491f9f33bfaa4f99aece7676b772231d, type: 3}
   m_Name: Heal Ally
   m_EditorClassIdentifier: 
-  title: 
-  description: 
+  title: Heal Ally
+  description: Heal chosen allied unit in range for 20
   icon: {fileID: 21300000, guid: faf08c48c06be9a4a8cba6691ccd77ec, type: 3}
   tags: 
   cooldown: 1
