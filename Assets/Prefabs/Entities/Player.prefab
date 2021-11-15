@@ -136,8 +136,11 @@ MonoBehaviour:
   initiative: 10
   equipment: {fileID: 0}
   abilities:
-    abilities:
-    - {fileID: 11400000, guid: c76b923872d560c41ba697b33b016e49, type: 2}
+  - {fileID: 11400000, guid: c76b923872d560c41ba697b33b016e49, type: 2}
+  - {fileID: 11400000, guid: 34136f8b4de701440a976deb4cbfa6e5, type: 2}
+  - {fileID: 11400000, guid: cf19840d6ba96ed42ba8e3e3d4a602aa, type: 2}
+  - {fileID: 11400000, guid: fe1c60c20955cc74ca3d1313b93a3a8f, type: 2}
+  - {fileID: 11400000, guid: e2a382e43b657e745a18dcf98ccae067, type: 2}
 --- !u!136 &4692986789365586099
 CapsuleCollider:
   m_ObjectHideFlags: 0

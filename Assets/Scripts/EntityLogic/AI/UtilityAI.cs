@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using EntityLogic.Abilities;
+using EntityLogic.Abilities.ReadyAbilities;
 using TurnSystem;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -9,13 +10,13 @@ namespace EntityLogic.AI
 {
     public class UtilityAI
     {
-        private List<GridLivingEntity> _enemies;
+        private List<GridLivingEntity> _agents;
         private List<GridLivingEntity> _players;
         private InfluenceMap _influenceMap;
         
         public UtilityAI()
         {
-            _enemies = new List<GridLivingEntity>();
+            _agents = new List<GridLivingEntity>();
             _players = new List<GridLivingEntity>();
             _influenceMap = InfluenceMap.instance;
             
@@ -23,18 +24,20 @@ namespace EntityLogic.AI
             foreach (var entity in entities)
             {
                 if (entity is PlayerEntity) _players.Add(entity);
-                else if (entity is EnemyEntity) _enemies.Add(entity);
+                else if (entity is EnemyEntity) _agents.Add(entity);
             }
         }
         
         private ActionType ChooseNextAction(EnemyEntity entity)
         {
             var targetEntity = Pathfinding.FindClosestPlayer(entity.GridPos);
+            // var coverMap = new CoverMap(entity, InfluenceMap.instance.GetEntityInfluencedPos(entity), _players);
             var utilities = new List<(ActionType, float)>
             {
-                (ActionType.Attack, MeleeAttackUtility(entity, targetEntity)),
-                (ActionType.Run, RushPlayerUtility(entity, targetEntity)),
-                (ActionType.Pass, PassTurnUtility(entity))
+                (ActionType.MeleeAttack, UtilityFunctions.MeleeAttackUtility(entity, targetEntity)),
+                (ActionType.RushPlayer, UtilityFunctions.RushPlayerUtility(entity, targetEntity)),
+                (ActionType.Pass, UtilityFunctions.PassTurnUtility()),
+                (ActionType.HealSelf, UtilityFunctions.HealSelfUtility(entity))
             }.Where(x => x.Item2 != 0f).OrderByDescending(x => x.Item2).ToList();
 
             return WeightedRandom(utilities);
@@ -49,7 +52,7 @@ namespace EntityLogic.AI
 
             switch (ChooseNextAction(entity))
             {
-                case ActionType.Attack:
+                case ActionType.MeleeAttack:
                 {
                     var ability = abilityProcessor.SelectedAbility;
                     TurnManager.instance.ActionPoints.ReservePoints(ability.GetEffectiveCost(targetEntity.GridPos));
@@ -57,7 +60,7 @@ namespace EntityLogic.AI
                     ability.Execute(targetEntity.GridPos);
                     return;
                 }
-                case ActionType.Run:
+                case ActionType.RushPlayer:
                 {
                     var pathfinding = new Pathfinding();
                     var (path, _) = pathfinding.FindPath(entity.GridPos, targetEntity.GridPos);
@@ -66,6 +69,15 @@ namespace EntityLogic.AI
                     TurnManager.instance.ActionPoints.ReservePoints(ability.GetEffectiveCost(target));
                     TurnManager.instance.ActionPoints.SpendReservedPoints();
                     ability.Execute(target);
+                    return;
+                }
+                case ActionType.HealSelf:
+                {
+                    abilityProcessor.SelectAbility(typeof(HealSelfAbility));
+                    var ability = abilityProcessor.SelectedAbility;
+                    TurnManager.instance.ActionPoints.ReservePoints(ability.GetEffectiveCost(entity.GridPos));
+                    TurnManager.instance.ActionPoints.SpendReservedPoints();
+                    ability.Execute(entity.GridPos);
                     return;
                 }
                 case ActionType.Pass:
@@ -93,47 +105,14 @@ namespace EntityLogic.AI
 
             var choice = Random.Range(0f, totalScore);
             var accumulator = 0f;
-            
+
             foreach (var (action, score) in bestUtilities)
             {
                 accumulator += score;
                 if (choice < accumulator) return action;
             }
-            
+
             return ActionType.Pass;
-        }
-
-        private float MeleeAttackUtility(GridLivingEntity entity, GridLivingEntity targetEntity)
-        {
-            var abilityProcessor = AbilityProcessor.instance;
-            
-            var availableActionPoints = TurnManager.instance.ActionPoints.ActionPoints;
-            var pathfinding = new Pathfinding();
-            if (entity.GridPos.OneDimDistance(targetEntity.GridPos) == 1
-                && pathfinding.FindPath(entity.GridPos, targetEntity.GridPos, 1).Item2 == 1
-                && availableActionPoints >= abilityProcessor.SelectedAbility.GetEffectiveCost(targetEntity.GridPos))
-            {
-                return 1f;
-            }
-            return 0f;
-        }
-
-        private float RushPlayerUtility(GridLivingEntity entity, GridLivingEntity targetEntity)
-        {
-            var abilityProcessor = AbilityProcessor.instance;
-            
-            if (entity.GridPos.OneDimDistance(targetEntity.GridPos) == 1) return 0f;
-            var availableActionPoints = TurnManager.instance.ActionPoints.ActionPoints;
-            var maxCost = availableActionPoints + 2;
-            var cost = abilityProcessor.SelectedAbility.GetEffectiveCost(targetEntity.GridPos);
-            if (cost <= 0 || cost > maxCost) return 0f;
-
-            return Mathf.Pow(cost / (float) maxCost, 0.333f);
-        }
-
-        private float PassTurnUtility(EnemyEntity entity)
-        {
-            return 0.05f;
         }
     }
 }

@@ -134,6 +134,17 @@ namespace EntityLogic.AI
             TurnManager.instance.TurnEntityRemoved -= TurnEntityRemoved;
             TurnManager.instance.TurnChanged -= TurnChanged;
         }
+
+        public Influence GetInfluenceOnPos(GridPos entityGridPos)
+        {
+            return _influenceMap[entityGridPos.x, entityGridPos.y];
+        }
+
+        public List<GridPos> GetEntityInfluencedPos(EnemyEntity entity)
+        {
+            return !_entityInfluence.ContainsKey(entity) ? new List<GridPos>() : _entityInfluence[entity];
+        }
         
+        // public HashSet<GridPos> 
     }
 }

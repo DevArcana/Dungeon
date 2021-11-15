@@ -19,6 +19,22 @@ PrefabInstance:
       propertyPath: entityName
       value: Mage
       objectReference: {fileID: 0}
+    - target: {fileID: 826060875, guid: 5b4da0c22f232dd4b8ab2b9a2327f179, type: 3}
+      propertyPath: abilities.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 826060875, guid: 5b4da0c22f232dd4b8ab2b9a2327f179, type: 3}
+      propertyPath: abilities.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: cf19840d6ba96ed42ba8e3e3d4a602aa, type: 2}
+    - target: {fileID: 826060875, guid: 5b4da0c22f232dd4b8ab2b9a2327f179, type: 3}
+      propertyPath: abilities.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: fe1c60c20955cc74ca3d1313b93a3a8f, type: 2}
+    - target: {fileID: 826060875, guid: 5b4da0c22f232dd4b8ab2b9a2327f179, type: 3}
+      propertyPath: abilities.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: e2a382e43b657e745a18dcf98ccae067, type: 2}
     - target: {fileID: 3480460645657372685, guid: 5b4da0c22f232dd4b8ab2b9a2327f179, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 

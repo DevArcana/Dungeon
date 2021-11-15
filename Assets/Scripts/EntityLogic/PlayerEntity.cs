@@ -40,7 +40,7 @@ namespace TurnSystem
 
     private void Update()
     {
-      Debug.Log(GridPos);
+      Debug.Log($"{GridPos} - {transform.position}");
     }
   }
 }

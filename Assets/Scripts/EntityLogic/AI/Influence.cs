@@ -2,14 +2,14 @@
 {
     public struct Influence
     {
-        public float playerInfluence;
-        public float enemyInfluence;
+        public float playersInfluence;
+        public float agentsInfluence;
         public float overallInfluence;
 
-        public Influence(float playerInfluence, float enemyInfluence, float overallInfluence)
+        public Influence(float playersInfluence, float agentsInfluence, float overallInfluence)
         {
-            this.playerInfluence = playerInfluence;
-            this.enemyInfluence = enemyInfluence;
+            this.playersInfluence = playersInfluence;
+            this.agentsInfluence = agentsInfluence;
             this.overallInfluence = overallInfluence;
         }
     }
