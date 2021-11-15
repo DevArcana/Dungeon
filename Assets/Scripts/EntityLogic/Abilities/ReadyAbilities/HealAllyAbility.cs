@@ -52,5 +52,10 @@ namespace EntityLogic.Abilities.ReadyAbilities
       var ally = World.World.instance.GetOccupant(pos);
       TurnManager.instance.Transactions.EnqueueTransaction(new HealAllyTransaction(TurnManager.instance.CurrentTurnTaker, ally, healAmount));
     }
+
+    public override string GetCostForTooltip()
+    {
+      return GetMinimumPossibleCost().ToString();
+    }
   }
 }

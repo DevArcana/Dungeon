@@ -9,6 +9,7 @@ namespace UI
   public class AbilityBar : MonoBehaviour
   {
     public Ability abilityPrefab;
+    public AbilityTooltip tooltip;
 
     private List<Ability> _abilities;
     private GridLivingEntity _abilityOwner;
@@ -17,6 +18,8 @@ namespace UI
     {
       Destroy(transform.GetChild(0).gameObject);
 
+      tooltip.Hide(null);
+      
       var turnManager = TurnManager.instance;
       turnManager.ActionPoints.ActionPointsChanged += OnActionPointsChanged;
       turnManager.TurnChanged += OnTurnChanged;
@@ -53,6 +56,11 @@ namespace UI
     private void SelectAbility(int abilityNumber)
     {
       var abilityProcessor = AbilityProcessor.instance;
+      var selectedAbilityIndex = abilityProcessor.SelectedAbilityIndex;
+      if (selectedAbilityIndex != -1)
+      {
+        _abilities[selectedAbilityIndex].Available();
+      }
       
       if (abilityProcessor.SelectedAbilityIndex == abilityNumber)
       {
@@ -60,6 +68,7 @@ namespace UI
         return;
       }
 
+      _abilities[abilityNumber].Selected();
       abilityProcessor.SelectAbility(abilityNumber);
     }
 
@@ -83,13 +92,24 @@ namespace UI
       for (var i = 0; i < turnTaker.abilities.Count; i++)
       {
         var ability = turnTaker.abilities[i];
-        var offCooldown = turnTaker.AbilityCooldowns[i] == 0;
-        var canAfford = ability.GetMinimumPossibleCost() <= turnManager.ActionPoints.ActionPoints;
-        var castable = !abilityProcessor.AbilityInExecution;
-        
-        _abilities[i].button.enabled = offCooldown && canAfford && castable;
-        _abilities[i].button.interactable = offCooldown && canAfford && castable;
-        _abilities[i].text.text = !offCooldown && castable ? turnTaker.AbilityCooldowns[i].ToString() : string.Empty;
+        var abilityIcon = _abilities[i];
+
+        if (abilityProcessor.AbilityInExecution)
+        {
+          abilityIcon.Processing();
+        }
+        else if (turnTaker.AbilityCooldowns[i] != 0)
+        {
+          abilityIcon.OnCooldown(turnTaker.AbilityCooldowns[i]);
+        }
+        else if (ability.GetMinimumPossibleCost() > turnManager.ActionPoints.ActionPoints)
+        {
+          abilityIcon.NotEnoughResource();
+        }
+        else
+        {
+          abilityIcon.Available();
+        }
       }
     }
 
@@ -118,6 +138,9 @@ namespace UI
           SelectAbility(index);
         });
         instantiatedAbility.image.sprite = ability.icon;
+        instantiatedAbility.Available();
+        instantiatedAbility.tooltip = tooltip;
+        instantiatedAbility.ability = ability;
         
         _abilities.Add(instantiatedAbility);
       }

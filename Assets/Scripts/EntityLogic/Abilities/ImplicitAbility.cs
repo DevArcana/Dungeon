@@ -88,5 +88,10 @@ namespace EntityLogic.Abilities
         turnManager.Transactions.EnqueueTransaction(new MoveTransaction(TurnManager.instance.CurrentTurnTaker, path.Last()));
       }
     }
+
+    public override string GetCostForTooltip()
+    {
+      return "";
+    }
   }
 }

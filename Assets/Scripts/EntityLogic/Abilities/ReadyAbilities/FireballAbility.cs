@@ -72,5 +72,10 @@ namespace EntityLogic.Abilities.ReadyAbilities
       
       TurnManager.instance.Transactions.EnqueueTransaction(new FireballTransaction(turnTaker, occupant, 20));
     }
+
+    public override string GetCostForTooltip()
+    {
+      return GetMinimumPossibleCost().ToString();
+    }
   }
 }

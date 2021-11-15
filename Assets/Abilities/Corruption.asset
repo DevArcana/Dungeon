@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccbdccabe1c149ee8af6eb003bf92b16, type: 3}
   m_Name: Corruption
   m_EditorClassIdentifier: 
-  title: 
-  description: 
+  title: Corruption
+  description: Deals 20 damage in a circle area with radius of 2 tiles around the
+    chosen point.
   icon: {fileID: 21300000, guid: a3e23d982e6b7c9478df204d4bb02f0f, type: 3}
   tags: 
   cooldown: 2

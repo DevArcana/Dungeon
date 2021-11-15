@@ -53,5 +53,10 @@ namespace EntityLogic.Abilities.ReadyAbilities
       
       turnManager.Transactions.EnqueueTransaction(new CorruptionTransaction(turnTaker, entities, damage));
     }
+
+    public override string GetCostForTooltip()
+    {
+      return GetMinimumPossibleCost().ToString();
+    }
   }
 }
