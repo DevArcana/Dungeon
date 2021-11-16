@@ -190,6 +190,11 @@ namespace Equipment
             {
                 useButton.onClick.RemoveAllListeners();
                 useButton.onClick.AddListener(consumable.Use);
+                useButton.onClick.AddListener(() =>
+                {
+                    backpack.Remove(consumable);
+                    iconsGenerated = false;
+                });
                 buttonText.text = "USE";
             }
             else
@@ -272,6 +277,7 @@ namespace Equipment
             }
 
             iconsGenerated = false;
+            isItemDescriptionEnabled = false;
         }
         
         private void UnEquip(Item item)
@@ -328,6 +334,7 @@ namespace Equipment
                 }
             }
             iconsGenerated = false;
+            isItemDescriptionEnabled = false;
         }
         
     }
