@@ -272,6 +272,7 @@ namespace World.Generation
       var connections = _regions.Values.SelectMany(r => r.connections).Distinct();
       foreach (var connection in connections)
       {
+        if (connection.regionA == connection.regionB) continue;
         Carve(connection);
       }
     }
