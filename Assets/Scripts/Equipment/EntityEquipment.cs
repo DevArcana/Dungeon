@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.UIElements;
+using Button = UnityEngine.UI.Button;
+using Image = UnityEngine.UI.Image;
 
 namespace Equipment
 {
@@ -10,6 +12,7 @@ namespace Equipment
         public static bool isEnabled;
         public static bool iconsGenerated;
         public GameObject inventory;
+        public Sprite background;
         
         private int _numberOfSlots;
         private GameObject[] _slots;
@@ -19,9 +22,9 @@ namespace Equipment
         public TextMeshProUGUI itemName;
         public TextMeshProUGUI itemDescriptionText;
         public Image icon;
-        public GameObject useButton;
+        public Button useButton;
+        public TextMeshProUGUI buttonText;
         public static bool isItemDescriptionEnabled;
-        private static bool _isItemConsumable;
 
         public GameObject weaponSlot;
         public GameObject helmetSlot;
@@ -47,7 +50,6 @@ namespace Equipment
         {
             iconsGenerated = false;
             isEnabled = false;
-            _isItemConsumable = false;
             isItemDescriptionEnabled = false;
             _numberOfSlots = 39;
             backpack.Capacity = _numberOfSlots;
@@ -75,12 +77,19 @@ namespace Equipment
                 {
                     _slots[i].GetComponent<Image>().sprite = backpack[i].icon;
                     var x = i;
-                    _slots[i].GetComponent<Button>().onClick.AddListener(()=>OnItemClicked(backpack[x]));
-                    
+                    _slots[i].GetComponent<Button>().onClick.RemoveAllListeners();
+                    _slots[i].GetComponent<Button>().onClick.AddListener(()=>OnItemClicked(backpack[x], false));
+                }
+
+                for (var i = backpack.Count; i < backpack.Capacity; i++)
+                {
+                    _slots[i].GetComponent<Button>().onClick.RemoveAllListeners();
+                    _slots[i].GetComponent<Image>().sprite = background;
                 }
                 if (!(weapon is null))
                 {
                     weaponSlot.GetComponent<Image>().sprite = weapon.icon;
+                    weaponSlot.GetComponent<Button>().onClick.RemoveAllListeners();
                     weaponSlot.GetComponent<Button>().onClick.AddListener(()=>OnItemClicked(weapon));
                     weaponSlot.SetActive(true);
                 }
@@ -91,6 +100,7 @@ namespace Equipment
                 if (!(helmet is null))
                 {
                     helmetSlot.GetComponent<Image>().sprite = helmet.icon;
+                    helmetSlot.GetComponent<Button>().onClick.RemoveAllListeners();
                     helmetSlot.GetComponent<Button>().onClick.AddListener(()=>OnItemClicked(helmet));
                     helmetSlot.SetActive(true);
                 }
@@ -101,6 +111,7 @@ namespace Equipment
                 if (!(breastplate is null))
                 {
                     breastplateSlot.GetComponent<Image>().sprite = breastplate.icon;
+                    breastplateSlot.GetComponent<Button>().onClick.RemoveAllListeners();
                     breastplateSlot.GetComponent<Button>().onClick.AddListener(()=>OnItemClicked(breastplate));
                     breastplateSlot.SetActive(true);
                 }
@@ -111,6 +122,7 @@ namespace Equipment
                 if (!(leggings is null))
                 {
                     leggingsSlot.GetComponent<Image>().sprite = leggings.icon;
+                    leggingsSlot.GetComponent<Button>().onClick.RemoveAllListeners();
                     leggingsSlot.GetComponent<Button>().onClick.AddListener(()=>OnItemClicked(leggings));
                     leggingsSlot.SetActive(true);
                 }
@@ -121,6 +133,7 @@ namespace Equipment
                 if (!(boots is null))
                 {
                     bootsSlot.GetComponent<Image>().sprite = boots.icon;
+                    bootsSlot.GetComponent<Button>().onClick.RemoveAllListeners();
                     bootsSlot.GetComponent<Button>().onClick.AddListener(()=>OnItemClicked(boots));
                     bootsSlot.SetActive(true);
                 }
@@ -131,6 +144,7 @@ namespace Equipment
                 if (!(necklace is null))
                 {
                     necklaceSlot.GetComponent<Image>().sprite = necklace.icon;
+                    necklaceSlot.GetComponent<Button>().onClick.RemoveAllListeners();
                     necklaceSlot.GetComponent<Button>().onClick.AddListener(()=>OnItemClicked(necklace));
                     necklaceSlot.SetActive(true);
                 }
@@ -141,6 +155,7 @@ namespace Equipment
                 if (!(ring is null))
                 {
                     ringSlot.GetComponent<Image>().sprite = ring.icon;
+                    ringSlot.GetComponent<Button>().onClick.RemoveAllListeners();
                     ringSlot.GetComponent<Button>().onClick.AddListener(()=>OnItemClicked(ring));
                     ringSlot.SetActive(true);
                 }
@@ -151,6 +166,7 @@ namespace Equipment
                 if (!(gloves is null))
                 {
                     glovesSlot.GetComponent<Image>().sprite = gloves.icon;
+                    glovesSlot.GetComponent<Button>().onClick.RemoveAllListeners();
                     glovesSlot.GetComponent<Button>().onClick.AddListener(()=>OnItemClicked(gloves));
                     glovesSlot.SetActive(true);
                 }
@@ -160,12 +176,11 @@ namespace Equipment
                 }
                 iconsGenerated = true;
             }
-            useButton.SetActive(_isItemConsumable);
             itemDescription.SetActive(isItemDescriptionEnabled);
             inventory.SetActive(isEnabled);
         }
 
-        private void OnItemClicked(Item item)
+        private void OnItemClicked(Item item, bool isEquiped = true)
         {
             isItemDescriptionEnabled = true;
             itemName.text = item.itemName;
@@ -173,13 +188,146 @@ namespace Equipment
             icon.sprite = item.icon;
             if (item is Consumable consumable)
             {
-                _isItemConsumable = true;
-                useButton.GetComponent<Button>().onClick.AddListener(consumable.Use);
+                useButton.onClick.RemoveAllListeners();
+                useButton.onClick.AddListener(consumable.Use);
+                buttonText.text = "USE";
             }
             else
             {
-                _isItemConsumable = false;
+                if (isEquiped)
+                {
+                    buttonText.text = "UNEQUIP";
+                    useButton.onClick.RemoveAllListeners();
+                    useButton.onClick.AddListener(()=> UnEquip(item));
+                }
+                else
+                {
+                    buttonText.text = "EQUIP";
+                    useButton.onClick.RemoveAllListeners();
+                    useButton.onClick.AddListener(() => Equip(item));
+                }
             }
+        }
+
+        private void Equip(Item item)
+        {
+            switch (item)
+            {
+                case Weapon w:
+                {
+                    if(!(weapon is null)) backpack.Add(weapon);
+                    weapon = w;
+                    backpack.Remove(w);
+                    break;
+                }
+                case Helmet w:
+                {
+                    if(!(helmet is null)) backpack.Add(helmet);
+                    helmet = w;
+                    backpack.Remove(w);
+                    break;
+                }
+                case Breastplate w:
+                {
+                    if(!(breastplate is null)) backpack.Add(breastplate);
+                    breastplate = w;
+                    backpack.Remove(w);
+                    break;
+                }
+                case Leggings w:
+                {
+                    if(!(leggings is null)) backpack.Add(leggings);
+                    leggings = w;
+                    backpack.Remove(w);
+                    break;
+                }
+                case Gloves w:
+                {
+                    if(!(gloves is null)) backpack.Add(gloves);
+                    gloves = w;
+                    backpack.Remove(w);
+                    break;
+                }
+                case Boots w:
+                {
+                    if(!(boots is null)) backpack.Add(boots);
+                    boots = w;
+                    backpack.Remove(w);
+                    break;
+                }
+                case Ring w:
+                {
+                    if(!(ring is null)) backpack.Add(ring);
+                    ring = w;
+                    backpack.Remove(w);
+                    break;
+                }
+                case Necklace w:
+                {
+                    if(!(necklace is null)) backpack.Add(necklace);
+                    necklace = w;
+                    backpack.Remove(w);
+                    break;
+                }
+            }
+
+            iconsGenerated = false;
+        }
+        
+        private void UnEquip(Item item)
+        {
+            switch (item)
+            {
+                case Weapon w:
+                {
+                    backpack.Add(weapon);
+                    weapon = null;
+                    break;
+                }
+                case Helmet w:
+                {
+                    backpack.Add(helmet);
+                    helmet = null;
+                    break;
+                }
+                case Breastplate w:
+                {
+                    backpack.Add(breastplate);
+                    breastplate = null;
+                    break;
+                }
+                case Leggings w:
+                {
+                    backpack.Add(leggings);
+                    leggings = null;
+                    break;
+                }
+                case Gloves w:
+                {
+                    backpack.Add(gloves);
+                    gloves = null;
+                    break;
+                }
+                case Boots w:
+                {
+                    backpack.Add(boots);
+                    boots = null;
+                    break;
+                }
+                case Ring w:
+                {
+                    backpack.Add(ring);
+                    ring = null;
+                    break;
+                }
+                case Necklace w:
+                {
+                    backpack.Add(necklace);
+                    necklace = null;
+                    break;
+                }
+            }
+            iconsGenerated = false;
         }
         
     }
