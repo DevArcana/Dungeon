@@ -47,7 +47,13 @@ namespace World.Generation
 
       map = ca.Result;
       
-      // step 3, split into regions
+      // step 3, ensure connectedness
+      var pruning = new MapRegionPruning(map);
+      pruning.Scan();
+      pruning.PruneRegions(_settings.minRegionSize);
+      pruning.ConnectRegions();
+
+      // step 4, split into regions
       var regions = new MapRegions(map, _settings.maxRegionSize, _settings.minRegionSize);
 
       // finally, apply to heightmap

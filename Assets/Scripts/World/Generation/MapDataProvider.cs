@@ -45,7 +45,7 @@ namespace World.Generation
       Instantiate(settings.playerPrefab, new Vector3(pos.x, heightmap[pos], pos.y), Quaternion.identity, transform);
 
       var endRegion = region;
-      while (endRegion == region)
+      while (allRegions.Length > 1 && endRegion == region)
       {
         endRegion = allRegions[random.Next(allRegions.Length)];
       }
