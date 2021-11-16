@@ -41,5 +41,10 @@ namespace EntityLogic.Abilities.ReadyAbilities
     {
       TurnManager.instance.Transactions.EnqueueTransaction(new HealSelfTransaction(TurnManager.instance.CurrentTurnTaker, healAmount));
     }
+
+    public override string GetCostForTooltip()
+    {
+      return GetMinimumPossibleCost().ToString();
+    }
   }
 }

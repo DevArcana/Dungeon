@@ -1,10 +1,11 @@
 ﻿namespace EntityLogic.AI
 {
-    internal enum CoverType
+    public enum CoverType
     {
         NoCover,
         SoftCover,
         MediumCover,
-        HardCover
+        HardCover,
+        OutOfRange
     }
 }

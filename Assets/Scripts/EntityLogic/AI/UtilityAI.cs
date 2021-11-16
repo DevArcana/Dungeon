@@ -31,7 +31,7 @@ namespace EntityLogic.AI
         private ActionType ChooseNextAction(EnemyEntity entity)
         {
             var targetEntity = Pathfinding.FindClosestPlayer(entity.GridPos);
-            // var coverMap = new CoverMap(entity, InfluenceMap.instance.GetEntityInfluencedPos(entity), _players);
+            var coverMap = new CoverMap(entity, InfluenceMap.instance.GetEntityInfluencedPos(entity), _players).GetCoverMap();
             var utilities = new List<(ActionType, float)>
             {
                 (ActionType.MeleeAttack, UtilityFunctions.MeleeAttackUtility(entity, targetEntity)),

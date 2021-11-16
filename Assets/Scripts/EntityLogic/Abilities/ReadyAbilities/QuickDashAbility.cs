@@ -46,5 +46,10 @@ namespace EntityLogic.Abilities.ReadyAbilities
     {
       TurnManager.instance.Transactions.EnqueueTransaction(new MoveTransaction(TurnManager.instance.CurrentTurnTaker, pos));
     }
+
+    public override string GetCostForTooltip()
+    {
+      return $"{CostPerTile} AP per tile";
+    }
   }
 }
