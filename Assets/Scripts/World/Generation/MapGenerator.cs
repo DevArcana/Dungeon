@@ -22,10 +22,8 @@ namespace World.Generation
 
     public MapGenerationResult Generate()
     {
-      var heightmap = new HeightMap(_settings.width, _settings.height);
-
       // step 1, randomize top layer
-      var map = heightmap.SliceAt(1);
+      var map = new SerializableMap<bool>(_settings.width, _settings.height);
       for (var y = 0; y < _settings.height; y++)
       {
         for (var x = 0; x < _settings.width; x++)
@@ -56,12 +54,13 @@ namespace World.Generation
       // step 4, split into regions
       var regions = new MapRegions(map, _settings.maxRegionSize, _settings.minRegionSize);
 
-      // finally, apply to heightmap
-      heightmap.ApplyAt(map, _settings.layers);
+      // step 5, terrain features
+      var features = new FeaturesGenerator(map, _settings.layers, _random);
+      features.PopulateRegions(regions.Regions);
 
       return new MapGenerationResult
       {
-        heightmap = heightmap,
+        heightmap = features.Result,
         regions = regions.Regions
       };
     }

@@ -149,19 +149,13 @@ namespace World.Common
 
     public IEnumerable<GridPos> SquarePattern(int radius)
     {
-      var world = World.instance;
-      
       var tiles = new List<GridPos>();
 
       for (var iy = y - radius; iy <= y + radius; iy++)
       {
         for (var ix = x - radius; ix <= x + radius; ix++)
         {
-          var currentTile = At(ix, iy);
-          if (world.IsWalkable(currentTile))
-          {
-            tiles.Add(currentTile);
-          }
+          tiles.Add(At(ix, iy));
         }
       }
 

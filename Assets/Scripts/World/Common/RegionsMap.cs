@@ -50,6 +50,19 @@ namespace World.Common
       return regions.Values.OrderByDescending(x => x.cells.Count);
     }
 
+    public bool Contains(int region, IEnumerable<GridPos> cells)
+    {
+      foreach (var cell in cells)
+      {
+        if (!WithinBounds(cell) || this[cell] != region)
+        {
+          return false;
+        }
+      }
+
+      return true;
+    }
+    
     public Region GetRegion(int index)
     {
       var region = new Region(index);
