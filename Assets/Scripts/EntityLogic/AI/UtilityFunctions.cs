@@ -13,11 +13,10 @@ namespace EntityLogic.AI
         public static float MeleeAttackUtility(GridLivingEntity entity, GridLivingEntity targetEntity)
         {
             var abilityProcessor = AbilityProcessor.instance;
-            var availableActionPoints = TurnManager.instance.ActionPoints.ActionPoints;
             var pathfinding = new Pathfinding();
-            if (entity.GridPos.OneDimDistance(targetEntity.GridPos) == 1
-                && pathfinding.FindPath(entity.GridPos, targetEntity.GridPos, 1).Item2 == 1
-                && availableActionPoints >= abilityProcessor.SelectedAbility.GetEffectiveCost(targetEntity.GridPos))
+            if (abilityProcessor.CanExecute(targetEntity.GridPos)
+                && entity.GridPos.OneDimDistance(targetEntity.GridPos) == 1
+                && pathfinding.FindPath(entity.GridPos, targetEntity.GridPos, 1).Item2 == 1)
             {
                 return 1f;
             }
@@ -28,7 +27,8 @@ namespace EntityLogic.AI
         {
             var abilityProcessor = AbilityProcessor.instance;
             
-            if (entity.GridPos.OneDimDistance(targetEntity.GridPos) == 1) return 0f;
+            if (!abilityProcessor.CanExecute(targetEntity.GridPos) ||
+                entity.GridPos.OneDimDistance(targetEntity.GridPos) == 1) return 0f;
             var availableActionPoints = TurnManager.instance.ActionPoints.ActionPoints;
             var maxCost = availableActionPoints + 2;
             var cost = abilityProcessor.SelectedAbility.GetEffectiveCost(targetEntity.GridPos);
@@ -40,7 +40,7 @@ namespace EntityLogic.AI
         public static float HealSelfUtility(EnemyEntity entity)
         {
             var abilityProcessor = AbilityProcessor.instance;
-            if (!abilityProcessor.SelectAbility(typeof(HealSelfAbility))) return 0f;
+            if (!abilityProcessor.SelectAbility(typeof(HealSelfAbility)) || !abilityProcessor.CanExecute(entity.GridPos)) return 0f;
             var influenceMap = InfluenceMap.instance;
             var health = entity.GetComponent<DamageableEntity>().damageable;
 
@@ -56,11 +56,12 @@ namespace EntityLogic.AI
             return healthFactor * (1 - threat);
         }
 
-        public static float RetreatUtility(EnemyEntity entity, Dictionary<GridPos, CoverType> coverMap)
+        public static float RetreatUtility(EnemyEntity entity, Dictionary<GridPos, CoverType> coverMap, out GridPos target)
         {
-            var abilityProcessor = AbilityProcessor.instance;
+            // var abilityProcessor = AbilityProcessor.instance;
             var influenceMap = InfluenceMap.instance;
             var health = entity.GetComponent<DamageableEntity>().damageable;
+            target = entity.GridPos;
 
             var healthPercentage = health.Health / (float) health.MaxHealth;
             // logistic function
@@ -68,13 +69,42 @@ namespace EntityLogic.AI
 
             var influence = influenceMap.GetInfluenceOnPos(entity.GridPos);
             // exponential function
-            var threat = Mathf.Min(-(100 - Mathf.Pow(influence.playersInfluence * 125, 4)) / (100 ^ 4), 1);
+            var threat = Mathf.Min(Mathf.Pow(influence.playersInfluence / 0.8f , 4), 1);
             // if threat is above average
-            if (threat > 0.5f)
+            if (!(threat > 0.5f)) return 0f;
+            
+            var bestScore = 0f;
+            var positions = new Dictionary<GridPos, float>();
+            var aa = influenceMap.GetEntityInfluencedPos(entity);
+            if (!aa.Contains(entity.GridPos))
             {
-                
+                var a = 1 + 1;
+            }
+            foreach (var position in influenceMap.GetEntityInfluencedPos(entity))
+            {
+                var occupant = World.World.instance.GetOccupant(position);
+                if (!(occupant is null) && occupant != entity) continue;
+                var coverFactor = coverMap[position] == CoverType.MediumCover ? 0.75f :
+                    coverMap[position] == CoverType.SoftCover ? 0.4f :
+                    coverMap[position] == CoverType.NoCover ? 0f : 1f;
+                var currentInfluence = influenceMap.GetInfluenceOnPos(position);
+                var threatFactor = 1 - Mathf.Min(Mathf.Pow(currentInfluence.playersInfluence / 0.8f , 4), 1);
+                var alliance = currentInfluence.agentsInfluence -
+                               influenceMap.GetEntityInfluenceOnPos(entity, position);
+                var allianceFactor = Mathf.Min(Mathf.Pow(alliance / 0.8f , 4), 1);
+                var score = (coverFactor + threatFactor + allianceFactor) / 3f;
+                if (score > bestScore)
+                {
+                    bestScore = score;
+                    target = position;
+                }
+                positions[position] = (coverFactor + threatFactor + allianceFactor) / 3f;
             }
 
+            if (bestScore > positions[entity.GridPos] * 1.2)
+            {
+                return healthFactor * threat;
+            }
             return 0f;
         }
         

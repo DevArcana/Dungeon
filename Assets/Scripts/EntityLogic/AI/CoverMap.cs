@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using World.Common;
@@ -16,7 +15,7 @@ namespace EntityLogic.AI
             var softCovers = new List<GridPos>();
             var mediumCovers = new List<GridPos>();
             
-            const int distance = 5;
+            const int distance = 7;
             foreach (var pos in influencedPositions)
             {
                 var consideredPositions = players
@@ -95,11 +94,12 @@ namespace EntityLogic.AI
             var world = World.World.instance;
             // TODO: check if height in world is the same as in game
             var observerPosition = new Vector3(observerGridPos.x, world.GetHeightAt(observerGridPos) + 0.5f, observerGridPos.y);
-            var entityPosition = new Vector3(entityGridPos.x, world.GetHeightAt(observerGridPos) + 0.5f, entityGridPos.y);
+            var entityPosition = new Vector3(entityGridPos.x, world.GetHeightAt(entityGridPos) + 0.5f, entityGridPos.y);
 
             var distance = (entityPosition - observerPosition).magnitude;
 
-            if (!Physics.Raycast(observerPosition, entityPosition - observerPosition, out var hit, distance))
+            if (!Physics.Raycast(observerPosition, entityPosition - observerPosition, out var hit, distance,
+                LayerMask.GetMask("Default", "Entities")))
             {
                 return true;
             }

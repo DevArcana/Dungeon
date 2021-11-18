@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using EntityLogic.Abilities;
 using TurnSystem;
 using Unity.Plastic.Newtonsoft.Json.Serialization;
 using UnityEngine;
@@ -31,6 +32,7 @@ namespace EntityLogic.AI
             TurnManager.instance.TurnEntityAdded += TurnEntityAdded;
             TurnManager.instance.TurnEntityRemoved += TurnEntityRemoved;
             TurnManager.instance.TurnChanged += TurnChanged;
+            AbilityProcessor.instance.AbilityFinishedExecution += AbilityFinishedExecution;
         }
 
         private void Start()
@@ -127,6 +129,23 @@ namespace EntityLogic.AI
             if (e.PreviousEntity is null) return;
             AddEntityInfluence(e.PreviousEntity);
         }
+        
+        private void AbilityFinishedExecution()
+        {
+            var entity = TurnManager.instance.CurrentTurnTaker;
+            if (_influencedPoints[entity.GridPos][entity] == 1)
+            {
+                AddEntityInfluence(TurnManager.instance.CurrentTurnTaker);
+            }
+            else
+            {
+                var influencers = GetInfluencersOnPos(entity.GridPos);
+                foreach (var influencer in influencers)
+                {
+                    AddEntityInfluence(influencer);
+                }
+            }
+        }
 
         private void OnDestroy()
         {
@@ -138,6 +157,16 @@ namespace EntityLogic.AI
         public Influence GetInfluenceOnPos(GridPos entityGridPos)
         {
             return _influenceMap[entityGridPos.x, entityGridPos.y];
+        }
+
+        public float GetEntityInfluenceOnPos(GridLivingEntity entity, GridPos pos)
+        {
+            if (!_influencedPoints.ContainsKey(pos) &&
+                !_influencedPoints[pos].ContainsKey(entity))
+            {
+                throw new ArgumentException("This entity is not present in influenced points!");
+            }
+            return 1 - _influencedPoints[pos][entity] / (float) TurnManager.instance.ActionPoints.ActionPoints;
         }
 
         public List<GridPos> GetEntityInfluencedPos(GridLivingEntity entity)

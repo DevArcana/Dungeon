@@ -5,6 +5,7 @@
         MeleeAttack,
         RushPlayer,
         Retreat,
+        MoveTo,
         HealSelf,
         Pass
     }

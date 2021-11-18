@@ -37,10 +37,5 @@ namespace TurnSystem
     {
       return $"HP: {_damageable.damageable.Health}/{_damageable.damageable.MaxHealth}";
     }
-
-    private void Update()
-    {
-      Debug.Log($"{GridPos} - {transform.position}");
-    }
   }
 }
