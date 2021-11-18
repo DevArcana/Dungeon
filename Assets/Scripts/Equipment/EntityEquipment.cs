@@ -21,6 +21,8 @@ namespace Equipment
         public GameObject itemDescription;
         public TextMeshProUGUI itemName;
         public TextMeshProUGUI itemDescriptionText;
+        public TextMeshProUGUI itemAttributesNamesText;
+        public TextMeshProUGUI itemAttributesValuesText;
         public Image icon;
         public Button useButton;
         public TextMeshProUGUI buttonText;
@@ -217,6 +219,25 @@ namespace Equipment
             }
             removeButton.onClick.RemoveAllListeners();
             removeButton.onClick.AddListener(() => RemoveItem(item, isEquiped));
+            switch (item)
+            {
+                case Weapon w:
+                    itemAttributesNamesText.text = "Damage:\nRange:";
+                    itemAttributesValuesText.text = $"{w.damage}\n{w.range}";
+                    break;
+                case Armor a:
+                    itemAttributesNamesText.text = "Damage reduction:";
+                    itemAttributesValuesText.text = $"{a.damageReduction}";
+                    break;
+                case HealthPotion h:
+                    itemAttributesNamesText.text = "Health Amount:";
+                    itemAttributesValuesText.text = $"{h.amountToHeal}";
+                    break;
+                case UpgradePotion u:
+                    itemAttributesNamesText.text = $"{u.attribute}:";
+                    itemAttributesValuesText.text = $"{u.amount}";
+                    break;
+            }
         }
 
         private void Equip(Item item)
