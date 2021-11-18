@@ -15,7 +15,7 @@ namespace EntityLogic.Abilities.ReadyAbilities
     public override IEnumerable<GridPos> GetValidTargetPositions()
     {
       var turnManager = TurnManager.instance;
-      var allTiles = turnManager.CurrentTurnTaker.GridPos.SquarePattern(7);
+      var allTiles = turnManager.CurrentTurnTaker.GridPos.SquarePattern(7).Walkable();
 
       var tilesWithAllies = allTiles.Where(x =>
       {

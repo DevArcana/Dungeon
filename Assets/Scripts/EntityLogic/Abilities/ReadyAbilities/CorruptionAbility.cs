@@ -15,12 +15,12 @@ namespace EntityLogic.Abilities.ReadyAbilities
     public override IEnumerable<GridPos> GetValidTargetPositions()
     {
       var turnManager = TurnManager.instance;
-      return turnManager.CurrentTurnTaker.GridPos.CirclePattern(7);
+      return turnManager.CurrentTurnTaker.GridPos.CirclePattern(7).Walkable();
     }
 
     public override IEnumerable<GridPos> GetEffectiveRange(GridPos pos)
     {
-      return pos.CirclePattern(2);
+      return pos.CirclePattern(2).Walkable();
     }
 
     public override int GetEffectiveCost(GridPos pos)
