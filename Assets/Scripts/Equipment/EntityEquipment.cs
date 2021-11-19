@@ -224,18 +224,28 @@ namespace Equipment
                 case Weapon w:
                     itemAttributesNamesText.text = "Damage:\nRange:";
                     itemAttributesValuesText.text = $"{w.damage}\n{w.range}";
+                    useButton.interactable = true;
                     break;
                 case Armor a:
                     itemAttributesNamesText.text = "Damage reduction:";
                     itemAttributesValuesText.text = $"{a.damageReduction}";
+                    useButton.interactable = true;
                     break;
                 case HealthPotion h:
                     itemAttributesNamesText.text = "Health Amount:";
                     itemAttributesValuesText.text = $"{h.amountToHeal}";
+                    useButton.interactable = true;
                     break;
                 case UpgradePotion u:
                     itemAttributesNamesText.text = $"{u.attribute}:";
                     itemAttributesValuesText.text = $"{u.amount}";
+                    useButton.interactable = true;
+                    break;
+                case WeaponComponent wc:
+                    itemAttributesNamesText.text = wc.AttributeNames();
+                    itemAttributesValuesText.text = wc.AttributeValues();
+                    useButton.interactable = false;
+                    buttonText.text = "USE";
                     break;
             }
         }
