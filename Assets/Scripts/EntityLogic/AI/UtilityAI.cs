@@ -59,7 +59,7 @@ namespace EntityLogic.AI
         public void PerformNextAction(EnemyEntity entity)
         {
             var abilityProcessor = AbilityProcessor.instance;
-            
+            abilityProcessor.DeselectAbility();
             var targetEntity = Pathfinding.FindClosestPlayer(entity.GridPos);
 
             var (action, target) = ChooseNextAction(entity);
@@ -68,12 +68,9 @@ namespace EntityLogic.AI
             {
                 case ActionType.MeleeAttack:
                 {
-                    var ability = abilityProcessor.SelectedAbility;
-                    TurnManager.instance.ActionPoints.ReservePoints(ability.GetEffectiveCost(targetEntity.GridPos));
-                    TurnManager.instance.ActionPoints.SpendReservedPoints();
-                    if (ability.CanExecute(targetEntity.GridPos))
+                    if (abilityProcessor.CanExecute(targetEntity.GridPos))
                     {
-                        ability.Execute(targetEntity.GridPos);
+                        abilityProcessor.Execute(targetEntity.GridPos);
                     }
                     else throw new Exception("Ability is not possible, but it was chosen for execution.");
                     return;
@@ -85,9 +82,9 @@ namespace EntityLogic.AI
                     var goal = path[path.Count - 2];
                     var ability = abilityProcessor.SelectedAbility;
                     Debug.Log($"Cost of rush: {ability.GetEffectiveCost(goal)}");
-                    if (ability.CanExecute(goal))
+                    if (abilityProcessor.CanExecute(goal))
                     {
-                        ability.Execute(goal);
+                        abilityProcessor.Execute(goal);
                     }
                     else throw new Exception("Ability is not possible, but it was chosen for execution.");
                     return;
@@ -97,9 +94,9 @@ namespace EntityLogic.AI
                     abilityProcessor.SelectAbility(typeof(HealSelfAbility));
                     var ability = abilityProcessor.SelectedAbility;
                     Debug.Log($"Cost of heal: {ability.GetEffectiveCost(entity.GridPos)}");
-                    if (ability.CanExecute(entity.GridPos))
+                    if (abilityProcessor.CanExecute(entity.GridPos))
                     {
-                        ability.Execute(entity.GridPos);
+                        abilityProcessor.Execute(entity.GridPos);
                     }
                     else throw new Exception("Ability is not possible, but it was chosen for execution.");
                     return;
@@ -108,9 +105,9 @@ namespace EntityLogic.AI
                 {
                     var ability = abilityProcessor.SelectedAbility;
                     Debug.Log($"Cost of move: {ability.GetEffectiveCost((GridPos) target!)}");
-                    if (ability.CanExecute((GridPos)target!))
+                    if (abilityProcessor.CanExecute((GridPos)target!))
                     {
-                        ability.Execute((GridPos)target!);
+                        abilityProcessor.Execute((GridPos)target!);
                     }
                     else throw new Exception("Ability is not possible, but it was chosen for execution.");
                     return;

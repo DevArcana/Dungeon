@@ -40,7 +40,12 @@ namespace EntityLogic.AI
         public static float HealSelfUtility(EnemyEntity entity)
         {
             var abilityProcessor = AbilityProcessor.instance;
-            if (!abilityProcessor.SelectAbility(typeof(HealSelfAbility)) || !abilityProcessor.CanExecute(entity.GridPos)) return 0f;
+            if (!abilityProcessor.SelectAbility(typeof(HealSelfAbility))) return 0f;
+            if (!abilityProcessor.CanExecute(entity.GridPos))
+            {
+                abilityProcessor.DeselectAbility();
+                return 0f;
+            }
             var influenceMap = InfluenceMap.instance;
             var health = entity.GetComponent<DamageableEntity>().damageable;
 

@@ -133,6 +133,7 @@ namespace EntityLogic.AI
         private void AbilityFinishedExecution()
         {
             var entity = TurnManager.instance.CurrentTurnTaker;
+            if (TurnManager.instance.ActionPoints.ActionPoints == ActionPointsProcessor.MaxActionPoints) return;
             if (_influencedPoints[entity.GridPos][entity] == 1)
             {
                 AddEntityInfluence(TurnManager.instance.CurrentTurnTaker);
