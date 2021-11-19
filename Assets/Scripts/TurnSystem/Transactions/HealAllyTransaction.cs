@@ -8,7 +8,7 @@ namespace TurnSystem.Transactions
     private readonly GridLivingEntity _healedEntity;
     private readonly int _healAmount;
 
-    public HealAllyTransaction(GridLivingEntity healingEntity, GridLivingEntity healedEntity, int healAmount)
+    public HealAllyTransaction(GridLivingEntity healingEntity, GridLivingEntity healedEntity, int healAmount, bool isAbility) : base(isAbility)
     {
       _healingEntity = healingEntity;
       _healedEntity = healedEntity;

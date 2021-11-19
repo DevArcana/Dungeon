@@ -51,7 +51,7 @@ namespace EntityLogic.Abilities.ReadyAbilities
         return !(occupant is null) && AbilityUtilities.AreEnemies(turnTaker, occupant);
       }).Select(x => world.GetOccupant(x));
       
-      turnManager.Transactions.EnqueueTransaction(new CorruptionTransaction(turnTaker, entities, damage));
+      turnManager.Transactions.EnqueueTransaction(new CorruptionTransaction(turnTaker, entities, damage, true));
     }
 
     public override string GetCostForTooltip()

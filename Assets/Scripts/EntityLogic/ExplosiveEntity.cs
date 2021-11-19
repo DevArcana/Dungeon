@@ -28,7 +28,7 @@ namespace EntityLogic
 
     private void OnDeath()
     {
-      TurnManager.instance.Transactions.EnqueueTransaction(new ExplosionTransaction(_entity.GridPos, radius));
+      TurnManager.instance.Transactions.EnqueueTransaction(new ExplosionTransaction(_entity.GridPos, radius, false));
     }
   }
 }

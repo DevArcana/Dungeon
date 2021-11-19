@@ -10,7 +10,7 @@ namespace TurnSystem.Transactions
     private readonly GridLivingEntity _enemyPrefab;
     private readonly GridPos _pos;
 
-    public SpawnEnemyTransaction(GridLivingEntity enemyPrefab, GridPos pos)
+    public SpawnEnemyTransaction(GridLivingEntity enemyPrefab, GridPos pos, bool isAbility) : base(isAbility)
     {
       _enemyPrefab = enemyPrefab;
       _pos = pos;

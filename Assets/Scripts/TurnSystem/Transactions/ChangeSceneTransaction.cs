@@ -7,7 +7,7 @@ namespace TurnSystem.Transactions
   {
     private readonly string _scene;
     
-    public ChangeSceneTransaction(string scene)
+    public ChangeSceneTransaction(string scene, bool isAbility) : base(isAbility)
     {
       _scene = scene;
     }

@@ -70,7 +70,7 @@ namespace EntityLogic.Abilities.ReadyAbilities
       var turnTaker = turnManager.CurrentTurnTaker;
       var occupant = World.World.instance.GetOccupant(pos);
       
-      TurnManager.instance.Transactions.EnqueueTransaction(new FireballTransaction(turnTaker, occupant, 20));
+      TurnManager.instance.Transactions.EnqueueTransaction(new FireballTransaction(turnTaker, occupant, 20, true));
     }
 
     public override string GetCostForTooltip()

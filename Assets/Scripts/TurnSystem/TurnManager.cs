@@ -153,7 +153,7 @@ namespace TurnSystem
       }
 
       ActionPoints.ResetPoints();
-      Transactions.EnqueueTransaction(new PanCameraTransaction(MapUtils.ToWorldPos(CurrentTurnTaker.GridPos)));
+      Transactions.EnqueueTransaction(new PanCameraTransaction(false, MapUtils.ToWorldPos(CurrentTurnTaker.GridPos)));
       OnTurnChanged(current, CurrentTurnTaker);
     }
 

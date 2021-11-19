@@ -9,7 +9,7 @@ namespace TurnSystem.Transactions
     private readonly IEnumerable<GridLivingEntity> _entities;
     private readonly int _damage;
 
-    public CorruptionTransaction(GridLivingEntity caster, IEnumerable<GridLivingEntity> entities, int damage)
+    public CorruptionTransaction(GridLivingEntity caster, IEnumerable<GridLivingEntity> entities, int damage, bool isAbility) : base(isAbility)
     {
       _caster = caster;
       _entities = entities;

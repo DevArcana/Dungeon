@@ -14,7 +14,7 @@ namespace World.Triggers
         return;
       }
       
-      TurnManager.instance.Transactions.EnqueueTransaction(new ChangeSceneTransaction(SceneManager.GetActiveScene().name));
+      TurnManager.instance.Transactions.EnqueueTransaction(new ChangeSceneTransaction(SceneManager.GetActiveScene().name, false));
       Destroy(gameObject);
     }
   }

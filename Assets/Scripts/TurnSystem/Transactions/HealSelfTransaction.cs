@@ -7,7 +7,7 @@ namespace TurnSystem.Transactions
     private readonly GridLivingEntity _entity;
     private readonly int _healAmount;
 
-    public HealSelfTransaction(GridLivingEntity entity, int healAmount)
+    public HealSelfTransaction(GridLivingEntity entity, int healAmount, bool isAbility) : base(isAbility)
     {
       _entity = entity;
       _healAmount = healAmount;

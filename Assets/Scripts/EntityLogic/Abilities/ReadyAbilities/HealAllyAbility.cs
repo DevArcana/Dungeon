@@ -50,7 +50,7 @@ namespace EntityLogic.Abilities.ReadyAbilities
     public override void Execute(GridPos pos)
     {
       var ally = World.World.instance.GetOccupant(pos);
-      TurnManager.instance.Transactions.EnqueueTransaction(new HealAllyTransaction(TurnManager.instance.CurrentTurnTaker, ally, healAmount));
+      TurnManager.instance.Transactions.EnqueueTransaction(new HealAllyTransaction(TurnManager.instance.CurrentTurnTaker, ally, healAmount, true));
     }
 
     public override string GetCostForTooltip()
