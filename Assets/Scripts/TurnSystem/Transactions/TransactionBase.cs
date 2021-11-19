@@ -6,8 +6,14 @@
   /// <remarks>Do not reuse transactions. Each transaction should be constructed before each use.</remarks>
   public abstract class TransactionBase
   {
+    public bool IsAbility { get; private set; }
     private bool _finished;
     private bool _started;
+
+    protected TransactionBase(bool isAbility)
+    {
+      IsAbility = isAbility;
+    }
 
     /// <summary>
     /// This method is called once at the beginning before processing the transaction.

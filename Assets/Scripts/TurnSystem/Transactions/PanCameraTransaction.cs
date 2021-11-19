@@ -9,7 +9,7 @@ namespace TurnSystem.Transactions
     private readonly bool _unlockAfter;
     private DivineCamera _camera;
 
-    public PanCameraTransaction(Vector3? targetPosition = null, bool unlockAfter = true)
+    public PanCameraTransaction(bool isAbility, Vector3? targetPosition = null, bool unlockAfter = true) : base(isAbility)
     {
       _targetPosition = targetPosition;
       _unlockAfter = unlockAfter;

@@ -15,7 +15,6 @@ namespace Equipment
     }
     public class Item : ScriptableObject
     {
-        public int level;
         public ItemRarity itemRarity;
         public string itemName;
         public string description;

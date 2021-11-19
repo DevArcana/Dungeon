@@ -30,7 +30,7 @@ namespace TurnSystem
 
     private static void OnDeath()
     {
-      TurnManager.instance.Transactions.EnqueueTransaction(new ChangeSceneTransaction("DeathScene"));
+      TurnManager.instance.Transactions.EnqueueTransaction(new ChangeSceneTransaction("DeathScene", false));
     }
 
     public override string GetTooltip()

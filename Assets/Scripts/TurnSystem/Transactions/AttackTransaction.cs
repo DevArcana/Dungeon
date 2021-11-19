@@ -8,7 +8,7 @@ namespace TurnSystem.Transactions
     private readonly GridEntity _attackedEntity;
     private readonly int _damage;
 
-    public AttackTransaction(GridLivingEntity attackingEntity, GridLivingEntity attackedEntity, int damage)
+    public AttackTransaction(GridLivingEntity attackingEntity, GridLivingEntity attackedEntity, int damage, bool isAbility) : base(isAbility)
     {
       _attackingEntity = attackingEntity;
       _attackedEntity = attackedEntity;

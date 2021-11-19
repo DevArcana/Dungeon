@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using TurnSystem.Transactions;
-using UnityEngine;
 
 namespace TurnSystem
 {
@@ -11,6 +10,7 @@ namespace TurnSystem
     private readonly Queue<TransactionBase> _transactionQueue = new Queue<TransactionBase>();
 
     public event Action TransactionsProcessed;
+    public event Action AbilityTransactionsProcessed;
     private bool _justFinished = false;
 
     /// <summary>
@@ -48,6 +48,14 @@ namespace TurnSystem
       {
         if (_transaction.Run())
         {
+          // a temporary hack to make abilities work again
+          if (_transaction.IsAbility)
+          {
+            if (_transactionQueue.Count == 0 || _transactionQueue.Count > 0 && !_transactionQueue.Peek().IsAbility)
+            {
+              AbilityTransactionsProcessed?.Invoke();
+            }
+          }
           _transaction = null;
 
           if (_transactionQueue.Count == 0)

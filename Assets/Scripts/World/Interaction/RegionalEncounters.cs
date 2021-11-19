@@ -57,11 +57,11 @@ namespace World.Interaction
         _currentRegion = region;
         foreach (var pos in _enemies[region])
         {
-          TurnManager.instance.Transactions.EnqueueTransaction(new PanCameraTransaction(MapUtils.ToWorldPos(pos), false));
-          TurnManager.instance.Transactions.EnqueueTransaction(new SpawnEnemyTransaction(spawnList[_random.Next(spawnList.Count)], pos));
+          TurnManager.instance.Transactions.EnqueueTransaction(new PanCameraTransaction(false, MapUtils.ToWorldPos(pos), false));
+          TurnManager.instance.Transactions.EnqueueTransaction(new SpawnEnemyTransaction(spawnList[_random.Next(spawnList.Count)], pos, false));
         }
         _enemies[region].Clear();
-        TurnManager.instance.Transactions.EnqueueTransaction(new PanCameraTransaction());
+        TurnManager.instance.Transactions.EnqueueTransaction(new PanCameraTransaction(false));
       }
     }
 

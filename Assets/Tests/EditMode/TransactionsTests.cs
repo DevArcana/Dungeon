@@ -12,7 +12,7 @@ namespace Tests.EditMode
       public int processCounter;
       public int endCounter;
 
-      public CounterTransaction(int counter)
+      public CounterTransaction(int counter) : base(false)
       {
         this.counter = counter;
       }

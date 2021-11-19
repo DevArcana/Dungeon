@@ -18,7 +18,7 @@ MonoBehaviour:
   description: Very old wood bow.
   icon: {fileID: 21300000, guid: 49ccb785aa9bd634480c543bdce1ebbf, type: 3}
   ability: {fileID: 0}
-  power: 8
+  damage: 10
   range: 10
-  attackPrefab: {fileID: 0}
   isRanged: 1
+  projectilePrefab: {fileID: 0}

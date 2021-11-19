@@ -21,10 +21,13 @@ namespace Equipment
         public GameObject itemDescription;
         public TextMeshProUGUI itemName;
         public TextMeshProUGUI itemDescriptionText;
+        public TextMeshProUGUI itemAttributesNamesText;
+        public TextMeshProUGUI itemAttributesValuesText;
         public Image icon;
         public Button useButton;
         public TextMeshProUGUI buttonText;
         public static bool isItemDescriptionEnabled;
+        public Button removeButton;
 
         public GameObject weaponSlot;
         public GameObject helmetSlot;
@@ -194,7 +197,9 @@ namespace Equipment
                 {
                     backpack.Remove(consumable);
                     iconsGenerated = false;
+                    isItemDescriptionEnabled = false;
                 });
+                
                 buttonText.text = "USE";
             }
             else
@@ -211,6 +216,37 @@ namespace Equipment
                     useButton.onClick.RemoveAllListeners();
                     useButton.onClick.AddListener(() => Equip(item));
                 }
+            }
+            removeButton.onClick.RemoveAllListeners();
+            removeButton.onClick.AddListener(() => RemoveItem(item, isEquiped));
+            switch (item)
+            {
+                case Weapon w:
+                    itemAttributesNamesText.text = "Damage:\nRange:";
+                    itemAttributesValuesText.text = $"{w.damage}\n{w.range}";
+                    useButton.interactable = true;
+                    break;
+                case Armor a:
+                    itemAttributesNamesText.text = "Damage reduction:";
+                    itemAttributesValuesText.text = $"{a.damageReduction}";
+                    useButton.interactable = true;
+                    break;
+                case HealthPotion h:
+                    itemAttributesNamesText.text = "Health Amount:";
+                    itemAttributesValuesText.text = $"{h.amountToHeal}";
+                    useButton.interactable = true;
+                    break;
+                case UpgradePotion u:
+                    itemAttributesNamesText.text = $"{u.attribute}:";
+                    itemAttributesValuesText.text = $"{u.amount}";
+                    useButton.interactable = true;
+                    break;
+                case WeaponComponent wc:
+                    itemAttributesNamesText.text = wc.AttributeNames();
+                    itemAttributesValuesText.text = wc.AttributeValues();
+                    useButton.interactable = false;
+                    buttonText.text = "USE";
+                    break;
             }
         }
 
@@ -336,6 +372,18 @@ namespace Equipment
             iconsGenerated = false;
             isItemDescriptionEnabled = false;
         }
-        
+
+        private void RemoveItem(Item item, bool isEquiped)
+        {
+            if (isEquiped)
+            {
+                UnEquip(item);
+            }
+
+            backpack.Remove(item);
+            iconsGenerated = false;
+            isItemDescriptionEnabled = false;
+        }
+
     }
 }

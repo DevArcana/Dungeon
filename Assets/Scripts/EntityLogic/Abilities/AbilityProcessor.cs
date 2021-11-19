@@ -43,7 +43,7 @@ namespace EntityLogic.Abilities
       }
       
       var turnManager = TurnManager.instance;
-      turnManager.Transactions.TransactionsProcessed += OnTransactionsProcessed;
+      turnManager.Transactions.AbilityTransactionsProcessed += OnAbilityTransactionsProcessed;
       turnManager.TurnChanged += OnTurnChanged;
       
       DeselectAbility();
@@ -60,7 +60,7 @@ namespace EntityLogic.Abilities
       }
     }
 
-    private void OnTransactionsProcessed()
+    private void OnAbilityTransactionsProcessed()
     {
       if (AbilityInExecution)
       {
@@ -147,6 +147,11 @@ namespace EntityLogic.Abilities
 
     public void Execute(GridPos pos)
     {
+      if (!CanExecute(pos))
+      {
+        return;
+      }
+      
       var turnManager = TurnManager.instance;
       if (SelectedAbilityIndex != -1)
       {

@@ -39,7 +39,7 @@ namespace EntityLogic.Abilities.ReadyAbilities
 
     public override void Execute(GridPos pos)
     {
-      TurnManager.instance.Transactions.EnqueueTransaction(new HealSelfTransaction(TurnManager.instance.CurrentTurnTaker, healAmount));
+      TurnManager.instance.Transactions.EnqueueTransaction(new HealSelfTransaction(TurnManager.instance.CurrentTurnTaker, healAmount, true));
     }
 
     public override string GetCostForTooltip()

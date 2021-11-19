@@ -76,16 +76,16 @@ namespace EntityLogic.Abilities
 
       foreach (var segment in path.Take(path.Count - 1))
       {
-        turnManager.Transactions.EnqueueTransaction(new MoveTransaction(TurnManager.instance.CurrentTurnTaker, segment));
+        turnManager.Transactions.EnqueueTransaction(new MoveTransaction(TurnManager.instance.CurrentTurnTaker, segment, true));
       }
       
       if (occupant is EnemyEntity && turnTaker is PlayerEntity || occupant is PlayerEntity && turnTaker is EnemyEntity)
       {
-        turnManager.Transactions.EnqueueTransaction(new AttackTransaction(turnTaker, occupant, 10));
+        turnManager.Transactions.EnqueueTransaction(new AttackTransaction(turnTaker, occupant, 10, true));
       }
       else
       {
-        turnManager.Transactions.EnqueueTransaction(new MoveTransaction(TurnManager.instance.CurrentTurnTaker, path.Last()));
+        turnManager.Transactions.EnqueueTransaction(new MoveTransaction(TurnManager.instance.CurrentTurnTaker, path.Last(), true));
       }
     }
 

@@ -13,7 +13,7 @@ namespace TurnSystem.Transactions
 
     private Vector3 _velocity;
     
-    public MoveTransaction(GridLivingEntity movedEntity, GridPos targetPosition)
+    public MoveTransaction(GridLivingEntity movedEntity, GridPos targetPosition, bool isAbility) : base(isAbility)
     {
       _targetEntity = movedEntity;
       _targetPosition = MapUtils.ToWorldPos(targetPosition);

@@ -44,7 +44,7 @@ namespace EntityLogic.Abilities.ReadyAbilities
 
     public override void Execute(GridPos pos)
     {
-      TurnManager.instance.Transactions.EnqueueTransaction(new MoveTransaction(TurnManager.instance.CurrentTurnTaker, pos));
+      TurnManager.instance.Transactions.EnqueueTransaction(new MoveTransaction(TurnManager.instance.CurrentTurnTaker, pos, true));
     }
 
     public override string GetCostForTooltip()

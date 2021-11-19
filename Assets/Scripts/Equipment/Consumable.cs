@@ -7,7 +7,6 @@ namespace Equipment
         public Consumable()
         {
             itemRarity = ItemRarity.Common;
-            level = 1;
             ability = null;
         }
 
