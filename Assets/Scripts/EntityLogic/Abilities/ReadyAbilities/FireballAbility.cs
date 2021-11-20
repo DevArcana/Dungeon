@@ -14,22 +14,27 @@ namespace EntityLogic.Abilities.ReadyAbilities
     public override IEnumerable<GridPos> GetValidTargetPositions()
     {
       var turnManager = TurnManager.instance;
+      var world = World.World.instance;
+      
       var allTiles = turnManager.CurrentTurnTaker.GridPos.CirclePattern(5).Walkable();
 
       var tilesWithEnemies = allTiles.Where(x =>
       {
-        var occupant = World.World.instance.GetOccupant(x);
+        var occupant = world.GetOccupant(x);
         return !(occupant == null) && AbilityUtilities.AreEnemies(occupant, turnManager.CurrentTurnTaker);
       });
 
       var tilesWithTargetableEnemies = new List<GridPos>();
       foreach (var tile in tilesWithEnemies)
       {
-        var occupant = World.World.instance.GetOccupant(tile);
+        var occupant = world.GetOccupant(tile);
         var turnTaker = turnManager.CurrentTurnTaker;
 
-        var occupantPosition = occupant.transform.position + new Vector3(0, 0.5f, 0);
-        var turnTakerPosition = turnTaker.transform.position + new Vector3(0, 0.5f, 0);
+        var occupantTile = occupant.GridPos;
+        var turnTakerTile = turnTaker.GridPos;
+        
+        var occupantPosition = new Vector3(occupantTile.x, world.GetHeightAt(occupantTile) + 0.5f, occupantTile.y);
+        var turnTakerPosition = new Vector3(turnTakerTile.x, world.GetHeightAt(turnTakerTile) + 0.5f, turnTakerTile.y);
         
         if (Physics.Raycast(turnTakerPosition, occupantPosition - turnTakerPosition, out var hit))
         {
