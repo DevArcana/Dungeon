@@ -4692,7 +4692,6 @@ GameObject:
   - component: {fileID: 760202967}
   - component: {fileID: 760202966}
   - component: {fileID: 760202965}
-  - component: {fileID: 760202968}
   m_Layer: 6
   m_Name: Player(Clone)
   m_TagString: Player
@@ -4763,62 +4762,32 @@ MonoBehaviour:
   highlight: {fileID: 0}
   autoRegister: 1
   initiative: 10
-  equipment: {fileID: 0}
+  equipment:
+    weapon: {fileID: 11400000, guid: 80f1559e44d407a48be99c80ec764296, type: 2}
+    helmet: {fileID: 11400000, guid: 3e41a619426b7d041bbc748fc8446967, type: 2}
+    breastplate: {fileID: 11400000, guid: b044889912473e64a8f1689e3fa121d2, type: 2}
+    leggings: {fileID: 11400000, guid: efd9b08af844d4f4080d4827c5423190, type: 2}
+    boots: {fileID: 11400000, guid: 15bd137899db58d428ba2d9e1996fd35, type: 2}
+    necklace: {fileID: 11400000, guid: dc5fc3b3d91917a4686ba57b93615999, type: 2}
+    ring: {fileID: 11400000, guid: cc1c6f9c0f92a52468e1889bc8471c0b, type: 2}
+    gloves: {fileID: 11400000, guid: 8cb87086c79255542bc38b5595c51e99, type: 2}
+    backpack:
+    - {fileID: 11400000, guid: 8d53c43bc8d501c4a8b700c59638a8bc, type: 2}
+    - {fileID: 11400000, guid: 7ed86065f33b8a54891aef9a76d71099, type: 2}
+    - {fileID: 11400000, guid: 6fe13cdec51c1b043adb288d394a250f, type: 2}
+    - {fileID: 11400000, guid: 634a1b04b6a66bb43ac8cd744efb0000, type: 2}
+    - {fileID: 11400000, guid: 6e57c2d70983b83478ace389fc3c4cee, type: 2}
+    - {fileID: 11400000, guid: 8892495a893f1f644abb5cb6694e1fc1, type: 2}
+    - {fileID: 11400000, guid: bed33d9e21cc6464a943dbbd898c1c4b, type: 2}
+    - {fileID: 11400000, guid: ba370c1dfb940d846990613427a7f203, type: 2}
+    - {fileID: 11400000, guid: c84d1370eb7955542adad9aefd517ec3, type: 2}
+    - {fileID: 11400000, guid: 4ed2f0f81f3a02f4f91212c15127bd05, type: 2}
   abilities:
   - {fileID: 11400000, guid: c76b923872d560c41ba697b33b016e49, type: 2}
   - {fileID: 11400000, guid: 34136f8b4de701440a976deb4cbfa6e5, type: 2}
   - {fileID: 11400000, guid: cf19840d6ba96ed42ba8e3e3d4a602aa, type: 2}
   - {fileID: 11400000, guid: fe1c60c20955cc74ca3d1313b93a3a8f, type: 2}
   - {fileID: 11400000, guid: e2a382e43b657e745a18dcf98ccae067, type: 2}
---- !u!114 &760202968
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 760202963}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 167fee63b96b4260a4daa0ff9d2afaa5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inventory: {fileID: 1776933480}
-  background: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  slotHolder: {fileID: 483499293}
-  itemDescription: {fileID: 1556083049}
-  itemName: {fileID: 597487117}
-  itemDescriptionText: {fileID: 462492875}
-  itemAttributesNamesText: {fileID: 1956976840}
-  itemAttributesValuesText: {fileID: 2016432929}
-  icon: {fileID: 1126322763}
-  useButton: {fileID: 1090444353}
-  buttonText: {fileID: 1886991387}
-  removeButton: {fileID: 1151402044}
-  weaponSlot: {fileID: 926812203}
-  helmetSlot: {fileID: 1445985657}
-  breastplateSlot: {fileID: 1258507002}
-  leggingsSlot: {fileID: 292921769}
-  bootsSlot: {fileID: 1245637533}
-  necklaceSlot: {fileID: 1465960192}
-  ringSlot: {fileID: 1029927771}
-  glovesSlot: {fileID: 388023711}
-  weapon: {fileID: 11400000, guid: 80f1559e44d407a48be99c80ec764296, type: 2}
-  helmet: {fileID: 11400000, guid: 3e41a619426b7d041bbc748fc8446967, type: 2}
-  breastplate: {fileID: 11400000, guid: b044889912473e64a8f1689e3fa121d2, type: 2}
-  leggings: {fileID: 11400000, guid: efd9b08af844d4f4080d4827c5423190, type: 2}
-  boots: {fileID: 11400000, guid: 15bd137899db58d428ba2d9e1996fd35, type: 2}
-  necklace: {fileID: 11400000, guid: dc5fc3b3d91917a4686ba57b93615999, type: 2}
-  ring: {fileID: 11400000, guid: 634a1b04b6a66bb43ac8cd744efb0000, type: 2}
-  gloves: {fileID: 11400000, guid: 8cb87086c79255542bc38b5595c51e99, type: 2}
-  backpack:
-  - {fileID: 11400000, guid: cc1c6f9c0f92a52468e1889bc8471c0b, type: 2}
-  - {fileID: 11400000, guid: 60946f2e9c17d3848919dbcb7d436a89, type: 2}
-  - {fileID: 11400000, guid: 8892495a893f1f644abb5cb6694e1fc1, type: 2}
-  - {fileID: 11400000, guid: da064680a7fc87d4c934127ef6ba2caf, type: 2}
-  - {fileID: 11400000, guid: 4ed2f0f81f3a02f4f91212c15127bd05, type: 2}
-  - {fileID: 11400000, guid: 7ed86065f33b8a54891aef9a76d71099, type: 2}
-  - {fileID: 11400000, guid: 6fe13cdec51c1b043adb288d394a250f, type: 2}
-  - {fileID: 11400000, guid: 8d53c43bc8d501c4a8b700c59638a8bc, type: 2}
 --- !u!1 &775094051
 GameObject:
   m_ObjectHideFlags: 0
@@ -15055,6 +15024,7 @@ GameObject:
   - component: {fileID: 1776933481}
   - component: {fileID: 1776933484}
   - component: {fileID: 1776933483}
+  - component: {fileID: 1776933482}
   m_Layer: 5
   m_Name: Inventory
   m_TagString: Untagged
@@ -15086,6 +15056,48 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 642, y: 418}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1776933482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1776933480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96952b330b944b22ad5e9a46398dc0c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventory: {fileID: 1776933480}
+  background: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  slotHolder: {fileID: 483499293}
+  itemDescription: {fileID: 1556083049}
+  itemName: {fileID: 597487117}
+  itemDescriptionText: {fileID: 462492875}
+  itemAttributesNamesText: {fileID: 1956976840}
+  itemAttributesValuesText: {fileID: 2016432929}
+  icon: {fileID: 1126322763}
+  useButton: {fileID: 1090444353}
+  buttonText: {fileID: 1886991387}
+  removeButton: {fileID: 1151402044}
+  weaponSlot: {fileID: 926812203}
+  helmetSlot: {fileID: 1445985657}
+  breastplateSlot: {fileID: 1258507002}
+  leggingsSlot: {fileID: 292921769}
+  bootsSlot: {fileID: 1245637533}
+  necklaceSlot: {fileID: 1465960192}
+  ringSlot: {fileID: 1029927771}
+  glovesSlot: {fileID: 388023711}
+  equipment:
+    weapon: {fileID: 0}
+    helmet: {fileID: 0}
+    breastplate: {fileID: 0}
+    leggings: {fileID: 0}
+    boots: {fileID: 0}
+    necklace: {fileID: 0}
+    ring: {fileID: 0}
+    gloves: {fileID: 0}
+    backpack: []
 --- !u!114 &1776933483
 MonoBehaviour:
   m_ObjectHideFlags: 0

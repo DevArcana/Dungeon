@@ -1,4 +1,5 @@
 ﻿using System;
+using UI;
 
 namespace Equipment
 {
@@ -13,7 +14,7 @@ namespace Equipment
         public void Use()
         {
             //Todo
-            EntityEquipment.isItemDescriptionEnabled = false;
+            EquipmentUI.isItemDescriptionEnabled = false;
         }
     }
 }
