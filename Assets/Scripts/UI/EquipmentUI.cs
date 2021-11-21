@@ -61,6 +61,7 @@ namespace UI
                 isEnabled = !isEnabled;
                 iconsGenerated = false;
                 isItemDescriptionEnabled = false;
+                CraftingUI.isCraftingEnabled = false;
             }
             if (isEnabled && !iconsGenerated)
             {
