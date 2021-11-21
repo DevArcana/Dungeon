@@ -58,8 +58,6 @@ namespace UI
             _equipment = TurnManager.instance.CurrentTurnTaker.equipment;
             if (Input.GetKeyDown(KeyCode.I))
             {
-                //TODO
-                //Repair Opening equipment
                 isEnabled = !isEnabled;
                 iconsGenerated = false;
                 isItemDescriptionEnabled = false;
@@ -170,7 +168,7 @@ namespace UI
                 iconsGenerated = true;
             }
             itemDescription.SetActive(isItemDescriptionEnabled);
-            inventory.SetActive(isEnabled);
+            MakeVisible(isEnabled);
         }
 
         private void OnItemClicked(Item item, bool isEquipped = true)
@@ -237,6 +235,18 @@ namespace UI
                     useButton.interactable = false;
                     buttonText.text = "USE";
                     break;
+            }
+        }
+
+        private void MakeVisible(bool enabled)
+        {
+            if (enabled)
+            {
+                inventory.transform.localScale = new Vector3(1, 1, 1);
+            }
+            else
+            {
+                inventory.transform.localScale = new Vector3(0, 0, 0);
             }
         }
     }

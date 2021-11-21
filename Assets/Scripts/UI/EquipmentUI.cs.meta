@@ -1,3 +1,31 @@
-﻿fileFormatVersion: 2
+fileFormatVersion: 2
 guid: 96952b330b944b22ad5e9a46398dc0c3
-timeCreated: 1637444217
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - inventory: {instanceID: 0}
+  - background: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  - slotHolder: {instanceID: 0}
+  - itemDescription: {instanceID: 0}
+  - itemName: {instanceID: 0}
+  - itemDescriptionText: {instanceID: 0}
+  - itemAttributesNamesText: {instanceID: 0}
+  - itemAttributesValuesText: {instanceID: 0}
+  - icon: {instanceID: 0}
+  - useButton: {instanceID: 0}
+  - buttonText: {instanceID: 0}
+  - removeButton: {instanceID: 0}
+  - weaponSlot: {instanceID: 0}
+  - helmetSlot: {instanceID: 0}
+  - breastplateSlot: {instanceID: 0}
+  - leggingsSlot: {instanceID: 0}
+  - bootsSlot: {instanceID: 0}
+  - necklaceSlot: {instanceID: 0}
+  - ringSlot: {instanceID: 0}
+  - glovesSlot: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
