@@ -11650,7 +11650,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh23574
+  m_Name: pb_Mesh21250
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -15088,16 +15088,6 @@ MonoBehaviour:
   necklaceSlot: {fileID: 1465960192}
   ringSlot: {fileID: 1029927771}
   glovesSlot: {fileID: 388023711}
-  equipment:
-    weapon: {fileID: 0}
-    helmet: {fileID: 0}
-    breastplate: {fileID: 0}
-    leggings: {fileID: 0}
-    boots: {fileID: 0}
-    necklace: {fileID: 0}
-    ring: {fileID: 0}
-    gloves: {fileID: 0}
-    backpack: []
 --- !u!114 &1776933483
 MonoBehaviour:
   m_ObjectHideFlags: 0
