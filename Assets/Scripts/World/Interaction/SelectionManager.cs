@@ -3,6 +3,7 @@ using EntityLogic;
 using EntityLogic.Abilities;
 using TurnSystem;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using Utils;
 using World.Common;
 
@@ -109,7 +110,7 @@ namespace World.Interaction
         return;
       }
       
-      if (Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out var hit, float.MaxValue, layerMask: LayerMask.GetMask("Selections")))
+      if (!EventSystem.current.IsPointerOverGameObject() && Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out var hit, float.MaxValue, layerMask: LayerMask.GetMask("Selections")))
       {
         var pos = MapUtils.ToMapPos(hit.point);
 
