@@ -9,15 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2a299c34f614cfdbc13fee20490850e, type: 3}
+  m_Script: {fileID: 11500000, guid: cced765c274e475e83fce95e842a3d65, type: 3}
   m_Name: Small Grip
   m_EditorClassIdentifier: 
   itemRarity: 0
   itemName: Small Grip
-  description: Small One-handed Grip
+  description: Small Grip
   icon: {fileID: 21300000, guid: 4e1686bc7ac5791489759c2c13604502, type: 3}
   ability: {fileID: 0}
   playerAttributesList: 
   playerAttributeValues: 
   weaponAttributesList: 00000000
-  weaponAttributeValues: 0a000000
+  weaponAttributeValues: 05000000

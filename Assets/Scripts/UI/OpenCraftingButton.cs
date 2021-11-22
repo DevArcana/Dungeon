@@ -11,6 +11,8 @@ namespace UI
             craftingButton.onClick.AddListener(() =>
             {
                 CraftingUI.isCraftingEnabled = true;
+                CraftingUI.craftingUIGenerated = false;
+                CraftingUI.currentPage = 1;
             });
         }
     }

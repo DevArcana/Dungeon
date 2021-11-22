@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using UI;
+using UnityEngine;
 
 namespace Equipment
 {
@@ -7,7 +8,7 @@ namespace Equipment
     {
         public UpperLimb()
         {
-            
+            recipeType = RecipeType.Bow;
         }
     }
 }

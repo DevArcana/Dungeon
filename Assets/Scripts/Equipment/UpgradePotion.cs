@@ -13,5 +13,11 @@ namespace Equipment
         {
             
         }
+
+        public override void Use()
+        {
+            base.Use();
+            //TODO
+        }
     }
 }

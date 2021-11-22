@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using TurnSystem;
+using UnityEngine;
 
 namespace Equipment
 {
@@ -10,6 +11,12 @@ namespace Equipment
         public HealthPotion()
         {
             
+        }
+
+        public override void Use()
+        {
+            base.Use();
+            //TODO
         }
     }
 }

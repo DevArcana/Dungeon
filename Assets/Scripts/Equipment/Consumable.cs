@@ -11,9 +11,8 @@ namespace Equipment
             ability = null;
         }
 
-        public void Use()
+        public virtual void Use()
         {
-            //Todo
             EquipmentUI.isItemDescriptionEnabled = false;
         }
     }

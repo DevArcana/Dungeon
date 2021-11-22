@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using UI;
 
 namespace Equipment
 {
@@ -8,6 +10,7 @@ namespace Equipment
         public List<int> playerAttributeValues;
         public List<WeaponAttribute> weaponAttributesList;
         public List<int> weaponAttributeValues;
+        [NonSerialized] public RecipeType recipeType;
         
         public WeaponComponent()
         {
