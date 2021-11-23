@@ -3,6 +3,7 @@ using EntityLogic;
 using EntityLogic.Abilities;
 using TurnSystem;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using Utils;
 using World.Common;
 
@@ -58,7 +59,7 @@ namespace World.Interaction
       Refresh();
     }
     
-    private void OnSelectedAbilityChanged(IAbility arg1, int arg2)
+    private void OnSelectedAbilityChanged(AbilityBase arg1, int arg2)
     {
       Refresh();
     }
@@ -77,7 +78,7 @@ namespace World.Interaction
       OnAbilityChange(abilityProcessor.SelectedAbility, abilityProcessor.SelectedAbilityIndex);
     }
 
-    private void OnAbilityChange(IAbility ability, int index)
+    private void OnAbilityChange(AbilityBase ability, int index)
     {
       foreach (var pos in ability.GetValidTargetPositions())
       {
@@ -109,7 +110,7 @@ namespace World.Interaction
         return;
       }
       
-      if (Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out var hit, float.MaxValue, layerMask: LayerMask.GetMask("Selections")))
+      if (!EventSystem.current.IsPointerOverGameObject() && Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out var hit, float.MaxValue, layerMask: LayerMask.GetMask("Selections")))
       {
         var pos = MapUtils.ToMapPos(hit.point);
 

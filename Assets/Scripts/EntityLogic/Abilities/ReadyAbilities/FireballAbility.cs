@@ -11,12 +11,14 @@ namespace EntityLogic.Abilities.ReadyAbilities
   [CreateAssetMenu(fileName = "Fireball", menuName = "Abilities/Fireball", order = 1)]
   public class FireballAbility : AbilityBase
   {
-    public override IEnumerable<GridPos> GetValidTargetPositions()
+    public override IEnumerable<GridPos> GetValidTargetPositions(GridPos? startingPosition = null)
     {
       var turnManager = TurnManager.instance;
+      startingPosition ??= turnManager.CurrentTurnTaker.GridPos;
+      
       var world = World.World.instance;
       
-      var allTiles = turnManager.CurrentTurnTaker.GridPos.CirclePattern(5).Walkable();
+      var allTiles = startingPosition.Value.CirclePattern(5).Walkable();
 
       var tilesWithEnemies = allTiles.Where(x =>
       {
@@ -49,12 +51,12 @@ namespace EntityLogic.Abilities.ReadyAbilities
       return tilesWithTargetableEnemies;
     }
 
-    public override IEnumerable<GridPos> GetEffectiveRange(GridPos pos)
+    public override IEnumerable<GridPos> GetEffectiveRange(GridPos atPosition)
     {
-      return new[] { pos };
+      return new[] { atPosition };
     }
 
-    public override int GetEffectiveCost(GridPos pos)
+    public override int GetEffectiveCost(GridPos atPosition)
     {
       return 2;
     }
@@ -64,16 +66,16 @@ namespace EntityLogic.Abilities.ReadyAbilities
       return 2;
     }
 
-    public override bool CanExecute(GridPos pos)
+    public override bool CanExecute(GridPos atPosition, GridPos? startingPosition = null)
     {
       return true;
     }
 
-    public override void Execute(GridPos pos)
+    public override void Execute(GridPos atPosition)
     {
       var turnManager = TurnManager.instance;
       var turnTaker = turnManager.CurrentTurnTaker;
-      var occupant = World.World.instance.GetOccupant(pos);
+      var occupant = World.World.instance.GetOccupant(atPosition);
       
       TurnManager.instance.Transactions.EnqueueTransaction(new FireballTransaction(turnTaker, occupant, 20, true));
     }

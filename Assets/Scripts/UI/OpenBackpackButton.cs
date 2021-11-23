@@ -13,6 +13,7 @@ namespace UI
             {
                 EquipmentUI.isEnabled = true;
                 EquipmentUI.iconsGenerated = false;
+                CraftingUI.isCraftingEnabled = false;
             });
         }
     }

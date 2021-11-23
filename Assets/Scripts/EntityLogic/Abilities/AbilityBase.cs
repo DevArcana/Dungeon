@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using TurnSystem;
 using UnityEngine;
 using World.Common;
 
 namespace EntityLogic.Abilities
 {
-  public abstract class AbilityBase : ScriptableObject, IAbility
+  public abstract class AbilityBase : ScriptableObject
   {
     public string title;
     public string description;
@@ -12,12 +13,12 @@ namespace EntityLogic.Abilities
     public AbilityTag[] tags;
     public int cooldown;
     
-    public abstract IEnumerable<GridPos> GetValidTargetPositions();
-    public abstract IEnumerable<GridPos> GetEffectiveRange(GridPos pos);
-    public abstract int GetEffectiveCost(GridPos pos);
+    public abstract IEnumerable<GridPos> GetValidTargetPositions(GridPos? startingPosition = null);
+    public abstract IEnumerable<GridPos> GetEffectiveRange(GridPos atPosition);
+    public abstract int GetEffectiveCost(GridPos atPosition);
     public abstract int GetMinimumPossibleCost();
-    public abstract bool CanExecute(GridPos pos);
-    public abstract void Execute(GridPos pos);
+    public abstract bool CanExecute(GridPos atPosition, GridPos? startingPosition = null);
+    public abstract void Execute(GridPos atPosition);
     public abstract string GetCostForTooltip();
   }
 }

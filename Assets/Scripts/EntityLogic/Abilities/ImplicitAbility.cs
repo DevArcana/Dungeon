@@ -11,15 +11,17 @@ namespace EntityLogic.Abilities
   [CreateAssetMenu(fileName = "Implicit", menuName = "Abilities/Implicit", order = 1)]
   public class ImplicitAbility : AbilityBase
   {
-    public override IEnumerable<GridPos> GetValidTargetPositions()
+    public override IEnumerable<GridPos> GetValidTargetPositions(GridPos? startingPosition = null)
     {
-      var turnTaker = TurnManager.instance.CurrentTurnTaker;
-      var pos = turnTaker.GridPos;
+      var turnManager = TurnManager.instance;
+      var turnTaker = turnManager.CurrentTurnTaker;
+      startingPosition ??= turnTaker.GridPos;
+
       var maxCost = TurnManager.instance.ActionPoints.ActionPoints;
       var world = World.World.instance;
       
       var pathFinding = new Pathfinding();
-      var tiles = pathFinding.GetShortestPathTree(pos, maxCost);
+      var tiles = pathFinding.GetShortestPathTree(startingPosition.Value, maxCost);
       var filteredTiles = new List<GridPos>();
       foreach (var tile in tiles)
       {
@@ -43,16 +45,16 @@ namespace EntityLogic.Abilities
       return filteredTiles;
     }
 
-    public override IEnumerable<GridPos> GetEffectiveRange(GridPos pos)
+    public override IEnumerable<GridPos> GetEffectiveRange(GridPos atPosition)
     {
       var pathfinding = new Pathfinding();
-      return pathfinding.FindPath(TurnManager.instance.CurrentTurnTaker.GridPos, pos).Item1;
+      return pathfinding.FindPath(TurnManager.instance.CurrentTurnTaker.GridPos, atPosition).Item1;
     }
 
-    public override int GetEffectiveCost(GridPos pos)
+    public override int GetEffectiveCost(GridPos atPosition)
     {
       var pathfinding = new Pathfinding();
-      return pathfinding.FindPath(TurnManager.instance.CurrentTurnTaker.GridPos, pos).Item2 + (World.World.instance.IsOccupied(pos) ? 1 : 0);
+      return pathfinding.FindPath(TurnManager.instance.CurrentTurnTaker.GridPos, atPosition).Item2 + (World.World.instance.IsOccupied(atPosition) ? 1 : 0);
     }
 
     public override int GetMinimumPossibleCost()
@@ -60,19 +62,19 @@ namespace EntityLogic.Abilities
       return 1;
     }
 
-    public override bool CanExecute(GridPos pos)
+    public override bool CanExecute(GridPos atPosition, GridPos? startingPosition = null)
     {
       return true;
     }
 
-    public override void Execute(GridPos pos)
+    public override void Execute(GridPos atPosition)
     {
       var turnManager = TurnManager.instance;
       var turnTaker = turnManager.CurrentTurnTaker;
-      var occupant = World.World.instance.GetOccupant(pos);
+      var occupant = World.World.instance.GetOccupant(atPosition);
       
       var pathfinding = new Pathfinding();
-      var path = pathfinding.FindPath(turnTaker.GridPos, pos).Item1;
+      var path = pathfinding.FindPath(turnTaker.GridPos, atPosition).Item1;
 
       foreach (var segment in path.Take(path.Count - 1))
       {

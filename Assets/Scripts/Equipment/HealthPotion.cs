@@ -1,4 +1,5 @@
 ﻿using TurnSystem;
+using TurnSystem.Transactions;
 using UnityEngine;
 
 namespace Equipment
@@ -16,7 +17,8 @@ namespace Equipment
         public override void Use()
         {
             base.Use();
-            //TODO
+            TurnManager.instance.Transactions.EnqueueTransaction(
+                new HealSelfTransaction(TurnManager.instance.CurrentTurnTaker, amountToHeal, false));
         }
     }
 }

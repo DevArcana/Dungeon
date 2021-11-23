@@ -24,7 +24,7 @@ MonoImporter:
   - necklaceSlot: {instanceID: 0}
   - ringSlot: {instanceID: 0}
   - glovesSlot: {instanceID: 0}
-  executionOrder: 0
+  executionOrder: 100
   icon: {instanceID: 0}
   userData: 
   assetBundleName: 
