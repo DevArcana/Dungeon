@@ -1,6 +1,7 @@
 ﻿using Equipment;
 using TMPro;
 using TurnSystem;
+using TurnSystem.Transactions;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -197,17 +198,17 @@ namespace UI
                 {
                     buttonText.text = "UNEQUIP";
                     useButton.onClick.RemoveAllListeners();
-                    useButton.onClick.AddListener(()=> _equipment.UnEquip(item));
+                    useButton.onClick.AddListener(()=> TurnManager.instance.Transactions.EnqueueTransaction( new UnEquipItemTransaction(TurnManager.instance.CurrentTurnTaker, item, false)));
                 }
                 else
                 {
                     buttonText.text = "EQUIP";
                     useButton.onClick.RemoveAllListeners();
-                    useButton.onClick.AddListener(() => _equipment.Equip(item));
+                    useButton.onClick.AddListener(() => TurnManager.instance.Transactions.EnqueueTransaction( new EquipItemTransaction(TurnManager.instance.CurrentTurnTaker, item, false)));
                 }
             }
             removeButton.onClick.RemoveAllListeners();
-            removeButton.onClick.AddListener(() => _equipment.RemoveItem(item, isEquipped));
+            removeButton.onClick.AddListener(() => TurnManager.instance.Transactions.EnqueueTransaction( new RemoveItemTransaction(TurnManager.instance.CurrentTurnTaker, item, isEquipped, false)));
             switch (item)
             {
                 case Weapon w:
