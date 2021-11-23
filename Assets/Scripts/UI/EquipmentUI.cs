@@ -240,16 +240,9 @@ namespace UI
             }
         }
 
-        private void MakeVisible(bool enabled)
+        private void MakeVisible(bool isEnabled)
         {
-            if (enabled)
-            {
-                inventory.transform.localScale = new Vector3(1, 1, 1);
-            }
-            else
-            {
-                inventory.transform.localScale = new Vector3(0, 0, 0);
-            }
+            inventory.transform.localScale = isEnabled ? new Vector3(1, 1, 1) : new Vector3(0, 0, 0);
         }
     }
 }
