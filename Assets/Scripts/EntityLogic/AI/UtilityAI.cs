@@ -39,6 +39,7 @@ namespace EntityLogic.AI
                 (ActionType.ChargePlayer, UtilityFunctions.ChargePlayerUtility(entity, targetEntity, out var chargeTarget)),
                 (ActionType.Pass, UtilityFunctions.PassTurnUtility()),
                 (ActionType.HealSelf, UtilityFunctions.HealSelfUtility(entity)),
+                (ActionType.HealAlly, UtilityFunctions.HealAllyUtility(entity, out var healAllyTarget)),
                 (ActionType.Retreat, UtilityFunctions.RetreatUtility(entity, coverMap, out var retreatTarget))
             }.Where(x => x.Item2 > 0.04f).OrderByDescending(x => x.Item2).ToList();
 
@@ -47,7 +48,7 @@ namespace EntityLogic.AI
             {
                 message += $"{actionType} - {score:F2}\n";
             }
-            var result = WeightedRandom(utilities);
+            var result = Helpers.WeightedRandom(utilities);
             message += $"Chosen action: {result}\nPoints left: {TurnManager.instance.ActionPoints.ActionPoints}";
             Debug.Log(message);
 
@@ -55,6 +56,7 @@ namespace EntityLogic.AI
             {
                 ActionType.Retreat => (result, retreatTarget),
                 ActionType.ChargePlayer => (result, chargeTarget),
+                ActionType.HealAlly => (result, healAllyTarget),
                 _ => (result, null)
             };
         }
@@ -100,31 +102,6 @@ namespace EntityLogic.AI
                     TurnManager.instance.NextTurn();
                     return;
             }
-        }
-
-        private static ActionType WeightedRandom(List<(ActionType, float)> utilities)
-        {
-            var (_, bestUtilityScore) = utilities.First();
-            var bestUtilities = utilities
-                .Where(x => x.Item2 >= bestUtilityScore * 0.9f)
-                .ToList();
-            var totalScore = 0f;
-
-            foreach (var (_, score) in bestUtilities)
-            {
-                totalScore += score;
-            }
-
-            var choice = Random.Range(0f, totalScore);
-            var accumulator = 0f;
-
-            foreach (var (action, score) in bestUtilities)
-            {
-                accumulator += score;
-                if (choice < accumulator) return action;
-            }
-
-            return ActionType.Pass;
         }
     }
 }

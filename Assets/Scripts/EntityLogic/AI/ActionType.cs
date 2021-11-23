@@ -5,6 +5,7 @@
         ChargePlayer,
         Retreat,
         HealSelf,
+        HealAlly,
         Pass
     }
 }

@@ -11,19 +11,6 @@ namespace EntityLogic.AI
 {
     public static class UtilityFunctions
     {
-        // public static float MeleeAttackUtility(GridLivingEntity entity, GridLivingEntity targetEntity)
-        // {
-        //     var abilityProcessor = AbilityProcessor.instance;
-        //     var pathfinding = new Pathfinding();
-        //     if (abilityProcessor.CanExecute(targetEntity.GridPos)
-        //         && entity.GridPos.OneDimDistance(targetEntity.GridPos) == 1
-        //         && pathfinding.FindPath(entity.GridPos, targetEntity.GridPos, 1).Item2 == 1)
-        //     {
-        //         return 1f;
-        //     }
-        //     return 0f;
-        // }
-
         public static float ChargePlayerUtility(EnemyEntity entity, GridLivingEntity targetEntity, out GridPos target)
         {
             target = targetEntity.GridPos;
@@ -64,6 +51,42 @@ namespace EntityLogic.AI
             
             abilityProcessor.DeselectAbility();
             return healthFactor * (1 - threat);
+        }
+
+        public static float HealAllyUtility(EnemyEntity entity, out GridPos target)
+        {
+            target = entity.GridPos;
+            var abilityProcessor = AbilityProcessor.instance;
+            if (!abilityProcessor.SelectAbility(typeof(HealAllyAbility))) return 0f;
+            var influenceMap = InfluenceMap.instance;
+            var map = World.World.instance;
+
+            var targets = abilityProcessor.SelectedAbility.GetValidTargetPositions().ToList();
+            if (!targets.Any())
+            {
+                abilityProcessor.DeselectAbility();
+                return 0f;
+            }
+
+            var bestScore = 0f;
+            
+            foreach (var currentTarget in targets)
+            {
+                var currentEntity = map.GetOccupant(currentTarget);
+                var health = currentEntity.GetComponent<DamageableEntity>().damageable;
+                var healthPercentage = health.Health / (float) health.MaxHealth;
+                var healthFactor = 1 - 1 / (1f + Mathf.Pow(2.718f * 1.2f, -(healthPercentage * 12) + 5.5f));
+                var playerInfluence = influenceMap.GetInfluenceOnPos(currentTarget).playersInfluence;
+                var threat = 1 / (1 + Mathf.Pow(2.718f * 1.2f, -(playerInfluence * 12) + 7f));
+                var score = healthFactor * (1 - threat);
+                if (score > bestScore)
+                {
+                    bestScore = score;
+                    target = currentTarget;
+                }
+            }
+
+            return bestScore;
         }
 
         public static float RetreatUtility(EnemyEntity entity, Dictionary<GridPos, CoverType> coverMap, out GridPos target)
