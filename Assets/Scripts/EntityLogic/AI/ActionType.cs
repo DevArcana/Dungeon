@@ -2,10 +2,8 @@
 {
     public enum ActionType
     {
-        MeleeAttack,
-        RushPlayer,
+        ChargePlayer,
         Retreat,
-        MoveTo,
         HealSelf,
         Pass
     }

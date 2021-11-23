@@ -11,17 +11,20 @@ namespace EntityLogic.Abilities.ReadyAbilities
   {
     public int healAmount;
 
-    public override IEnumerable<GridPos> GetValidTargetPositions()
+    public override IEnumerable<GridPos> GetValidTargetPositions(GridPos? startingPosition = null)
     {
-      return new[] { TurnManager.instance.CurrentTurnTaker.GridPos };
+      var turnManager = TurnManager.instance;
+      startingPosition ??= turnManager.CurrentTurnTaker.GridPos;
+      
+      return new[] { startingPosition.Value };
     }
 
-    public override IEnumerable<GridPos> GetEffectiveRange(GridPos pos)
+    public override IEnumerable<GridPos> GetEffectiveRange(GridPos atPosition)
     {
-      return new[] { pos };
+      return new[] { atPosition };
     }
 
-    public override int GetEffectiveCost(GridPos pos)
+    public override int GetEffectiveCost(GridPos atPosition)
     {
       return 2;
     }
@@ -31,13 +34,13 @@ namespace EntityLogic.Abilities.ReadyAbilities
       return 2;
     }
 
-    public override bool CanExecute(GridPos pos)
+    public override bool CanExecute(GridPos atPosition, GridPos? startingPosition = null)
     {
       // TODO
       return true;
     }
 
-    public override void Execute(GridPos pos)
+    public override void Execute(GridPos atPosition)
     {
       TurnManager.instance.Transactions.EnqueueTransaction(new HealSelfTransaction(TurnManager.instance.CurrentTurnTaker, healAmount, true));
     }

@@ -36,8 +36,7 @@ namespace EntityLogic.AI
             var coverMap = new CoverMap(entity, InfluenceMap.instance.GetEntityInfluencedPos(entity), _players).GetCoverMap();
             var utilities = new List<(ActionType, float)>
             {
-                (ActionType.MeleeAttack, UtilityFunctions.MeleeAttackUtility(entity, targetEntity)),
-                (ActionType.RushPlayer, UtilityFunctions.RushPlayerUtility(entity, targetEntity)),
+                (ActionType.ChargePlayer, UtilityFunctions.ChargePlayerUtility(entity, targetEntity, out var chargeTarget)),
                 (ActionType.Pass, UtilityFunctions.PassTurnUtility()),
                 (ActionType.HealSelf, UtilityFunctions.HealSelfUtility(entity)),
                 (ActionType.Retreat, UtilityFunctions.RetreatUtility(entity, coverMap, out var retreatTarget))
@@ -52,43 +51,23 @@ namespace EntityLogic.AI
             message += $"Chosen action: {result}\nPoints left: {TurnManager.instance.ActionPoints.ActionPoints}";
             Debug.Log(message);
 
-            if (result == ActionType.Retreat) return (ActionType.MoveTo, retreatTarget);
-            return (result, null);
+            return result switch
+            {
+                ActionType.Retreat => (result, retreatTarget),
+                ActionType.ChargePlayer => (result, chargeTarget),
+                _ => (result, null)
+            };
         }
 
         public void PerformNextAction(EnemyEntity entity)
         {
             var abilityProcessor = AbilityProcessor.instance;
             abilityProcessor.DeselectAbility();
-            var targetEntity = Pathfinding.FindClosestPlayer(entity.GridPos);
 
             var (action, target) = ChooseNextAction(entity);
             
             switch (action)
             {
-                case ActionType.MeleeAttack:
-                {
-                    if (abilityProcessor.CanExecute(targetEntity.GridPos))
-                    {
-                        abilityProcessor.Execute(targetEntity.GridPos);
-                    }
-                    else throw new Exception("Ability is not possible, but it was chosen for execution.");
-                    return;
-                }
-                case ActionType.RushPlayer:
-                {
-                    var pathfinding = new Pathfinding();
-                    var (path, _) = pathfinding.FindPath(entity.GridPos, targetEntity.GridPos);
-                    var goal = path[path.Count - 2];
-                    var ability = abilityProcessor.SelectedAbility;
-                    Debug.Log($"Cost of rush: {ability.GetEffectiveCost(goal)}");
-                    if (abilityProcessor.CanExecute(goal))
-                    {
-                        abilityProcessor.Execute(goal);
-                    }
-                    else throw new Exception("Ability is not possible, but it was chosen for execution.");
-                    return;
-                }
                 case ActionType.HealSelf:
                 {
                     abilityProcessor.SelectAbility(typeof(HealSelfAbility));
@@ -98,10 +77,11 @@ namespace EntityLogic.AI
                     {
                         abilityProcessor.Execute(entity.GridPos);
                     }
-                    else throw new Exception("Ability is not possible, but it was chosen for execution.");
+                    else throw new Exception($"Ability {action} is not possible, but it was chosen for execution.");
                     return;
                 }
-                case ActionType.MoveTo:
+                case ActionType.Retreat:
+                case ActionType.ChargePlayer:
                 {
                     var ability = abilityProcessor.SelectedAbility;
                     Debug.Log($"Cost of move: {ability.GetEffectiveCost((GridPos) target!)}");
@@ -109,7 +89,7 @@ namespace EntityLogic.AI
                     {
                         abilityProcessor.Execute((GridPos)target!);
                     }
-                    else throw new Exception("Ability is not possible, but it was chosen for execution.");
+                    else throw new Exception($"Ability {action} is not possible, but it was chosen for execution.");
                     return;
                 }
                 case ActionType.Pass:

@@ -63,28 +63,97 @@ namespace EntityLogic.AI
 
             return (null, int.MinValue);
         }
-
-        public HashSet<PathNode> GetShortestPathTree(GridPos start, int maxCost = ActionPointsProcessor.MaxActionPoints)
+        
+        public (List<GridPos>, int, int) FindPartialPath(GridPos start, GridPos end, int maxPartialCost,
+            int maxSearchingCost = ActionPointsProcessor.MaxActionPoints * 3)
         {
             var map = World.World.instance;
             var startNode = new PathNode(start.x, start.y, map.GetHeightAt(start), !map.IsOccupied(start));
-            
+            var endNode = new PathNode(end.x, end.y, map.GetHeightAt(end), !map.IsOccupied(end));
+
             var openList = new Dictionary<PathNode, PathNode> { {startNode, startNode} };
-            var resultList = new HashSet<PathNode> { startNode };
+            var closedList = new HashSet<PathNode>();
+
+            startNode.gCost = 0;
+            startNode.hCost = CalculateDistanceCost(startNode, endNode);
+            startNode.CalculateFCost();
+
+            while (openList.Any())
+            {
+                var currentNode = GetLowestFCostNode(openList.Keys);
+                if (currentNode == endNode)
+                {
+                    var path = GetPath(currentNode);
+                    var partialPath = new List<GridPos>();
+                    var cost = int.MaxValue;
+                    var fullCost = int.MaxValue;
+                    foreach (var node in path)
+                    {
+                        var pos = GridPos.At(node.x, node.y);
+                        var tempCost = Mathf.FloorToInt(node.gCost) + (map.IsOccupied(pos) ? 1 : 0);
+                        if (tempCost > maxPartialCost) break;
+                        partialPath.Add(pos);
+                        cost = tempCost;
+                    }
+
+                    if (partialPath.Count > 0)
+                    {
+                        fullCost = Mathf.FloorToInt(path[path.Count - 1].gCost) +
+                                   (map.IsOccupied(GridPos.At(path[path.Count - 1].x, path[path.Count - 1].y)) ? 1 : 0);
+                    }
+
+                    return (partialPath, cost, fullCost);
+                }
+
+                openList.Remove(currentNode);
+                closedList.Add(currentNode);
+
+                foreach (var neighbour in GetNeighbourNodes(currentNode))
+                {
+                    if (closedList.Contains(neighbour)) continue;
+                    var neighbourNode = openList.ContainsKey(neighbour) ? openList[neighbour] : neighbour;
+                    if (!neighbourNode.isWalkable && neighbourNode != endNode)
+                    {
+                        closedList.Add(neighbourNode);
+                        continue;
+                    }
+                    var tempGCost = currentNode.gCost + CalculateDistanceCost(currentNode, neighbourNode);
+                    if (tempGCost >= neighbourNode.gCost
+                        || Mathf.Abs(currentNode.height - neighbourNode.height) > 1
+                        || Mathf.Floor(tempGCost) > maxSearchingCost) continue;
+                    neighbourNode.previousNode = currentNode;
+                    neighbourNode.gCost = tempGCost;
+                    neighbourNode.hCost = CalculateDistanceCost(neighbourNode, endNode);
+                    neighbourNode.CalculateFCost();
+                    
+                    openList[neighbourNode] = neighbourNode;
+                }
+            }
+
+            return (null, int.MaxValue, int.MaxValue);
+        }
+
+        public IEnumerable<PathNode> GetShortestPathTree(GridPos start, int maxCost = ActionPointsProcessor.MaxActionPoints)
+        {
+            var map = World.World.instance;
+            var startNode = new PathNode(start.x, start.y, map.GetHeightAt(start), !map.IsOccupied(start));
+
+            var openList = new HashSet<PathNode> { startNode };
+            var resultList = new Dictionary<PathNode, PathNode> { {startNode, startNode} };
             var closedList = new HashSet<PathNode>();
             
             startNode.gCost = startNode.fCost = 0;
             
             while (openList.Any())
             {
-                var currentNode = GetLowestFCostNode(openList.Keys);
+                var currentNode = GetLowestFCostNode(openList);
                 openList.Remove(currentNode);
                 closedList.Add(currentNode);
                 
                 foreach (var neighbour in GetNeighbourNodes(currentNode))
                 {
                     if (closedList.Contains(neighbour)) continue;
-                    var neighbourNode = openList.ContainsKey(neighbour) ? openList[neighbour] : neighbour;
+                    var neighbourNode = resultList.ContainsKey(neighbour) ? resultList[neighbour] : neighbour;
                     var isOccupied = !(map.GetOccupant(GridPos.At(neighbourNode.x, neighbourNode.y)) is null);
                     if (!neighbourNode.isWalkable && !isOccupied)
                     {
@@ -104,18 +173,18 @@ namespace EntityLogic.AI
                     neighbourNode.previousNode = currentNode;
                     neighbourNode.gCost = neighbourNode.fCost = tempGCost;
 
-                    if (!isOccupied) openList[neighbourNode] = neighbourNode;
-                    resultList.Add(neighbourNode);
+                    if (!isOccupied) openList.Add(neighbourNode);
+                    resultList[neighbourNode] = neighbourNode;
                 }
                 
             }
 
-            foreach (var pathNode in resultList)
+            foreach (var pathNode in resultList.Keys)
             {
                 pathNode.gCost = Mathf.FloorToInt(pathNode.gCost);
             }
 
-            return resultList;
+            return resultList.Keys;
         }
         
         private static float CalculateDistanceCost(PathNode a, PathNode b)

@@ -8,6 +8,9 @@ namespace EntityLogic
 {
   public class EnemyEntity : GridLivingEntity
   {
+    public float teamwork;
+    public float aggressiveness;
+    
     private void Update()
     {
       if (TurnManager.instance.CurrentTurnTaker == this && !TurnManager.instance.Transactions.HasPendingTransactions)
@@ -24,6 +27,9 @@ namespace EntityLogic
     {
       base.Start();
       _damageable = GetComponent<DamageableEntity>();
+      var personality = GetComponent<PersonalityProvider>();
+      teamwork = personality.teamwork;
+      aggressiveness = personality.aggressiveness;
     }
 
     public override string GetTooltip()
