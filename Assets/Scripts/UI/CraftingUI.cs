@@ -134,7 +134,7 @@ namespace UI
             isComponentsDescriptionEnabled = true;
             componentsName.text = component.itemName;
             componentsDescriptionText.text = component.description;
-            icon.sprite = component.icon;
+            componentIcon.sprite = component.icon;
             
             //TODO - use button listener
             
