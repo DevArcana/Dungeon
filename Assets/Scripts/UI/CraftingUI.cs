@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Equipment;
 using TMPro;
@@ -133,7 +134,7 @@ namespace UI
             isComponentsDescriptionEnabled = true;
             componentsName.text = component.itemName;
             componentsDescriptionText.text = component.description;
-            componentIcon.sprite = component.icon;
+            icon.sprite = component.icon;
             
             //TODO - use button listener
             
