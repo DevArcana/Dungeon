@@ -12,18 +12,20 @@ namespace EntityLogic.Abilities.ReadyAbilities
   {
     public int damage;
 
-    public override IEnumerable<GridPos> GetValidTargetPositions()
+    public override IEnumerable<GridPos> GetValidTargetPositions(GridPos? startingPosition = null)
     {
       var turnManager = TurnManager.instance;
-      return turnManager.CurrentTurnTaker.GridPos.CirclePattern(7).Walkable();
+      startingPosition ??= turnManager.CurrentTurnTaker.GridPos;
+      
+      return startingPosition.Value.CirclePattern(7).Walkable();
     }
 
-    public override IEnumerable<GridPos> GetEffectiveRange(GridPos pos)
+    public override IEnumerable<GridPos> GetEffectiveRange(GridPos atPosition)
     {
-      return pos.CirclePattern(2).Walkable();
+      return atPosition.CirclePattern(2).Walkable();
     }
 
-    public override int GetEffectiveCost(GridPos pos)
+    public override int GetEffectiveCost(GridPos atPosition)
     {
       return 3;
     }
@@ -33,19 +35,19 @@ namespace EntityLogic.Abilities.ReadyAbilities
       return 3;
     }
 
-    public override bool CanExecute(GridPos pos)
+    public override bool CanExecute(GridPos atPosition, GridPos? startingPosition = null)
     {
       // TODO
       return true;
     }
 
-    public override void Execute(GridPos pos)
+    public override void Execute(GridPos atPosition)
     {
       var turnManager = TurnManager.instance;
       var turnTaker = turnManager.CurrentTurnTaker;
       var world = World.World.instance;
 
-      var entities = GetEffectiveRange(pos).Where(x =>
+      var entities = GetEffectiveRange(atPosition).Where(x =>
       {
         var occupant = world.GetOccupant(x);
         return !(occupant is null) && AbilityUtilities.AreEnemies(turnTaker, occupant);

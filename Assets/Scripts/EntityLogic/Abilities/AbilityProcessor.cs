@@ -15,7 +15,7 @@ namespace EntityLogic.Abilities
     public AbilityBase SelectedAbility { get; private set; }
     public int SelectedAbilityIndex { get; private set; }
 
-    public event Action<IAbility, int> SelectedAbilityChanged;
+    public event Action<AbilityBase, int> SelectedAbilityChanged;
     public event Action AbilityStartedExecution;
     public event Action AbilityFinishedExecution;
 
@@ -135,14 +135,14 @@ namespace EntityLogic.Abilities
       SelectedAbilityChanged?.Invoke(SelectedAbility, SelectedAbilityIndex);
     }
 
-    public bool CanExecute(GridPos pos)
+    public bool CanExecute(GridPos atPosition, GridPos? startingPosition = null)
     {
-      TurnManager.instance.ActionPoints.ReservePoints(SelectedAbility.GetEffectiveCost(pos));
+      TurnManager.instance.ActionPoints.ReservePoints(SelectedAbility.GetEffectiveCost(atPosition));
       
       return !AbilityInExecution
-             && SelectedAbility.GetValidTargetPositions().Contains(pos)
+             && SelectedAbility.GetValidTargetPositions(startingPosition).Contains(atPosition)
              && TurnManager.instance.ActionPoints.CanSpendReservedPoints()
-             && SelectedAbility.CanExecute(pos);
+             && SelectedAbility.CanExecute(atPosition);
     }
 
     public void Execute(GridPos pos)

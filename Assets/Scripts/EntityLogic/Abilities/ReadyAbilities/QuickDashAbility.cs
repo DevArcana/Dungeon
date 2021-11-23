@@ -12,22 +12,24 @@ namespace EntityLogic.Abilities.ReadyAbilities
   {
     private const double CostPerTile = 0.5;
     
-    public override IEnumerable<GridPos> GetValidTargetPositions()
+    public override IEnumerable<GridPos> GetValidTargetPositions(GridPos? startingPosition = null)
     {
       var turnManager = TurnManager.instance;
-      return turnManager.CurrentTurnTaker.GridPos.CardinalPattern((int)(turnManager.ActionPoints.ActionPoints / CostPerTile), wallsBlock: true, enemiesBlock: true, includeStart: false);
+      startingPosition ??= turnManager.CurrentTurnTaker.GridPos;
+      
+      return startingPosition.Value.CardinalPattern((int)(turnManager.ActionPoints.ActionPoints / CostPerTile), wallsBlock: true, enemiesBlock: true, includeStart: false);
     }
 
-    public override IEnumerable<GridPos> GetEffectiveRange(GridPos pos)
+    public override IEnumerable<GridPos> GetEffectiveRange(GridPos atPosition)
     {
-      return new[] { pos };
+      return new[] { atPosition };
     }
 
-    public override int GetEffectiveCost(GridPos pos)
+    public override int GetEffectiveCost(GridPos atPosition)
     {
       var turnTakerPos = TurnManager.instance.CurrentTurnTaker.GridPos;
 
-      var distance = Math.Max(Math.Abs(turnTakerPos.x - pos.x), Math.Abs(turnTakerPos.y - pos.y));
+      var distance = Math.Max(Math.Abs(turnTakerPos.x - atPosition.x), Math.Abs(turnTakerPos.y - atPosition.y));
       return (int) Math.Ceiling(distance * CostPerTile);
     }
 
@@ -36,15 +38,15 @@ namespace EntityLogic.Abilities.ReadyAbilities
       return 1;
     }
 
-    public override bool CanExecute(GridPos pos)
+    public override bool CanExecute(GridPos atPosition, GridPos? startingPosition = null)
     {
       // TODO
       return true;
     }
 
-    public override void Execute(GridPos pos)
+    public override void Execute(GridPos atPosition)
     {
-      TurnManager.instance.Transactions.EnqueueTransaction(new MoveTransaction(TurnManager.instance.CurrentTurnTaker, pos, true));
+      TurnManager.instance.Transactions.EnqueueTransaction(new MoveTransaction(TurnManager.instance.CurrentTurnTaker, atPosition, true));
     }
 
     public override string GetCostForTooltip()

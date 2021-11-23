@@ -59,7 +59,7 @@ namespace World.Interaction
       Refresh();
     }
     
-    private void OnSelectedAbilityChanged(IAbility arg1, int arg2)
+    private void OnSelectedAbilityChanged(AbilityBase arg1, int arg2)
     {
       Refresh();
     }
@@ -78,7 +78,7 @@ namespace World.Interaction
       OnAbilityChange(abilityProcessor.SelectedAbility, abilityProcessor.SelectedAbilityIndex);
     }
 
-    private void OnAbilityChange(IAbility ability, int index)
+    private void OnAbilityChange(AbilityBase ability, int index)
     {
       foreach (var pos in ability.GetValidTargetPositions())
       {
