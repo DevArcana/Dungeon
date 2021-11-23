@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using EntityLogic.Abilities;
 using EntityLogic.Abilities.ReadyAbilities;
 using TurnSystem;
@@ -10,31 +11,35 @@ namespace EntityLogic.AI
 {
     public static class UtilityFunctions
     {
-        public static float MeleeAttackUtility(GridLivingEntity entity, GridLivingEntity targetEntity)
-        {
-            var abilityProcessor = AbilityProcessor.instance;
-            var pathfinding = new Pathfinding();
-            if (abilityProcessor.CanExecute(targetEntity.GridPos)
-                && entity.GridPos.OneDimDistance(targetEntity.GridPos) == 1
-                && pathfinding.FindPath(entity.GridPos, targetEntity.GridPos, 1).Item2 == 1)
-            {
-                return 1f;
-            }
-            return 0f;
-        }
+        // public static float MeleeAttackUtility(GridLivingEntity entity, GridLivingEntity targetEntity)
+        // {
+        //     var abilityProcessor = AbilityProcessor.instance;
+        //     var pathfinding = new Pathfinding();
+        //     if (abilityProcessor.CanExecute(targetEntity.GridPos)
+        //         && entity.GridPos.OneDimDistance(targetEntity.GridPos) == 1
+        //         && pathfinding.FindPath(entity.GridPos, targetEntity.GridPos, 1).Item2 == 1)
+        //     {
+        //         return 1f;
+        //     }
+        //     return 0f;
+        // }
 
-        public static float RushPlayerUtility(GridLivingEntity entity, GridLivingEntity targetEntity)
+        public static float ChargePlayerUtility(EnemyEntity entity, GridLivingEntity targetEntity, out GridPos target)
         {
-            var abilityProcessor = AbilityProcessor.instance;
-            
-            if (!abilityProcessor.CanExecute(targetEntity.GridPos) ||
-                entity.GridPos.OneDimDistance(targetEntity.GridPos) == 1) return 0f;
+            target = targetEntity.GridPos;
             var availableActionPoints = TurnManager.instance.ActionPoints.ActionPoints;
-            var maxCost = availableActionPoints + 2;
-            var cost = abilityProcessor.SelectedAbility.GetEffectiveCost(targetEntity.GridPos);
-            if (cost <= 0 || cost > maxCost) return 0f;
+            var maxChargeDistance = 10f + (entity.equipment.weapon ? entity.equipment.weapon.range : 0);
+            var pathfinding = new Pathfinding();
+            var (path, cost, fullCost) = pathfinding.FindPartialPath(entity.GridPos, targetEntity.GridPos,
+                availableActionPoints, (int)maxChargeDistance);
 
-            return Mathf.Pow(cost / (float) maxCost, 0.333f);
+            if (path is null || !path.Any()) return 0f;
+            target = path[path.Count - 1];
+            if (cost == fullCost)
+            {
+                return 1 - Mathf.Pow(fullCost / maxChargeDistance, 3);
+            }
+            return (1 - Mathf.Pow(fullCost / maxChargeDistance, 2)) / 2;
         }
         
         public static float HealSelfUtility(EnemyEntity entity)
@@ -112,6 +117,23 @@ namespace EntityLogic.AI
             }
             return 0f;
         }
+
+        // public static float FireballUtility(EnemyEntity entity)
+        // {
+        //     var abilityProcessor = AbilityProcessor.instance;
+        //     if (!abilityProcessor.SelectAbility(typeof(FireballAbility))) return 0f;
+        //     
+        //     var influenceMap = InfluenceMap.instance;
+        //     var targets = abilityProcessor.SelectedAbility.GetValidTargetPositions();
+        //
+        //     if (!targets.Any()) return 0f;
+        //
+        //     if (!abilityProcessor.CanExecute(entity.GridPos))
+        //     {
+        //         abilityProcessor.DeselectAbility();
+        //         return 0f;
+        //     }
+        // }
         
         public static float PassTurnUtility() => 0.05f;
     }
