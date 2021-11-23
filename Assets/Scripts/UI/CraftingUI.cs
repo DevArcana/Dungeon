@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Equipment;
 using TMPro;
@@ -36,9 +35,15 @@ namespace UI
         public TextMeshProUGUI componentsDescriptionText;
         public TextMeshProUGUI componentsAttributesNamesText;
         public TextMeshProUGUI componentsAttributesValuesText;
-        public Image icon;
+        public Image componentIcon;
         public Button useButton;
         public static bool isComponentsDescriptionEnabled;
+        
+        public TextMeshProUGUI weaponName;
+        public TextMeshProUGUI weaponDescriptionText;
+        public TextMeshProUGUI weaponAttributesNamesText;
+        public TextMeshProUGUI weaponAttributesValuesText;
+        public Image weaponIcon;
 
 
         private void Start()
@@ -99,6 +104,25 @@ namespace UI
                 craftingUIGenerated = true;
                 previousButton.interactable = startingIndex != 0;
                 nextButton.interactable = endingIndex != listOfComponents.Count;
+
+                if (_equipment.weapon is null)
+                {
+                    weaponName.text = "No Equipped Weapon";
+                    weaponDescriptionText.text = "";
+                    weaponAttributesNamesText.text = "";
+                    weaponAttributesValuesText.text = "";
+                    weaponIcon.enabled = false;
+                }
+                else
+                {
+                    weaponName.text = _equipment.weapon.itemName;
+                    weaponDescriptionText.text = _equipment.weapon.description;
+                    weaponAttributesNamesText.text = "Damage:\nRange:";
+                    weaponAttributesValuesText.text = $"{_equipment.weapon.damage}\n{_equipment.weapon.range}";
+                    weaponIcon.enabled = true;
+                    weaponIcon.sprite = _equipment.weapon.icon;
+                }
+                
             }
             MakeVisible(isCraftingEnabled);
             componentsDescription.SetActive(isComponentsDescriptionEnabled);
@@ -109,7 +133,7 @@ namespace UI
             isComponentsDescriptionEnabled = true;
             componentsName.text = component.itemName;
             componentsDescriptionText.text = component.description;
-            icon.sprite = component.icon;
+            componentIcon.sprite = component.icon;
             
             //TODO - use button listener
             
