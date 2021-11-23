@@ -142,16 +142,9 @@ namespace UI
             componentsAttributesValuesText.text = component.AttributeValues();
         }
         
-        private void MakeVisible(bool enabled)
+        private void MakeVisible(bool isEnabled)
         {
-            if (enabled)
-            {
-                crafting.transform.localScale = new Vector3(1, 1, 1);
-            }
-            else
-            {
-                crafting.transform.localScale = new Vector3(0, 0, 0);
-            }
+            crafting.transform.localScale = isEnabled ? new Vector3(1, 1, 1) : new Vector3(0, 0, 0);
         }
     }
 }
