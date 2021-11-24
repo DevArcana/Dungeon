@@ -16,23 +16,33 @@ namespace EntityLogic.AI
             target = targetEntity.GridPos;
             var availableActionPoints = TurnManager.instance.ActionPoints.ActionPoints;
             var maxChargeDistance = 10f + (entity.equipment.weapon ? entity.equipment.weapon.range : 0);
+            var influenceMap = InfluenceMap.instance;
             var pathfinding = new Pathfinding();
             var (path, cost, fullCost) = pathfinding.FindPartialPath(entity.GridPos, targetEntity.GridPos,
                 availableActionPoints, (int)maxChargeDistance);
 
             if (path is null || !path.Any()) return 0f;
             target = path[path.Count - 1];
-            if (cost == fullCost)
-            {
-                return 1 - Mathf.Pow(fullCost / maxChargeDistance, 3);
-            }
-            return (1 - Mathf.Pow(fullCost / maxChargeDistance, 2)) / 2;
+            var costFactor = cost == fullCost
+                ? 1 - Mathf.Pow(fullCost / maxChargeDistance, 3)
+                : (1 - Mathf.Pow(fullCost / maxChargeDistance, 2)) / 2;
+
+            var recalculatedInfluenceOnPos = influenceMap.GetInfluenceOnPos(target).overallInfluence
+                - influenceMap.GetEntityInfluenceOnPos(entity, target) + (cost == fullCost ? 0.8f : 1f);
+            
+            var influenceFactor = 1 / (1f + Mathf.Pow(2.718f, -(recalculatedInfluenceOnPos * 6) + 0.5f));
+            
+            var health = entity.GetComponent<DamageableEntity>().damageable;
+            var healthPercentage = health.Health / (float) health.MaxHealth;
+            var healthFactor = 1 / (1f + Mathf.Pow(2.718f * 1.2f, -(healthPercentage * 12) + 5.5f));
+
+            return healthFactor * ((costFactor + influenceFactor) / 2f);
         }
         
         public static float HealSelfUtility(EnemyEntity entity)
         {
             var abilityProcessor = AbilityProcessor.instance;
-            if (!abilityProcessor.SelectAbility(typeof(HealSelfAbility))) return 0f;
+            if (!abilityProcessor.SelectAbility<HealSelfAbility>()) return 0f;
             if (!abilityProcessor.CanExecute(entity.GridPos))
             {
                 abilityProcessor.DeselectAbility();
@@ -57,12 +67,14 @@ namespace EntityLogic.AI
         {
             target = entity.GridPos;
             var abilityProcessor = AbilityProcessor.instance;
-            if (!abilityProcessor.SelectAbility(typeof(HealAllyAbility))) return 0f;
+            if (!abilityProcessor.SelectAbility<HealAllyAbility>()) return 0f;
+            
+            var ability = abilityProcessor.SelectedAbility;
             var influenceMap = InfluenceMap.instance;
             var map = World.World.instance;
 
             var targets = abilityProcessor.SelectedAbility.GetValidTargetPositions().ToList();
-            if (!targets.Any())
+            if (ability.GetMinimumPossibleCost() > TurnManager.instance.ActionPoints.ActionPoints || !targets.Any())
             {
                 abilityProcessor.DeselectAbility();
                 return 0f;
@@ -72,13 +84,14 @@ namespace EntityLogic.AI
             
             foreach (var currentTarget in targets)
             {
+                if (!ability.CanExecute(currentTarget)) continue;
                 var currentEntity = map.GetOccupant(currentTarget);
                 var health = currentEntity.GetComponent<DamageableEntity>().damageable;
                 var healthPercentage = health.Health / (float) health.MaxHealth;
                 var healthFactor = 1 - 1 / (1f + Mathf.Pow(2.718f * 1.2f, -(healthPercentage * 12) + 5.5f));
                 var playerInfluence = influenceMap.GetInfluenceOnPos(currentTarget).playersInfluence;
                 var threat = 1 / (1 + Mathf.Pow(2.718f * 1.2f, -(playerInfluence * 12) + 7f));
-                var score = healthFactor * (1 - threat);
+                var score = healthFactor * threat;
                 if (score > bestScore)
                 {
                     bestScore = score;
@@ -86,6 +99,7 @@ namespace EntityLogic.AI
                 }
             }
 
+            abilityProcessor.DeselectAbility();
             return bestScore;
         }
 
@@ -108,11 +122,6 @@ namespace EntityLogic.AI
             
             var bestScore = 0f;
             var positions = new Dictionary<GridPos, float>();
-            var aa = influenceMap.GetEntityInfluencedPos(entity);
-            if (!aa.Contains(entity.GridPos))
-            {
-                var a = 1 + 1;
-            }
             foreach (var position in influenceMap.GetEntityInfluencedPos(entity))
             {
                 var occupant = World.World.instance.GetOccupant(position);
@@ -141,22 +150,49 @@ namespace EntityLogic.AI
             return 0f;
         }
 
-        // public static float FireballUtility(EnemyEntity entity)
-        // {
-        //     var abilityProcessor = AbilityProcessor.instance;
-        //     if (!abilityProcessor.SelectAbility(typeof(FireballAbility))) return 0f;
-        //     
-        //     var influenceMap = InfluenceMap.instance;
-        //     var targets = abilityProcessor.SelectedAbility.GetValidTargetPositions();
-        //
-        //     if (!targets.Any()) return 0f;
-        //
-        //     if (!abilityProcessor.CanExecute(entity.GridPos))
-        //     {
-        //         abilityProcessor.DeselectAbility();
-        //         return 0f;
-        //     }
-        // }
+        public static float FireballUtility(EnemyEntity entity, out GridPos target)
+        {
+            target = entity.GridPos;
+            var abilityProcessor = AbilityProcessor.instance;
+            if (!abilityProcessor.SelectAbility<FireballAbility>()) return 0f;
+
+            var ability = abilityProcessor.SelectedAbility;
+            var influenceMap = InfluenceMap.instance;
+            var map = World.World.instance;
+            var targets = ability.GetValidTargetPositions().ToList();
+
+            if (ability.GetMinimumPossibleCost() > TurnManager.instance.ActionPoints.ActionPoints || !targets.Any())
+            {
+                abilityProcessor.DeselectAbility();
+                return 0f;
+            }
+
+            var bestScore = 0f;
+            
+            foreach (var currentTarget in targets)
+            {
+                if (!ability.CanExecute(currentTarget)) continue;
+                var influenceFactor = 1 / (1f + Mathf.Pow(2.718f, -(influenceMap.GetInfluenceOnPos(target).overallInfluence * 6) + 0.5f));
+            
+                var health = entity.GetComponent<DamageableEntity>().damageable;
+                var healthPercentage = health.Health / (float) health.MaxHealth;
+                var healthFactor = 1 / (1f + Mathf.Pow(2.718f * 1.2f, -(healthPercentage * 12) + 5.5f));
+
+                var skillDamage = 20;
+                var playerHealth = map.GetOccupant(currentTarget).GetComponent<DamageableEntity>().damageable.Health;
+                var playerHealthFactor = Mathf.Min(Mathf.Pow(0.5f, playerHealth / (skillDamage / 2f)) + 0.7f, 1f);
+
+                var score = (healthFactor * influenceFactor + playerHealthFactor) / 2f;
+                if (score > bestScore)
+                {
+                    bestScore = score;
+                    target = currentTarget;
+                }
+            }
+            
+            abilityProcessor.DeselectAbility();
+            return bestScore;
+        }
         
         public static float PassTurnUtility() => 0.05f;
     }

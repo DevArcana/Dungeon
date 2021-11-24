@@ -40,7 +40,8 @@ namespace EntityLogic.AI
                 (ActionType.Pass, UtilityFunctions.PassTurnUtility()),
                 (ActionType.HealSelf, UtilityFunctions.HealSelfUtility(entity)),
                 (ActionType.HealAlly, UtilityFunctions.HealAllyUtility(entity, out var healAllyTarget)),
-                (ActionType.Retreat, UtilityFunctions.RetreatUtility(entity, coverMap, out var retreatTarget))
+                (ActionType.Retreat, UtilityFunctions.RetreatUtility(entity, coverMap, out var retreatTarget)),
+                (ActionType.Fireball, UtilityFunctions.FireballUtility(entity, out var fireballTarget))
             }.Where(x => x.Item2 > 0.04f).OrderByDescending(x => x.Item2).ToList();
 
             var message = $"{entity.name}\n";
@@ -57,6 +58,7 @@ namespace EntityLogic.AI
                 ActionType.Retreat => (result, retreatTarget),
                 ActionType.ChargePlayer => (result, chargeTarget),
                 ActionType.HealAlly => (result, healAllyTarget),
+                ActionType.Fireball => (result, fireballTarget),
                 _ => (result, null)
             };
         }
@@ -72,12 +74,36 @@ namespace EntityLogic.AI
             {
                 case ActionType.HealSelf:
                 {
-                    abilityProcessor.SelectAbility(typeof(HealSelfAbility));
+                    abilityProcessor.SelectAbility<HealSelfAbility>();
                     var ability = abilityProcessor.SelectedAbility;
-                    Debug.Log($"Cost of heal: {ability.GetEffectiveCost(entity.GridPos)}");
+                    Debug.Log($"Cost of heal self: {ability.GetEffectiveCost(entity.GridPos)}");
                     if (abilityProcessor.CanExecute(entity.GridPos))
                     {
                         abilityProcessor.Execute(entity.GridPos);
+                    }
+                    else throw new Exception($"Ability {action} is not possible, but it was chosen for execution.");
+                    return;
+                }
+                case ActionType.HealAlly:
+                {
+                    abilityProcessor.SelectAbility<HealAllyAbility>();
+                    var ability = abilityProcessor.SelectedAbility;
+                    Debug.Log($"Cost of heal ally: {ability.GetEffectiveCost((GridPos)target!)}");
+                    if (abilityProcessor.CanExecute((GridPos)target!))
+                    {
+                        abilityProcessor.Execute((GridPos)target!);
+                    }
+                    else throw new Exception($"Ability {action} is not possible, but it was chosen for execution.");
+                    return;
+                }
+                case ActionType.Fireball:
+                {
+                    abilityProcessor.SelectAbility<FireballAbility>();
+                    var ability = abilityProcessor.SelectedAbility;
+                    Debug.Log($"Cost of fireball: {ability.GetEffectiveCost((GridPos)target!)}");
+                    if (abilityProcessor.CanExecute((GridPos)target!))
+                    {
+                        abilityProcessor.Execute((GridPos)target!);
                     }
                     else throw new Exception($"Ability {action} is not possible, but it was chosen for execution.");
                     return;

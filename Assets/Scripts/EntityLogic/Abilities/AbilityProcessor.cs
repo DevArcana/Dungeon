@@ -98,13 +98,13 @@ namespace EntityLogic.Abilities
       return true;
     }
 
-    public bool SelectAbility(Type ability)
+    public bool SelectAbility<T>()
     {
       var turnTaker = TurnManager.instance.CurrentTurnTaker;
       
       for (var i = 0; i < turnTaker.abilities.Count; i++)
       {
-        if (turnTaker.abilities[i].GetType() != ability)
+        if (!(turnTaker.abilities[i] is T))
         {
           continue;
         }
