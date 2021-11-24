@@ -11,18 +11,13 @@ namespace UI
         public TabGroup tabGroup;
 
         [NonSerialized]public Image background;
+
+        public RecipeType recipeType;
         // Start is called before the first frame update
         void Start()
         {
             background = GetComponent<Image>();
             tabGroup.Subscribe(this);
-            
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-        
         }
 
         public void OnPointerEnter(PointerEventData eventData)

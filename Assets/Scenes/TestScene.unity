@@ -2296,6 +2296,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tabGroup: {fileID: 2048191126}
+  recipeType: 2
 --- !u!1 &219012637
 GameObject:
   m_ObjectHideFlags: 0
@@ -8195,6 +8196,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tabGroup: {fileID: 2048191126}
+  recipeType: 1
 --- !u!1 &587469415
 GameObject:
   m_ObjectHideFlags: 0
@@ -8405,6 +8407,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tabGroup: {fileID: 2048191126}
+  recipeType: 3
 --- !u!1 &597487115
 GameObject:
   m_ObjectHideFlags: 0

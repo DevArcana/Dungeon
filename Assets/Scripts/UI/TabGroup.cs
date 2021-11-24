@@ -47,9 +47,14 @@ namespace UI
             {
                 tabs[i].SetActive(i == index);
             }
+
+            CraftingUI.currentPage = 1;
+            CraftingUI.craftingUIGenerated = false;
+            CraftingUI.recipeType = button.recipeType;
+            CraftingUI.isComponentsDescriptionEnabled = false;
         }
 
-        public void ResetTabs()
+        private void ResetTabs()
         {
             foreach (var button in tabsButtons)
             {
