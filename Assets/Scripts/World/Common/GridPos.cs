@@ -54,8 +54,10 @@ namespace World.Common
     public GridPos East => At(x + 1, y );
     public GridPos South => At(x, y - 1);
     public GridPos West => At(x - 1, y);
+
+    public GridPos Shift(int dx, int dy) => At(x + dx, y + dy);
     
-    public int OneDimDistance(GridPos other) => Mathf.Max(Mathf.Abs(this.x - other.x), Mathf.Abs(this.y - other.y));
+    public int OneDimDistance(GridPos other) => Mathf.Max(Mathf.Abs(x - other.x), Mathf.Abs(y - other.y));
     public float TwoDimDistance(GridPos other) => Mathf.Sqrt(Mathf.Abs(x - other.x) * Mathf.Abs(x - other.x) + Mathf.Abs(y - other.y) * Mathf.Abs(y - other.y));
 
     public IEnumerable<GridPos> CardinalPattern(int radius, bool wallsBlock = false, bool enemiesBlock = false, bool includeStart = true)
@@ -145,6 +147,20 @@ namespace World.Common
       }
 
       return tiles;
+    }
+
+    public IEnumerable<GridPos> AxisAlignedRect(GridPos other)
+    {
+      var dx = Math.Abs(this.x - other.x);
+      var dy = Math.Abs(this.y - other.y);
+
+      for (var x = 0; x < dx; x++)
+      {
+        for (var y = 0; y < dy; y++)
+        {
+          yield return At(this.x + x, this.y + y);
+        }
+      }
     }
 
     public IEnumerable<GridPos> SquarePattern(int radius)

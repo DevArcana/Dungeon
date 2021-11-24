@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using World.Common;
 
 namespace World.Generation
@@ -7,6 +9,7 @@ namespace World.Generation
   {
     private readonly byte _maxHeight;
     private readonly SerializableMap<bool> _map;
+    private readonly SerializableMap<bool> _mask;
     private readonly HeightMap _heightMap;
     private readonly Random _random;
 
@@ -16,6 +19,7 @@ namespace World.Generation
     public FeaturesGenerator(SerializableMap<bool> map, byte maxHeight, Random random)
     {
       _map = map;
+      _mask = new SerializableMap<bool>(map.width, map.height);
       _maxHeight = maxHeight;
       _random = random;
       _heightMap = new HeightMap(map.width, map.height);
@@ -32,23 +36,69 @@ namespace World.Generation
       }
     }
 
+    public bool Mask(List<GridPos> cells)
+    {
+      foreach (var cell in cells)
+      {
+        if (_mask[cell])
+        {
+          return false;
+        }
+      }
+      
+      foreach (var cell in cells)
+      {
+        _mask[cell] = true;
+      }
+
+      return true;
+    }
+
     public void PopulateRegions(RegionsMap regions)
     {
       foreach (var region in regions.AllRegions())
       {
         foreach (var cell in region.cells)
         {
-          var height = _random.Next(_maxHeight - 1);
-          
-          if (regions.Contains(region.index, cell.CirclePattern(height)))
+          var width = _random.Next(1, _maxHeight - 2);
+          var height = _random.Next(1, _maxHeight - 2);
+          var layers = _random.Next(_maxHeight - 2);
+
+          var start = cell;
+          var aabb = start.AxisAlignedRect(start.Shift(width + 1, height + 1)).ToList();
+
+          if (regions.Contains(region.index, aabb) && Mask(aabb))
           {
-            while (height > 0)
+            while (layers > 0)
             {
-              height--;
-              
-              foreach (var pos in cell.CirclePattern(height))
+              layers--;
+
+              if (_random.Next() % 2 == 0)
               {
-                _heightMap[pos]++;
+                if (width > 1)
+                {
+                  width--;
+                  if (_random.Next() % 2 == 0)
+                  {
+                    start = start.West;
+                  }
+                }
+              }
+              else
+              {
+                if (height > 1)
+                {
+                  height--;
+                  if (_random.Next() % 2 == 0)
+                  {
+                    start = start.North;
+                  }
+                }
+              }
+
+              foreach (var tile in start.AxisAlignedRect(start.Shift(width, height)))
+              {
+                _heightMap[tile]++;
               }
             }
           }
