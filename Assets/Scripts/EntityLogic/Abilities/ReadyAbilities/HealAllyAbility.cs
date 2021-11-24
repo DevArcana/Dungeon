@@ -19,10 +19,12 @@ namespace EntityLogic.Abilities.ReadyAbilities
       
       var allTiles = startingPosition.Value.SquarePattern(7).Walkable();
 
+      var turnTaker = turnManager.CurrentTurnTaker;
+
       var tilesWithAllies = allTiles.Where(x =>
       {
         var occupant = World.World.instance.GetOccupant(x);
-        return occupant is PlayerEntity && occupant != turnManager.CurrentTurnTaker;
+        return !AbilityUtilities.AreEnemies(occupant, turnTaker) && occupant != turnTaker;
       });
 
       return tilesWithAllies;
