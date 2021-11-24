@@ -11,6 +11,7 @@ namespace UI
 {
     public enum RecipeType
     {
+        None,
         Sword,
         Axe,
         Bow
@@ -21,7 +22,7 @@ namespace UI
         private EntityEquipment _equipment;
         public static bool isCraftingEnabled;
         public static bool craftingUIGenerated;
-        private RecipeType _recipeType;
+        public static RecipeType recipeType;
         public Sprite background;
         
         private int _numberOfSlots;
@@ -50,7 +51,7 @@ namespace UI
         private void Start()
         {
             isCraftingEnabled = false;
-            _recipeType = RecipeType.Sword;
+            recipeType = RecipeType.None;
             _numberOfSlots = 6;
             currentPage = 1;
             _slots = new GameObject[_numberOfSlots];
@@ -87,7 +88,7 @@ namespace UI
             if (isCraftingEnabled && !craftingUIGenerated)
             {
                 var listOfComponents = _equipment.backpack.Where(x =>
-                    x is WeaponComponent component && component.recipeType == _recipeType).ToList();
+                    x is WeaponComponent component && component.recipeType == recipeType).ToList();
                 var startingIndex = currentPage * _numberOfSlots - _numberOfSlots;
                 var endingIndex = Math.Min(startingIndex + _numberOfSlots, listOfComponents.Count);
                 for (var i = 0; i <= (endingIndex - 1) % _numberOfSlots; i++)
