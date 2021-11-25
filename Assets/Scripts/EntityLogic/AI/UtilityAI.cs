@@ -41,7 +41,8 @@ namespace EntityLogic.AI
                 (ActionType.HealSelf, UtilityFunctions.HealSelfUtility(entity)),
                 (ActionType.HealAlly, UtilityFunctions.HealAllyUtility(entity, out var healAllyTarget)),
                 (ActionType.Retreat, UtilityFunctions.RetreatUtility(entity, coverMap, out var retreatTarget)),
-                (ActionType.Fireball, UtilityFunctions.FireballUtility(entity, out var fireballTarget))
+                (ActionType.Fireball, UtilityFunctions.FireballUtility(entity, out var fireballTarget)),
+                (ActionType.TacticalMovement, UtilityFunctions.TacticalMovementUtility(entity, coverMap, out var tacticalMoveTarget)),
             }.Where(x => x.Item2 > 0.04f).OrderByDescending(x => x.Item2).ToList();
 
             var message = $"{entity.name}\n";
@@ -59,6 +60,7 @@ namespace EntityLogic.AI
                 ActionType.ChargePlayer => (result, chargeTarget),
                 ActionType.HealAlly => (result, healAllyTarget),
                 ActionType.Fireball => (result, fireballTarget),
+                ActionType.TacticalMovement => (result, tacticalMoveTarget),
                 _ => (result, null)
             };
         }
@@ -110,6 +112,7 @@ namespace EntityLogic.AI
                 }
                 case ActionType.Retreat:
                 case ActionType.ChargePlayer:
+                case ActionType.TacticalMovement:
                 {
                     var ability = abilityProcessor.SelectedAbility;
                     Debug.Log($"Cost of move: {ability.GetEffectiveCost((GridPos) target!)}");

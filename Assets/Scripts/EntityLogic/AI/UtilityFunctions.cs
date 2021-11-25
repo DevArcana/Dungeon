@@ -193,6 +193,49 @@ namespace EntityLogic.AI
             abilityProcessor.DeselectAbility();
             return bestScore;
         }
+
+        public static float TacticalMovementUtility(EnemyEntity entity, Dictionary<GridPos, CoverType> coverMap, out GridPos target)
+        {
+            target = entity.GridPos;
+            
+            var influenceMap = InfluenceMap.instance;
+            var health = entity.GetComponent<DamageableEntity>().damageable;
+            var healthPercentage = health.Health / (float) health.MaxHealth;
+            var healthFactor = 1 / (1f + Mathf.Pow(2.718f * 1.2f, -(healthPercentage * 12) + 5.5f));
+
+            if (healthFactor < 0.05f) return 0f;
+            var positions = new Dictionary<GridPos, float>();
+            var teamworkFactor = entity.teamwork - 0.5f;
+
+            var bestScore = 0f;
+            foreach (var position in influenceMap.GetEntityInfluencedPos(entity))
+            {
+                var occupant = World.World.instance.GetOccupant(position);
+                if (!(occupant is null) && occupant != entity) continue;
+                var coverFactor = coverMap[position] == CoverType.HardCover ? 1f :
+                    coverMap[position] == CoverType.MediumCover ? 0.75f :
+                    coverMap[position] == CoverType.SoftCover ? 0.4f : 0f;
+                var currentInfluence = influenceMap.GetInfluenceOnPos(position);
+                var threatFactor = 1 - Mathf.Min(Mathf.Pow(currentInfluence.playersInfluence / 0.8f , 4), 1);
+                var alliance = currentInfluence.agentsInfluence -
+                               influenceMap.GetEntityInfluenceOnPos(entity, position);
+                var allianceFactor = Mathf.Max(-Mathf.Pow(alliance * 2 - 0.4f, 2) + 1, 0);
+                var score = (coverFactor + threatFactor + (1 + teamworkFactor) * allianceFactor) / (3f + teamworkFactor);
+                if (score > bestScore)
+                {
+                    bestScore = score;
+                    target = position;
+                }
+                positions[position] = (coverFactor + threatFactor + allianceFactor) / 3f;
+            }
+
+            if (bestScore > positions[entity.GridPos] * 1.2)
+            {
+                return healthFactor * bestScore;
+            }
+
+            return 0f;
+        }
         
         public static float PassTurnUtility() => 0.05f;
     }

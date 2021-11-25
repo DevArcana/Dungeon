@@ -24,7 +24,7 @@ namespace EntityLogic.Abilities.ReadyAbilities
       var tilesWithAllies = allTiles.Where(x =>
       {
         var occupant = World.World.instance.GetOccupant(x);
-        return !AbilityUtilities.AreEnemies(occupant, turnTaker) && occupant != turnTaker;
+        return occupant != null && !AbilityUtilities.AreEnemies(occupant, turnTaker) && occupant != turnTaker;
       });
 
       return tilesWithAllies;
