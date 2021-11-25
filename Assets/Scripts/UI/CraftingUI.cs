@@ -142,19 +142,20 @@ namespace UI
                 
                 if (!isWeaponDescriptionEnabled)
                 {
-                    var recipePage = componentFields.First(x => x.recipeType == recipeType);
-                    if (recipePage.componentFields.TrueForAll(x => !(x.selectedComponent is null)))
+                    var recipePage = componentFields.FirstOrDefault(x => x.recipeType == recipeType);
+                    if (!(recipePage is null))
                     {
-                        isWeaponDescriptionEnabled = true;
-                        craftedWeaponName.text = "Some Weapon";
-                        craftedWeaponDescriptionText.text = "Description";
-                        craftedWeaponIcon.sprite = swordSprite;
-                        //TODO attributes values
+                        if (recipePage.componentFields.TrueForAll(x => !(x.selectedComponent is null)))
+                        {
+                            isWeaponDescriptionEnabled = true;
+                            craftedWeaponName.text = "Some Weapon";
+                            craftedWeaponDescriptionText.text = "Description";
+                            craftedWeaponIcon.sprite = swordSprite;
+                            //TODO attributes values
+                        }
                     }
                 }
             }
-
-            
             craftedWeapon.SetActive(isWeaponDescriptionEnabled);
             MakeVisible(isCraftingEnabled);
             componentsDescription.SetActive(isComponentsDescriptionEnabled);
