@@ -17,7 +17,7 @@ namespace UI
     private void Update()
     {
       layoutElement.enabled = Math.Max(header.text.Length, content.text.Length) > characterLimit;
-      transform.position = Input.mousePosition;
+      transform.position = Input.mousePosition + new Vector3(8, 8);
     }
   }
 }

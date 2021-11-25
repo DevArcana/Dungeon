@@ -6,6 +6,7 @@
         Retreat,
         HealSelf,
         HealAlly,
+        Fireball,
         Pass
     }
 }

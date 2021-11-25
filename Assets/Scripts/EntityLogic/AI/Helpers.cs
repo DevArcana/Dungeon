@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace EntityLogic.AI
 {
-    public class Helpers
+    public static class Helpers
     {
         public static ActionType WeightedRandom(List<(ActionType, float)> utilities)
         {

@@ -18,6 +18,7 @@ namespace EntityLogic.AI.Bucketing
             var utilities = new List<(ActionType, float)>
             {
                 (ActionType.ChargePlayer, UtilityFunctions.ChargePlayerUtility(entity, targetEntity, out var chargeTarget)),
+                (ActionType.Fireball, UtilityFunctions.FireballUtility(entity, out var fireballTarget)),
                 (ActionType.Pass, UtilityFunctions.PassTurnUtility())
             }.Where(x => x.Item2 > 0.04f).OrderByDescending(x => x.Item2).ToList();
 
@@ -26,6 +27,7 @@ namespace EntityLogic.AI.Bucketing
             return result switch
             {
                 ActionType.ChargePlayer => (result, chargeTarget),
+                ActionType.Fireball => (result, fireballTarget),
                 _ => (result, null)
             };
         }
