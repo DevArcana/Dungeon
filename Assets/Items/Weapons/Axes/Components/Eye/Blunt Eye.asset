@@ -15,7 +15,7 @@ MonoBehaviour:
   itemRarity: 0
   itemName: Blunt Eye
   description: Blunt Eye
-  icon: {fileID: 21300000, guid: 48e7f414d28c20a4f9edb3e88d3fc01c, type: 3}
+  icon: {fileID: 21300000, guid: 86de901eb47c3a94f9109202364ef03b, type: 3}
   ability: {fileID: 0}
   playerAttributesList: 
   playerAttributeValues: 

@@ -15,7 +15,7 @@ MonoBehaviour:
   itemRarity: 0
   itemName: Rusty Bit
   description: Rusty Bit
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 30bc12c2ac3060c48989a3388272c5d5, type: 3}
   ability: {fileID: 0}
   playerAttributesList: 
   playerAttributeValues: 
