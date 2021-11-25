@@ -47,10 +47,25 @@ namespace UI
         public TextMeshProUGUI weaponAttributesValuesText;
         public Image weaponIcon;
 
+        public List<CraftingRecipePage> componentFields;
+
+        public GameObject craftedWeapon;
+        public TextMeshProUGUI craftedWeaponName;
+        public TextMeshProUGUI craftedWeaponDescriptionText;
+        public TextMeshProUGUI craftedWeaponAttributesNamesText;
+        public TextMeshProUGUI craftedWeaponAttributesValuesText;
+        public Image craftedWeaponIcon;
+        public bool isWeaponDescriptionEnabled;
+        public Sprite swordSprite;
+        public Sprite axeSprite;
+        public Sprite bowSprite;
+        public Button craftButton;
 
         private void Start()
         {
             isCraftingEnabled = false;
+            isComponentsDescriptionEnabled = false;
+            craftingUIGenerated = true;
             recipeType = RecipeType.None;
             _numberOfSlots = 6;
             currentPage = 1;
@@ -125,7 +140,23 @@ namespace UI
                     weaponIcon.sprite = _equipment.weapon.icon;
                 }
                 
+                if (!isWeaponDescriptionEnabled)
+                {
+                    var recipePage = componentFields.FirstOrDefault(x => x.recipeType == recipeType);
+                    if (!(recipePage is null))
+                    {
+                        if (recipePage.componentFields.TrueForAll(x => !(x.selectedComponent is null)))
+                        {
+                            isWeaponDescriptionEnabled = true;
+                            craftedWeaponName.text = "Some Weapon";
+                            craftedWeaponDescriptionText.text = "Description";
+                            craftedWeaponIcon.sprite = swordSprite;
+                            //TODO attributes values
+                        }
+                    }
+                }
             }
+            craftedWeapon.SetActive(isWeaponDescriptionEnabled);
             MakeVisible(isCraftingEnabled);
             componentsDescription.SetActive(isComponentsDescriptionEnabled);
         }
@@ -137,8 +168,9 @@ namespace UI
             componentsDescriptionText.text = component.description;
             componentIcon.sprite = component.icon;
             
-            //TODO - use button listener
-            
+            useButton.onClick.RemoveAllListeners();
+            useButton.onClick.AddListener(() => componentFields.First(x => x.recipeType == recipeType).Show(component));
+
             componentsAttributesNamesText.text = component.AttributeNames();
             componentsAttributesValuesText.text = component.AttributeValues();
         }
@@ -147,5 +179,16 @@ namespace UI
         {
             crafting.transform.localScale = isEnabled ? new Vector3(1, 1, 1) : new Vector3(0, 0, 0);
         }
+        
+        public void Subscribe(CraftingRecipePage craftingRecipePage)
+        {
+            if (componentFields == null)
+            {
+                componentFields = new List<CraftingRecipePage>();
+            }
+            
+            componentFields.Add(craftingRecipePage);
+        }
+
     }
 }
