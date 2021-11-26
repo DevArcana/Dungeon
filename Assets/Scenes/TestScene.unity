@@ -4034,7 +4034,6 @@ GameObject:
   - component: {fileID: 319550351}
   - component: {fileID: 319550353}
   - component: {fileID: 319550352}
-  - component: {fileID: 319550354}
   - component: {fileID: 319550355}
   m_Layer: 5
   m_Name: Page2 - Axe
@@ -4105,21 +4104,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 319550350}
   m_CullTransparentMesh: 1
---- !u!114 &319550354
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 319550350}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a9ff713bea2431bbaaebba7dde87ccf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  recipeType: 0
-  componentFields: []
-  craftingUI: {fileID: 0}
 --- !u!114 &319550355
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4310,11 +4294,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 951025962270887211, guid: 119176283478f8943ac39b6b315f2648, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 951025962270887211, guid: 119176283478f8943ac39b6b315f2648, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1630077568711211184, guid: 119176283478f8943ac39b6b315f2648, type: 3}
       propertyPath: m_Layer
@@ -4366,15 +4350,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4325193172694635256, guid: 119176283478f8943ac39b6b315f2648, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4325193172694635256, guid: 119176283478f8943ac39b6b315f2648, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4325193172694635256, guid: 119176283478f8943ac39b6b315f2648, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4414094051338514585, guid: 119176283478f8943ac39b6b315f2648, type: 3}
       propertyPath: m_Layer
@@ -10387,7 +10371,6 @@ GameObject:
   - component: {fileID: 724923433}
   - component: {fileID: 724923435}
   - component: {fileID: 724923434}
-  - component: {fileID: 724923436}
   - component: {fileID: 724923437}
   m_Layer: 5
   m_Name: Page3 - Bow
@@ -10458,21 +10441,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 724923432}
   m_CullTransparentMesh: 1
---- !u!114 &724923436
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 724923432}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a9ff713bea2431bbaaebba7dde87ccf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  recipeType: 0
-  componentFields: []
-  craftingUI: {fileID: 0}
 --- !u!114 &724923437
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20303,7 +20271,7 @@ MonoBehaviour:
   swordSprite: {fileID: 21300000, guid: 00d843ee8d0d0c84880c4bad1830d53d, type: 3}
   axeSprite: {fileID: 21300000, guid: 4ac41389fe449564e975f57a0e13fe57, type: 3}
   bowSprite: {fileID: 21300000, guid: 49ccb785aa9bd634480c543bdce1ebbf, type: 3}
-  craftButton: {fileID: 0}
+  craftButton: {fileID: 1298652233}
 --- !u!114 &1008370809
 MonoBehaviour:
   m_ObjectHideFlags: 0
