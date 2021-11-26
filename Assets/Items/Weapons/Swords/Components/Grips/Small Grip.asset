@@ -17,7 +17,8 @@ MonoBehaviour:
   description: Small Grip
   icon: {fileID: 21300000, guid: 4e1686bc7ac5791489759c2c13604502, type: 3}
   ability: {fileID: 0}
-  playerAttributesList: 
-  playerAttributeValues: 
-  weaponAttributesList: 00000000
-  weaponAttributeValues: 05000000
+  attributesUpgrades:
+  - attribute: 5
+    value: 7
+  - attribute: 3
+    value: 2

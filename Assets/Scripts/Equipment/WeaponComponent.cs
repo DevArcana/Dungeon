@@ -4,12 +4,15 @@ using UI;
 
 namespace Equipment
 {
+    [Serializable]
+    public class AttributeUpgrade
+    {
+        public Attribute attribute;
+        public int value;
+    }
     public class WeaponComponent : Item
     {
-        public List<PlayerAttribute> playerAttributesList;
-        public List<int> playerAttributeValues;
-        public List<WeaponAttribute> weaponAttributesList;
-        public List<int> weaponAttributeValues;
+        public List<AttributeUpgrade> attributesUpgrades;
         [NonSerialized] public RecipeType recipeType;
         
         public WeaponComponent()
@@ -20,13 +23,9 @@ namespace Equipment
         public string AttributeNames()
         {
             string res = "";
-            foreach (var name in playerAttributesList)
+            foreach (var upgrade in attributesUpgrades)
             {
-                res += $"{name}:\n";
-            }
-            foreach (var name in weaponAttributesList)
-            {
-                res += $"{name}:\n";
+                res += $"{upgrade.attribute}:\n";
             }
             return res.TrimEnd();
         }
@@ -34,13 +33,9 @@ namespace Equipment
         public string AttributeValues()
         {
             string res = "";
-            foreach (var values in playerAttributeValues)
+            foreach (var upgrade in attributesUpgrades)
             {
-                res += $"{values}\n";
-            }
-            foreach (var values in weaponAttributeValues)
-            {
-                res += $"{values}\n";
+                res += $"{upgrade.value}\n";
             }
             return res.TrimEnd();
         }
