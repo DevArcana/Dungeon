@@ -15,8 +15,8 @@ namespace EntityLogic.Abilities.ReadyAbilities
     {
       var turnManager = TurnManager.instance;
       startingPosition ??= turnManager.CurrentTurnTaker.GridPos;
-      
-      return new[] { startingPosition.Value };
+
+      yield return startingPosition.Value;
     }
 
     public override IEnumerable<GridPos> GetEffectiveRange(GridPos atPosition)
@@ -32,12 +32,6 @@ namespace EntityLogic.Abilities.ReadyAbilities
     public override int GetMinimumPossibleCost()
     {
       return 2;
-    }
-
-    public override bool CanExecute(GridPos atPosition, GridPos? startingPosition = null)
-    {
-      // TODO
-      return true;
     }
 
     public override void Execute(GridPos atPosition)

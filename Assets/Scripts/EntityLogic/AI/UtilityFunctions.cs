@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using EntityLogic.Abilities;
 using EntityLogic.Abilities.ReadyAbilities;
@@ -84,7 +83,7 @@ namespace EntityLogic.AI
             
             foreach (var currentTarget in targets)
             {
-                if (!ability.CanExecute(currentTarget)) continue;
+                if (!abilityProcessor.CanExecute(currentTarget)) continue;
                 var currentEntity = map.GetOccupant(currentTarget);
                 var health = currentEntity.GetComponent<DamageableEntity>().damageable;
                 var healthPercentage = health.Health / (float) health.MaxHealth;
@@ -171,7 +170,7 @@ namespace EntityLogic.AI
             
             foreach (var currentTarget in targets)
             {
-                if (!ability.CanExecute(currentTarget)) continue;
+                if (!abilityProcessor.CanExecute(currentTarget)) continue;
                 var influenceFactor = 1 / (1f + Mathf.Pow(2.718f, -(influenceMap.GetInfluenceOnPos(target).overallInfluence * 6) + 0.5f));
             
                 var health = entity.GetComponent<DamageableEntity>().damageable;

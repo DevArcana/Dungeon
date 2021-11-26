@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using TurnSystem;
 using TurnSystem.Transactions;
 using UnityEngine;
@@ -16,18 +15,10 @@ namespace EntityLogic.Abilities.ReadyAbilities
     {
       var turnManager = TurnManager.instance;
       startingPosition ??= turnManager.CurrentTurnTaker.GridPos;
-      
-      var allTiles = startingPosition.Value.SquarePattern(7).Walkable();
 
       var turnTaker = turnManager.CurrentTurnTaker;
 
-      var tilesWithAllies = allTiles.Where(x =>
-      {
-        var occupant = World.World.instance.GetOccupant(x);
-        return occupant != null && !AbilityUtilities.AreEnemies(occupant, turnTaker) && occupant != turnTaker;
-      });
-
-      return tilesWithAllies;
+      return startingPosition.Value.Circle(7, false).OccupiedByAlliesOf(turnTaker).Wounded();
     }
 
     public override IEnumerable<GridPos> GetEffectiveRange(GridPos atPosition)
@@ -43,12 +34,6 @@ namespace EntityLogic.Abilities.ReadyAbilities
     public override int GetMinimumPossibleCost()
     {
       return 2;
-    }
-
-    public override bool CanExecute(GridPos atPosition, GridPos? startingPosition = null)
-    {
-      // TODO
-      return true;
     }
 
     public override void Execute(GridPos atPosition)
