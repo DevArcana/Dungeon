@@ -12,11 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d75063ab43bb477485afa626bccc2fa1, type: 3}
   m_Name: Leather Boots
   m_EditorClassIdentifier: 
-  level: 1
   itemRarity: 0
   itemName: Leather Boots
   description: Thin leather boots
   icon: {fileID: 21300000, guid: dd51fbd8612700946b7cef10e38c56e7, type: 3}
   ability: {fileID: 0}
-  physicalDefense: 1
-  magicalDefense: 0
+  attributeModifiers:
+  - attribute: 7
+    value: 10
+    type: 0
+  - attribute: 3
+    value: 2
+    type: 0
