@@ -16,8 +16,10 @@ namespace EntityLogic.Abilities.ReadyAbilities
     {
       var turnManager = TurnManager.instance;
       startingPosition ??= turnManager.CurrentTurnTaker.GridPos;
-      
-      return startingPosition.Value.CardinalPattern((int)(turnManager.ActionPoints.ActionPoints / CostPerTile), wallsBlock: true, enemiesBlock: true, includeStart: false);
+
+      var maxDistance = (int) (turnManager.ActionPoints.ActionPoints / CostPerTile);
+
+      return startingPosition.Value.Cardinal(maxDistance, false, true, true);
     }
 
     public override IEnumerable<GridPos> GetEffectiveRange(GridPos atPosition)
@@ -36,12 +38,6 @@ namespace EntityLogic.Abilities.ReadyAbilities
     public override int GetMinimumPossibleCost()
     {
       return 1;
-    }
-
-    public override bool CanExecute(GridPos atPosition, GridPos? startingPosition = null)
-    {
-      // TODO
-      return true;
     }
 
     public override void Execute(GridPos atPosition)

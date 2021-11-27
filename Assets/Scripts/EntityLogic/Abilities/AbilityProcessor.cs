@@ -138,11 +138,10 @@ namespace EntityLogic.Abilities
     public bool CanExecute(GridPos atPosition, GridPos? startingPosition = null)
     {
       TurnManager.instance.ActionPoints.ReservePoints(SelectedAbility.GetEffectiveCost(atPosition));
-      
+
       return !AbilityInExecution
-             && SelectedAbility.GetValidTargetPositions(startingPosition).Contains(atPosition)
-             && TurnManager.instance.ActionPoints.CanSpendReservedPoints()
-             && SelectedAbility.CanExecute(atPosition);
+          && SelectedAbility.GetValidTargetPositions(startingPosition).Contains(atPosition)
+          && TurnManager.instance.ActionPoints.CanSpendReservedPoints();
     }
 
     public void Execute(GridPos pos)

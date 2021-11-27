@@ -17,7 +17,10 @@ MonoBehaviour:
   description: Metal Guard
   icon: {fileID: 21300000, guid: dd407fdbee2c47e4a910120d84b6f057, type: 3}
   ability: {fileID: 0}
-  playerAttributesList: 
-  playerAttributeValues: 
-  weaponAttributesList: 00000000
-  weaponAttributeValues: 06000000
+  attributeModifiers:
+  - attribute: 5
+    value: 3
+    type: 0
+  - attribute: 0
+    value: 2
+    type: 0

@@ -62,11 +62,6 @@ namespace EntityLogic.Abilities
       return 1;
     }
 
-    public override bool CanExecute(GridPos atPosition, GridPos? startingPosition = null)
-    {
-      return true;
-    }
-
     public override void Execute(GridPos atPosition)
     {
       var turnManager = TurnManager.instance;

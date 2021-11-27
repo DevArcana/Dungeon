@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using EntityLogic.Abilities;
 using EntityLogic.Abilities.ReadyAbilities;
+using EntityLogic.Attributes;
 using TurnSystem;
 using UnityEngine;
 using World.Common;
@@ -15,7 +15,8 @@ namespace EntityLogic.AI
         {
             target = targetEntity.GridPos;
             var availableActionPoints = TurnManager.instance.ActionPoints.ActionPoints;
-            var maxChargeDistance = 10f + (entity.equipment.weapon ? entity.equipment.weapon.range : 0);
+            var range = entity.equipment.weapon.attributeModifiers.FirstOrDefault(x => x.attribute == Attribute.Range);
+            var maxChargeDistance = 10f + (entity.equipment.weapon ? (range?.value ?? 1) : 0);
             var influenceMap = InfluenceMap.instance;
             var pathfinding = new Pathfinding();
             var (path, cost, fullCost) = pathfinding.FindPartialPath(entity.GridPos, targetEntity.GridPos,
@@ -24,8 +25,8 @@ namespace EntityLogic.AI
             if (path is null || !path.Any()) return 0f;
             target = path[path.Count - 1];
             var costFactor = cost == fullCost
-                ? 1 - Mathf.Pow(fullCost / maxChargeDistance, 3)
-                : (1 - Mathf.Pow(fullCost / maxChargeDistance, 2)) / 2;
+                ? 1 - Mathf.Pow(fullCost / (int)maxChargeDistance, 3)
+                : (1 - Mathf.Pow(fullCost / (int)maxChargeDistance, 2)) / 2;
 
             var recalculatedInfluenceOnPos = influenceMap.GetInfluenceOnPos(target).overallInfluence
                 - influenceMap.GetEntityInfluenceOnPos(entity, target) + (cost == fullCost ? 0.8f : 1f);
@@ -84,7 +85,7 @@ namespace EntityLogic.AI
             
             foreach (var currentTarget in targets)
             {
-                if (!ability.CanExecute(currentTarget)) continue;
+                if (!abilityProcessor.CanExecute(currentTarget)) continue;
                 var currentEntity = map.GetOccupant(currentTarget);
                 var health = currentEntity.GetComponent<DamageableEntity>().damageable;
                 var healthPercentage = health.Health / (float) health.MaxHealth;
@@ -171,7 +172,7 @@ namespace EntityLogic.AI
             
             foreach (var currentTarget in targets)
             {
-                if (!ability.CanExecute(currentTarget)) continue;
+                if (!abilityProcessor.CanExecute(currentTarget)) continue;
                 var influenceFactor = 1 / (1f + Mathf.Pow(2.718f, -(influenceMap.GetInfluenceOnPos(target).overallInfluence * 6) + 0.5f));
             
                 var health = entity.GetComponent<DamageableEntity>().damageable;
