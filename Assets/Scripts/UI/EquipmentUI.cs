@@ -232,8 +232,9 @@ namespace UI
                     useButton.interactable = true;
                     break;
                 case WeaponComponent wc:
-                    itemAttributesNamesText.text = wc.AttributeNames();
-                    itemAttributesValuesText.text = wc.AttributeValues();
+                    // TODO
+                    //itemAttributesNamesText.text = wc.AttributeNames();
+                    //itemAttributesValuesText.text = wc.AttributeValues();
                     useButton.interactable = false;
                     buttonText.text = "USE";
                     break;

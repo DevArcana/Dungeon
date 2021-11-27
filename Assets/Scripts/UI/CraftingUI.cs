@@ -156,17 +156,20 @@ namespace UI
                             craftedWeaponDescriptionText.text = "Description";
                             craftedWeaponIcon.sprite = swordSprite;
                             //TODO Input on Name and description, onClick in craft button, correct weapon sprite
-                            var attributeList = CalculateAttributes(recipePage.componentFields.Select(x => x.selectedComponent).ToList());
+                            // TODO
+                            //var attributeList = CalculateAttributes(recipePage.componentFields.Select(x => x.selectedComponent).ToList());
                             var attributeText = "";
-                            foreach (var attribute in attributeList)
-                            {
-                                attributeText = attributeText + attribute.attribute +":\n";
-                            }
+                            // TODO
+                            // foreach (var attribute in attributeList)
+                            // {
+                            //     attributeText = attributeText + attribute.attribute +":\n";
+                            // }
                             var attributeValues = "";
-                            foreach (var attribute in attributeList)
-                            {
-                                attributeValues = attributeValues + attribute.value +"\n";
-                            }
+                            // TODO
+                            // foreach (var attribute in attributeList)
+                            // {
+                            //     attributeValues = attributeValues + attribute.value +"\n";
+                            // }
 
                             craftedWeaponAttributesNamesText.text = attributeText;
                             craftedWeaponAttributesValuesText.text = attributeValues;
@@ -189,8 +192,9 @@ namespace UI
             useButton.onClick.RemoveAllListeners();
             useButton.onClick.AddListener(() => componentFields.First(x => x.recipeType == recipeType).Show(component));
 
-            componentsAttributesNamesText.text = component.AttributeNames();
-            componentsAttributesValuesText.text = component.AttributeValues();
+            // TODO
+            //componentsAttributesNamesText.text = component.AttributeNames();
+            //componentsAttributesValuesText.text = component.AttributeValues();
         }
         
         private void MakeVisible(bool isEnabled)
@@ -221,26 +225,27 @@ namespace UI
             }
         }
 
-        public List<AttributeUpgrade> CalculateAttributes(List<WeaponComponent> usedComponents)
-        {
-            var attributeList = new List<AttributeUpgrade>();
-            var resultAttributeList = new List<AttributeUpgrade>();
-            foreach (var component in usedComponents)
-            {
-                attributeList = attributeList.Concat(component.attributesUpgrades).ToList();
-            }
-
-            var attributeNamesList = attributeList.Select(x => x.attribute).Distinct().ToList();
-            foreach (var attributeName in attributeNamesList)
-            {
-                var attribute = new AttributeUpgrade()
-                {
-                    attribute = attributeName,
-                    value = attributeList.Where(x => x.attribute == attributeName).Sum(x => x.value)
-                };
-                resultAttributeList.Add(attribute);
-            }
-            return resultAttributeList;
-        }
+        // TODO
+        // public List<AttributeUpgrade> CalculateAttributes(List<WeaponComponent> usedComponents)
+        // {
+        //     var attributeList = new List<AttributeUpgrade>();
+        //     var resultAttributeList = new List<AttributeUpgrade>();
+        //     foreach (var component in usedComponents)
+        //     {
+        //         attributeList = attributeList.Concat(component.attributesUpgrades).ToList();
+        //     }
+        //
+        //     var attributeNamesList = attributeList.Select(x => x.attribute).Distinct().ToList();
+        //     foreach (var attributeName in attributeNamesList)
+        //     {
+        //         var attribute = new AttributeUpgrade()
+        //         {
+        //             attribute = attributeName,
+        //             value = attributeList.Where(x => x.attribute == attributeName).Sum(x => x.value)
+        //         };
+        //         resultAttributeList.Add(attribute);
+        //     }
+        //     return resultAttributeList;
+        // }
     }
 }

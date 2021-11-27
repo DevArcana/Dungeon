@@ -49,9 +49,10 @@ namespace UI
             var componentField = componentFields.First(x => Type.GetType("Equipment." + x.componentTypeString) == component.GetType());
             componentField.icon.sprite = component.icon;
             componentField.icon.enabled = true;
-            componentField.attributeNames.text = component.AttributeNames();
+            // TODO
+            //componentField.attributeNames.text = component.AttributeNames();
             componentField.attributeNames.enabled = true;
-            componentField.attributeValues.text = component.AttributeValues();
+            //componentField.attributeValues.text = component.AttributeValues();
             componentField.attributeValues.enabled = true;
             componentField.selectedComponent = component;
             craftingUI.isWeaponDescriptionEnabled = false;
