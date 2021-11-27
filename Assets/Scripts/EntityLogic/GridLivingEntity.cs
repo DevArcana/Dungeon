@@ -84,14 +84,14 @@ namespace EntityLogic
       var damageReductionModifiers = attributeModifiers.Where(x => x.attribute == Attribute.DamageReduction).ToList();
       attributes.DamageReduction = (float)(baseAttributes.damageReduction + damageReductionModifiers.Sum(x => x.value));
       
-      // weapon damage
-      var weaponDamageModifiers = attributeModifiers.Where(x => x.attribute == Attribute.WeaponDamage).ToList();
-      attributes.WeaponDamage = equipment?.weapon?.damage == null ? 0 : CalculateAttribute(equipment.weapon.damage, weaponDamageModifiers);
-      
-      // weapon range
-      //  only additive modifiers
-      var weaponRangeModifiers = attributeModifiers.Where(x => x.attribute == Attribute.WeaponRange).ToList();
-      attributes.WeaponRange = equipment?.weapon?.range == null ? 0 : (float)(equipment.weapon.range + weaponRangeModifiers.Sum(x => x.value));
+      // // weapon damage
+      // var weaponDamageModifiers = attributeModifiers.Where(x => x.attribute == Attribute.WeaponDamage).ToList();
+      // attributes.WeaponDamage = equipment?.weapon?.damage == null ? 0 : CalculateAttribute(equipment.weapon.damage, weaponDamageModifiers);
+      //
+      // // weapon range
+      // //  only additive modifiers
+      // var weaponRangeModifiers = attributeModifiers.Where(x => x.attribute == Attribute.WeaponRange).ToList();
+      // attributes.WeaponRange = equipment?.weapon?.range == null ? 0 : (float)(equipment.weapon.range + weaponRangeModifiers.Sum(x => x.value));
       
       // maximum health
       var maximumHealthModifiers = attributeModifiers.Where(x => x.attribute == Attribute.MaximumHealth).ToList();
