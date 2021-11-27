@@ -138,9 +138,9 @@ namespace World.Common
     {
       foreach (var tile in tiles)
       {
-        var occupantHealth = World.instance.GetOccupant(tile)?.GetComponent<DamageableEntity>()?.damageable;
+        var occupantHealth = World.instance.GetOccupant(tile)?.health;
 
-        if (occupantHealth != null && occupantHealth.Health != occupantHealth.MaxHealth)
+        if (occupantHealth != null && occupantHealth.Health != occupantHealth.MaximumHealth)
         {
           yield return tile;
         }

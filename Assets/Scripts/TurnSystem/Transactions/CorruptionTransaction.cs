@@ -5,13 +5,11 @@ namespace TurnSystem.Transactions
 {
   public class CorruptionTransaction : TransactionBase
   {
-    private readonly GridLivingEntity _caster;
     private readonly IEnumerable<GridLivingEntity> _entities;
-    private readonly int _damage;
+    private readonly float _damage;
 
-    public CorruptionTransaction(GridLivingEntity caster, IEnumerable<GridLivingEntity> entities, int damage, bool isAbility) : base(isAbility)
+    public CorruptionTransaction(IEnumerable<GridLivingEntity> entities, float damage, bool isAbility) : base(isAbility)
     {
-      _caster = caster;
       _entities = entities;
       _damage = damage;
     }
@@ -20,7 +18,7 @@ namespace TurnSystem.Transactions
     {
       foreach (var entity in _entities)
       {
-        var victimHealth = entity.GetComponent<DamageableEntity>()?.damageable;
+        var victimHealth = entity.health;
         victimHealth?.SufferDamage(_damage);
       }
       Finish();

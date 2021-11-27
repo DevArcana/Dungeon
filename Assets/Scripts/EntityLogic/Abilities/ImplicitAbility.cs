@@ -11,6 +11,16 @@ namespace EntityLogic.Abilities
   [CreateAssetMenu(fileName = "Implicit", menuName = "Abilities/Implicit", order = 1)]
   public class ImplicitAbility : AbilityBase
   {
+    public override string TooltipDescription()
+    {
+      return "";
+    }
+
+    public override string TooltipCost()
+    {
+      return "";
+    }
+
     public override IEnumerable<GridPos> GetValidTargetPositions(GridPos? startingPosition = null)
     {
       var turnManager = TurnManager.instance;
@@ -78,17 +88,12 @@ namespace EntityLogic.Abilities
       
       if (occupant is EnemyEntity && turnTaker is PlayerEntity || occupant is PlayerEntity && turnTaker is EnemyEntity)
       {
-        turnManager.Transactions.EnqueueTransaction(new AttackTransaction(turnTaker, occupant, 10, true));
+        turnManager.Transactions.EnqueueTransaction(new AttackTransaction(turnTaker, occupant, true));
       }
       else
       {
         turnManager.Transactions.EnqueueTransaction(new MoveTransaction(TurnManager.instance.CurrentTurnTaker, path.Last(), true));
       }
-    }
-
-    public override string GetCostForTooltip()
-    {
-      return "";
     }
   }
 }

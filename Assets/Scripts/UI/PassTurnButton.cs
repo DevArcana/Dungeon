@@ -1,4 +1,5 @@
-﻿using TurnSystem;
+﻿using EntityLogic;
+using TurnSystem;
 using UnityEngine;
 using UnityEngine.UI;
 

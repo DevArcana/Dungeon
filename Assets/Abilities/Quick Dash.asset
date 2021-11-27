@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Quick Dash
   m_EditorClassIdentifier: 
   title: Quick Dash
-  description: Dash in a cardinal direction (cannot pass through units or obstacles)
   icon: {fileID: 21300000, guid: f4b907724b408c546afe04c5b4f703cd, type: 3}
   tags: 
   cooldown: 1
+  baseCostPerTile: 0.75
+  reductionPerAgilityPoint: 0.025

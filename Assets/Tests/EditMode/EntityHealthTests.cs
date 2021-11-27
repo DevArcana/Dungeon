@@ -8,7 +8,7 @@ namespace Tests.EditMode
     [Test]
     public void DefaultHealthIs100()
     {
-      var sut = new Damageable();
+      var sut = new EntityHealth();
       Assert.That(sut.Health, Is.EqualTo(100));
     }
     
@@ -17,14 +17,14 @@ namespace Tests.EditMode
     [TestCase(200)]
     public void HealthIsInitializedToMaxHealthByDefault(int health)
     {
-      var sut = new Damageable(health);
-      Assert.That(sut.Health, Is.EqualTo(sut.MaxHealth));
+      var sut = new EntityHealth(health);
+      Assert.That(sut.Health, Is.EqualTo(sut.MaximumHealth));
     }
 
     [Test]
     public void EventIsEmittedOnEachHealthChange()
     {
-      var sut = new Damageable();
+      var sut = new EntityHealth();
 
       var count = 0;
       void OnHealthChange()
@@ -46,7 +46,7 @@ namespace Tests.EditMode
     [TestCase(235)]
     public void EventIsNotEmittedWhenHealthDoesNotChange(int health)
     {
-      var sut = new Damageable(health);
+      var sut = new EntityHealth(health);
 
       var count = 0;
       void OnHealthChange()
@@ -64,7 +64,7 @@ namespace Tests.EditMode
     [Test]
     public void DeathEventIsEmittedWhenHealthReachesZero()
     {
-      var sut = new Damageable();
+      var sut = new EntityHealth();
 
       var died = false;
       void OnDeath()
@@ -82,7 +82,7 @@ namespace Tests.EditMode
     [Test]
     public void DeathEventIsEmittedWhenHealthReachesBelowZero()
     {
-      var sut = new Damageable();
+      var sut = new EntityHealth();
 
       var died = false;
       void OnDeath()
@@ -100,7 +100,7 @@ namespace Tests.EditMode
     [Test]
     public void DeathEventIsEmittedAfterHealthChangeEvent()
     {
-      var sut = new Damageable();
+      var sut = new EntityHealth();
 
       var e = string.Empty;
       void OnDeath()
@@ -125,7 +125,7 @@ namespace Tests.EditMode
     [Test]
     public void TakingDamageDecreasesHealth()
     {
-      var sut = new Damageable(50);
+      var sut = new EntityHealth(50);
       sut.SufferDamage(30);
       Assert.That(sut.Health, Is.EqualTo(20));
     }
@@ -133,7 +133,7 @@ namespace Tests.EditMode
     [Test]
     public void HealingIncreasesHealth()
     {
-      var sut = new Damageable(50);
+      var sut = new EntityHealth(50);
       sut.SufferDamage(49);
       sut.Heal(9);
       Assert.That(sut.Health, Is.EqualTo(10));
@@ -142,7 +142,7 @@ namespace Tests.EditMode
     [Test]
     public void CanNotOverHeal()
     {
-      var sut = new Damageable(50);
+      var sut = new EntityHealth(50);
       sut.Heal(1000);
       Assert.That(sut.Health, Is.EqualTo(50));
     }

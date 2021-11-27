@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using EntityLogic;
 using EntityLogic.Attributes;
 using Equipment;
 using TMPro;

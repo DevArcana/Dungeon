@@ -1,8 +1,5 @@
-﻿using System.IO;
-using EntityLogic.AI;
+﻿using EntityLogic.AI;
 using TurnSystem;
-using UnityEngine;
-using World.Common;
 
 namespace EntityLogic
 {
@@ -19,14 +16,10 @@ namespace EntityLogic
         utilityAI.PerformNextAction(this);
       }
     }
-    
-    // unity components
-    private DamageableEntity _damageable;
 
     protected override void Start()
     {
       base.Start();
-      _damageable = GetComponent<DamageableEntity>();
       var personality = GetComponent<PersonalityProvider>();
       teamwork = personality.teamwork;
       aggressiveness = personality.aggressiveness;
@@ -34,7 +27,7 @@ namespace EntityLogic
 
     public override string GetTooltip()
     {
-      return $"HP: {_damageable.damageable.Health}/{_damageable.damageable.MaxHealth}";
+      return $"HP: {health.Health}/{health.MaximumHealth}";
     }
   }
 }

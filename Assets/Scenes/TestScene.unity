@@ -4656,11 +4656,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 951025962270887211, guid: 119176283478f8943ac39b6b315f2648, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 951025962270887211, guid: 119176283478f8943ac39b6b315f2648, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1630077568711211184, guid: 119176283478f8943ac39b6b315f2648, type: 3}
       propertyPath: m_Layer
@@ -4712,15 +4712,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4325193172694635256, guid: 119176283478f8943ac39b6b315f2648, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4325193172694635256, guid: 119176283478f8943ac39b6b315f2648, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4325193172694635256, guid: 119176283478f8943ac39b6b315f2648, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4414094051338514585, guid: 119176283478f8943ac39b6b315f2648, type: 3}
       propertyPath: m_Layer
@@ -20413,7 +20413,6 @@ GameObject:
   - component: {fileID: 970122650}
   - component: {fileID: 970122653}
   - component: {fileID: 970122652}
-  - component: {fileID: 970122651}
   m_Layer: 6
   m_Name: Player(Clone)
   m_TagString: Player
@@ -20437,21 +20436,6 @@ Transform:
   m_Father: {fileID: 179007826}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &970122651
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 970122649}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd75a64c53134cbead0dc810a5c81cf6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damageable:
-    maxHealth: 100
-    health: 100
 --- !u!136 &970122652
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -20483,7 +20467,6 @@ MonoBehaviour:
   portrait: {fileID: 21300000, guid: 6eca0410d08f5c3469c6ee763edc9a6e, type: 3}
   highlight: {fileID: 0}
   autoRegister: 1
-  initiative: 10
   equipment:
     weapon: {fileID: 11400000, guid: 80f1559e44d407a48be99c80ec764296, type: 2}
     helmet: {fileID: 11400000, guid: 3e41a619426b7d041bbc748fc8446967, type: 2}
@@ -20515,12 +20498,12 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 86f05841c4ac7434093b4db425788ced, type: 2}
     - {fileID: 11400000, guid: 8ff28ddea5b42db4fb07f24259da411b, type: 2}
   baseAttributes:
-    strength: 0
-    agility: 0
-    focus: 0
-    initiative: 0
+    strength: 10
+    agility: 10
+    focus: 10
+    initiative: 10
     damageReduction: 0
-    maximumHealth: 0
+    maximumHealth: 100
   abilities:
   - {fileID: 11400000, guid: c76b923872d560c41ba697b33b016e49, type: 2}
   - {fileID: 11400000, guid: 34136f8b4de701440a976deb4cbfa6e5, type: 2}

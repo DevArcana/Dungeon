@@ -156,35 +156,35 @@ namespace Equipment
 
         public IEnumerable<AttributeModifier> GetAllAttributeModifiers()
         {
-            foreach (var modifier in weapon.attributeModifiers)
+            foreach (var modifier in weapon?.attributeModifiers ?? Array.Empty<AttributeModifier>())
             {
                 yield return modifier;
             }
-            foreach (var modifier in helmet.attributeModifiers)
+            foreach (var modifier in helmet?.attributeModifiers ?? Array.Empty<AttributeModifier>())
             {
                 yield return modifier;
             }
-            foreach (var modifier in breastplate.attributeModifiers)
+            foreach (var modifier in breastplate?.attributeModifiers ?? Array.Empty<AttributeModifier>())
             {
                 yield return modifier;
             }
-            foreach (var modifier in leggings.attributeModifiers)
+            foreach (var modifier in leggings?.attributeModifiers ?? Array.Empty<AttributeModifier>())
             {
                 yield return modifier;
             }
-            foreach (var modifier in boots.attributeModifiers)
+            foreach (var modifier in boots?.attributeModifiers ?? Array.Empty<AttributeModifier>())
             {
                 yield return modifier;
             }
-            foreach (var modifier in necklace.attributeModifiers)
+            foreach (var modifier in necklace?.attributeModifiers ?? Array.Empty<AttributeModifier>())
             {
                 yield return modifier;
             }
-            foreach (var modifier in ring.attributeModifiers)
+            foreach (var modifier in ring?.attributeModifiers ?? Array.Empty<AttributeModifier>())
             {
                 yield return modifier;
             }
-            foreach (var modifier in gloves.attributeModifiers)
+            foreach (var modifier in gloves?.attributeModifiers ?? Array.Empty<AttributeModifier>())
             {
                 yield return modifier;
             }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using EntityLogic;
+using UnityEngine;
 using Utils;
 
 namespace TurnSystem

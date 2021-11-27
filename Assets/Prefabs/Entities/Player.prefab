@@ -92,7 +92,6 @@ GameObject:
   - component: {fileID: 168577634632048304}
   - component: {fileID: 1687080857}
   - component: {fileID: 4692986789365586099}
-  - component: {fileID: 4389445747545231012}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -133,8 +132,23 @@ MonoBehaviour:
   portrait: {fileID: 21300000, guid: 6eca0410d08f5c3469c6ee763edc9a6e, type: 3}
   highlight: {fileID: 0}
   autoRegister: 1
-  initiative: 10
-  equipment: {fileID: 0}
+  equipment:
+    weapon: {fileID: 0}
+    helmet: {fileID: 0}
+    breastplate: {fileID: 0}
+    leggings: {fileID: 0}
+    boots: {fileID: 0}
+    necklace: {fileID: 0}
+    ring: {fileID: 0}
+    gloves: {fileID: 0}
+    backpack: []
+  baseAttributes:
+    strength: 10
+    agility: 10
+    focus: 10
+    initiative: 10
+    damageReduction: 0
+    maximumHealth: 100
   abilities:
   - {fileID: 11400000, guid: c76b923872d560c41ba697b33b016e49, type: 2}
   - {fileID: 11400000, guid: 34136f8b4de701440a976deb4cbfa6e5, type: 2}
@@ -155,21 +169,6 @@ CapsuleCollider:
   m_Height: 1.0181148
   m_Direction: 1
   m_Center: {x: 0, y: 0.35639787, z: 0}
---- !u!114 &4389445747545231012
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 775171587901771761}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd75a64c53134cbead0dc810a5c81cf6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damageable:
-    maxHealth: 100
-    health: 100
 --- !u!1001 &8738411132719200329
 PrefabInstance:
   m_ObjectHideFlags: 0
