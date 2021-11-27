@@ -6,9 +6,9 @@
         Agility,
         Focus,
         Initiative,
-        HealthPoints,
-        Damage,
-        Range,
-        DamageReduction
+        DamageReduction,
+        WeaponDamage,
+        WeaponRange,
+        MaximumHealth
     }
 }

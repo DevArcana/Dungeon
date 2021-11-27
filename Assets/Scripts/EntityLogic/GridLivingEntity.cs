@@ -20,7 +20,7 @@ namespace EntityLogic
 
     public EntityEquipment equipment;
     public EntityBaseAttributes baseAttributes;
-    private EntityAttributes attributes;
+    public EntityAttributes attributes;
 
     public List<AbilityBase> abilities;
     public List<int> AbilityCooldowns { get; private set; }
@@ -83,9 +83,22 @@ namespace EntityLogic
       //   only additive modifiers
       var damageReductionModifiers = attributeModifiers.Where(x => x.attribute == Attribute.DamageReduction).ToList();
       attributes.DamageReduction = (float)(baseAttributes.damageReduction + damageReductionModifiers.Sum(x => x.value));
+      
+      // weapon damage
+      var weaponDamageModifiers = attributeModifiers.Where(x => x.attribute == Attribute.WeaponDamage).ToList();
+      attributes.WeaponDamage = equipment?.weapon?.damage == null ? 0 : CalculateAttribute(equipment.weapon.damage, weaponDamageModifiers);
+      
+      // weapon range
+      //  only additive modifiers
+      var weaponRangeModifiers = attributeModifiers.Where(x => x.attribute == Attribute.WeaponRange).ToList();
+      attributes.WeaponRange = equipment?.weapon?.range == null ? 0 : (float)(equipment.weapon.range + weaponRangeModifiers.Sum(x => x.value));
+      
+      // maximum health
+      var maximumHealthModifiers = attributeModifiers.Where(x => x.attribute == Attribute.MaximumHealth).ToList();
+      attributes.MaximumHealth = CalculateAttribute(baseAttributes.maximumHealth, maximumHealthModifiers);
     }
 
-    private static float CalculateAttribute(float baseValue, IEnumerable<AttributeModifier> modifiers)
+    private static float CalculateAttribute(float baseValue, List<AttributeModifier> modifiers)
     {
       var additiveValue = modifiers.Where(x => x.type == ModifierType.Additive).Sum(x => x.value);
       var multiplicativeValue = modifiers.Where(x => x.type == ModifierType.Multiplicative).Sum(x => x.value);
