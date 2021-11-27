@@ -15,8 +15,9 @@ namespace EntityLogic.AI
         {
             target = targetEntity.GridPos;
             var availableActionPoints = TurnManager.instance.ActionPoints.ActionPoints;
-            var range = entity.equipment.weapon.attributeModifiers.FirstOrDefault(x => x.attribute == Attribute.WeaponRange);
-            var maxChargeDistance = 10f + (entity.equipment.weapon ? (range?.value ?? 1) : 0);
+            var hasWeapon = !(entity.equipment.weapon is null);
+            var range = hasWeapon ? entity.equipment.weapon.attributeModifiers.FirstOrDefault(x => x.attribute == Attribute.WeaponRange) : null;
+            var maxChargeDistance = 10f + (hasWeapon ? (range?.value ?? 1f) : 0f);
             var influenceMap = InfluenceMap.instance;
             var pathfinding = new Pathfinding();
             var (path, cost, fullCost) = pathfinding.FindPartialPath(entity.GridPos, targetEntity.GridPos,
@@ -25,8 +26,8 @@ namespace EntityLogic.AI
             if (path is null || !path.Any()) return 0f;
             target = path[path.Count - 1];
             var costFactor = cost == fullCost
-                ? 1 - Mathf.Pow(fullCost / (int)maxChargeDistance, 3)
-                : (1 - Mathf.Pow(fullCost / (int)maxChargeDistance, 2)) / 2;
+                ? 1 - Mathf.Pow(fullCost / (float) maxChargeDistance, 3)
+                : (1 - Mathf.Pow(fullCost / (float) maxChargeDistance, 2)) / 2;
 
             var recalculatedInfluenceOnPos = influenceMap.GetInfluenceOnPos(target).overallInfluence
                 - influenceMap.GetEntityInfluenceOnPos(entity, target) + (cost == fullCost ? 0.8f : 1f);
@@ -172,14 +173,14 @@ namespace EntityLogic.AI
             
             foreach (var currentTarget in targets)
             {
-                if (!abilityProcessor.CanExecute(currentTarget)) continue;
                 var influenceFactor = 1 / (1f + Mathf.Pow(2.718f, -(influenceMap.GetInfluenceOnPos(target).overallInfluence * 6) + 0.5f));
             
                 var health = entity.GetComponent<DamageableEntity>().damageable;
                 var healthPercentage = health.Health / (float) health.MaxHealth;
                 var healthFactor = 1 / (1f + Mathf.Pow(2.718f * 1.2f, -(healthPercentage * 12) + 5.5f));
 
-                var skillDamage = 20;
+                // var skillDamage = (FireballAbility) ability.CalculateDamage();
+                var skillDamage = 20f;
                 var playerHealth = map.GetOccupant(currentTarget).GetComponent<DamageableEntity>().damageable.Health;
                 var playerHealthFactor = Mathf.Min(Mathf.Pow(0.5f, playerHealth / (skillDamage / 2f)) + 0.7f, 1f);
 
@@ -249,7 +250,7 @@ namespace EntityLogic.AI
                 foreach (var player in players)
                 {
                     var (_, distance) = pathfinding.FindPath(position.Key, player.GridPos);
-                    if (distance < closestDistance || distance == closestDistance && position.Value > closestDistanceScore)
+                    if (distance > 0 && (distance < closestDistance || distance == closestDistance && position.Value > closestDistanceScore))
                     {
                     
                         closestDistance = distance;

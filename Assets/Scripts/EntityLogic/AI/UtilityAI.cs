@@ -45,14 +45,16 @@ namespace EntityLogic.AI
                 (ActionType.TacticalMovement, UtilityFunctions.TacticalMovementUtility(entity, coverMap, out var tacticalMoveTarget)),
             }.Where(x => x.Item2 > 0.04f).OrderByDescending(x => x.Item2).ToList();
 
-            var message = $"{entity.name}\n";
+            AILogs.AddMainLogEndl($"{entity.name}");
+            var message = "";
             foreach (var (actionType, score) in utilities)
             {
                 message += $"{actionType} - {score:F2}\n";
             }
             var result = Helpers.WeightedRandom(utilities);
-            message += $"Chosen action: {result}\nPoints left: {TurnManager.instance.ActionPoints.ActionPoints}";
-            Debug.Log(message);
+            AILogs.AddMainLog($"Chosen action: {result},");
+            AILogs.AddMainLog($"Points left: {TurnManager.instance.ActionPoints.ActionPoints},");
+            AILogs.AddSecondaryLogEndl(message.Trim());
 
             return result switch
             {
@@ -78,59 +80,61 @@ namespace EntityLogic.AI
                 {
                     abilityProcessor.SelectAbility<HealSelfAbility>();
                     var ability = abilityProcessor.SelectedAbility;
-                    Debug.Log($"Cost of heal self: {ability.GetEffectiveCost(entity.GridPos)}");
+                    AILogs.AddMainLogEndl($"Cost of heal self: {ability.GetEffectiveCost(entity.GridPos)}");
                     if (abilityProcessor.CanExecute(entity.GridPos))
                     {
                         abilityProcessor.Execute(entity.GridPos);
                     }
                     else throw new Exception($"Ability {action} is not possible, but it was chosen for execution.");
-                    return;
+                    break;
                 }
                 case ActionType.HealAlly:
                 {
                     abilityProcessor.SelectAbility<HealAllyAbility>();
                     var ability = abilityProcessor.SelectedAbility;
-                    Debug.Log($"Cost of heal ally: {ability.GetEffectiveCost((GridPos)target!)}");
+                    AILogs.AddMainLogEndl($"Cost of heal ally: {ability.GetEffectiveCost((GridPos)target!)}");
                     if (abilityProcessor.CanExecute((GridPos)target!))
                     {
                         abilityProcessor.Execute((GridPos)target!);
                     }
                     else throw new Exception($"Ability {action} is not possible, but it was chosen for execution.");
-                    return;
+                    break;
                 }
                 case ActionType.Fireball:
                 {
                     abilityProcessor.SelectAbility<FireballAbility>();
                     var ability = abilityProcessor.SelectedAbility;
-                    Debug.Log($"Cost of fireball: {ability.GetEffectiveCost((GridPos)target!)}");
+                    AILogs.AddMainLogEndl($"Cost of fireball: {ability.GetEffectiveCost((GridPos)target!)}");
                     if (abilityProcessor.CanExecute((GridPos)target!))
                     {
                         abilityProcessor.Execute((GridPos)target!);
                     }
                     else throw new Exception($"Ability {action} is not possible, but it was chosen for execution.");
-                    return;
+                    break;
                 }
                 case ActionType.Retreat:
                 case ActionType.ChargePlayer:
                 case ActionType.TacticalMovement:
                 {
                     var ability = abilityProcessor.SelectedAbility;
-                    Debug.Log($"Cost of move: {ability.GetEffectiveCost((GridPos) target!)}");
+                    AILogs.AddMainLogEndl($"Cost of move: {ability.GetEffectiveCost((GridPos) target!)}");
                     if (abilityProcessor.CanExecute((GridPos)target!))
                     {
                         abilityProcessor.Execute((GridPos)target!);
                     }
                     else throw new Exception($"Ability {action} is not possible, but it was chosen for execution.");
-                    return;
+                    break;
                 }
                 case ActionType.Pass:
                     TurnManager.instance.NextTurn();
-                    return;
+                    break;
                 default:
                     Debug.Log("No action found");
                     TurnManager.instance.NextTurn();
-                    return;
+                    break;
             }
+            
+            AILogs.Log();
         }
     }
 }
