@@ -26,9 +26,11 @@ namespace EntityLogic
     /// Causes the entity to suffer damage.
     /// </summary>
     /// <param name="damage">The amount of damage dealt to the entity.</param>
-    public void SufferDamage(float damage)
+    /// <param name="damageReduction">Percentage of damage reduction of the entity.</param>
+    public void SufferDamage(float damage, float damageReduction)
     {
-      SetHealth(Math.Max(Health - damage, 0));
+      var effectiveDamage = damage * (1 - damageReduction / 100);
+      SetHealth(Math.Max(Health - effectiveDamage, 0));
     }
 
     /// <summary>

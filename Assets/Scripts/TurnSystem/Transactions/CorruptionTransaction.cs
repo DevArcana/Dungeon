@@ -19,7 +19,8 @@ namespace TurnSystem.Transactions
       foreach (var entity in _entities)
       {
         var victimHealth = entity.health;
-        victimHealth?.SufferDamage(_damage);
+        var victimDamageReduction = entity.attributes.DamageReduction;
+        victimHealth?.SufferDamage(_damage, victimDamageReduction);
       }
       Finish();
     }

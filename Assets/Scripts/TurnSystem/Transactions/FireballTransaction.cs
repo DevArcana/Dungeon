@@ -16,7 +16,8 @@ namespace TurnSystem.Transactions
     protected override void Process()
     {
       var victimHealth = _attackedEntity.health;
-      victimHealth?.SufferDamage(_damage);
+      var victimDamageReduction = _attackedEntity.attributes.DamageReduction;
+      victimHealth?.SufferDamage(_damage, victimDamageReduction);
       Finish();
     }
   }
