@@ -75,7 +75,7 @@ namespace UI
                     _slots[i].GetComponent<Button>().onClick.AddListener(()=>OnItemClicked(_equipment.backpack[x], false));
                 }
 
-                for (var i = _equipment.backpack.Count; i < _equipment.backpack.Capacity; i++)
+                for (var i = _equipment.backpack.Count; i < _numberOfSlots; i++)
                 {
                     _slots[i].GetComponent<Button>().onClick.RemoveAllListeners();
                     _slots[i].GetComponent<Image>().sprite = background;
