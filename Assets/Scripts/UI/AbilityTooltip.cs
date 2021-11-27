@@ -1,5 +1,4 @@
-﻿using System;
-using EntityLogic.Abilities;
+﻿using EntityLogic.Abilities;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,9 +22,9 @@ namespace UI
       _currentAbility = ability;
       
       titleText.text = ability.title;
-      descriptionText.text = ability.description;
+      descriptionText.text = ability.TooltipDescription();
       cooldownText.text = $"{ability.cooldown} turn{(ability.cooldown == 1 ? string.Empty : "s")}";
-      costText.text = ability.GetCostForTooltip();
+      costText.text = ability.TooltipCost();
       
       backgroundImage.enabled = true;
       titleText.enabled = true;

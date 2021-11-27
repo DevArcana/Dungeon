@@ -15,8 +15,8 @@ namespace EntityLogic
     public Sprite portrait;
     public GameObject highlight;
     public bool autoRegister = false;
-    
-    public int initiative = 0;
+
+    public EntityHealth health;
 
     public EntityEquipment equipment;
     public EntityBaseAttributes baseAttributes;
@@ -25,13 +25,22 @@ namespace EntityLogic
     public List<AbilityBase> abilities;
     public List<int> AbilityCooldowns { get; private set; }
 
-    protected virtual void Start()
+    private void Awake()
     {
+      health = new EntityHealth(baseAttributes.maximumHealth);
+      attributes = new EntityAttributes();
+      RecalculateAttributes();
+      
       AbilityCooldowns = new List<int>();
       foreach (var _ in abilities)
       {
         AbilityCooldowns.Add(0);
       }
+    }
+
+    protected virtual void Start()
+    {
+      health.EntityDied += OnDeath;
       
       highlight = transform.Find("Highlight").gameObject;
       Highlighted(false);
@@ -45,7 +54,13 @@ namespace EntityLogic
 
     private void OnDestroy()
     {
+      health.EntityDied -= OnDeath;
       TurnManager.instance.UnregisterTurnBasedEntity(this);
+    }
+
+    protected virtual void OnDeath()
+    {
+      Destroy(gameObject);
     }
 
     public void Highlighted(bool active)
@@ -84,18 +99,18 @@ namespace EntityLogic
       var damageReductionModifiers = attributeModifiers.Where(x => x.attribute == Attribute.DamageReduction).ToList();
       attributes.DamageReduction = (float)(baseAttributes.damageReduction + damageReductionModifiers.Sum(x => x.value));
       
-      // // weapon damage
-      // var weaponDamageModifiers = attributeModifiers.Where(x => x.attribute == Attribute.WeaponDamage).ToList();
-      // attributes.WeaponDamage = equipment?.weapon?.damage == null ? 0 : CalculateAttribute(equipment.weapon.damage, weaponDamageModifiers);
-      //
-      // // weapon range
-      // //  only additive modifiers
-      // var weaponRangeModifiers = attributeModifiers.Where(x => x.attribute == Attribute.WeaponRange).ToList();
-      // attributes.WeaponRange = equipment?.weapon?.range == null ? 0 : (float)(equipment.weapon.range + weaponRangeModifiers.Sum(x => x.value));
+      // weapon damage
+      var weaponDamageModifiers = attributeModifiers.Where(x => x.attribute == Attribute.WeaponDamage).ToList();
+      attributes.WeaponDamage = equipment.weapon == null ? 10 : CalculateAttribute(equipment.weapon.baseDamage, weaponDamageModifiers);
+      
+      // weapon range
+      //  only additive modifiers
+      var weaponRangeModifiers = attributeModifiers.Where(x => x.attribute == Attribute.WeaponRange).ToList();
+      attributes.WeaponRange = equipment.weapon == null ? 1 : (float)(equipment.weapon.baseRange + weaponRangeModifiers.Sum(x => x.value));
       
       // maximum health
       var maximumHealthModifiers = attributeModifiers.Where(x => x.attribute == Attribute.MaximumHealth).ToList();
-      attributes.MaximumHealth = CalculateAttribute(baseAttributes.maximumHealth, maximumHealthModifiers);
+      health.MaximumHealth = CalculateAttribute(baseAttributes.maximumHealth, maximumHealthModifiers);
     }
 
     private static float CalculateAttribute(float baseValue, List<AttributeModifier> modifiers)

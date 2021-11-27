@@ -9,7 +9,19 @@ namespace EntityLogic.Abilities.ReadyAbilities
   [CreateAssetMenu(fileName = "HealAlly", menuName = "Abilities/Heal Ally", order = 1)]
   public class HealAllyAbility : AbilityBase
   {
-    public int healAmount;
+    public float baseHeal;
+    public float focusPercentage;
+    public int castRange;
+
+    public float CalculateHeal()
+    {
+      return baseHeal + focusPercentage / 100 * TurnManager.instance.CurrentTurnTaker.attributes.Focus;
+    }
+    
+    public override string TooltipDescription()
+    {
+      return $"Restore {CalculateHeal()} health ({baseHeal} + {focusPercentage}% Focus) to a wounded ally (excluding yourself).";
+    }
 
     public override IEnumerable<GridPos> GetValidTargetPositions(GridPos? startingPosition = null)
     {
@@ -18,7 +30,7 @@ namespace EntityLogic.Abilities.ReadyAbilities
 
       var turnTaker = turnManager.CurrentTurnTaker;
 
-      return startingPosition.Value.Circle(7, false).OccupiedByAlliesOf(turnTaker).Wounded();
+      return startingPosition.Value.Circle(castRange, false).OccupiedByAlliesOf(turnTaker).Wounded();
     }
 
     public override IEnumerable<GridPos> GetEffectiveRange(GridPos atPosition)
@@ -39,12 +51,7 @@ namespace EntityLogic.Abilities.ReadyAbilities
     public override void Execute(GridPos atPosition)
     {
       var ally = World.World.instance.GetOccupant(atPosition);
-      TurnManager.instance.Transactions.EnqueueTransaction(new HealAllyTransaction(TurnManager.instance.CurrentTurnTaker, ally, healAmount, true));
-    }
-
-    public override string GetCostForTooltip()
-    {
-      return GetMinimumPossibleCost().ToString();
+      TurnManager.instance.Transactions.EnqueueTransaction(new HealAllyTransaction(ally, CalculateHeal(), true));
     }
   }
 }

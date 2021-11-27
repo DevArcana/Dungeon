@@ -27,6 +27,10 @@ PrefabInstance:
       propertyPath: abilities.Array.data[0]
       value: 
       objectReference: {fileID: 11400000, guid: 34136f8b4de701440a976deb4cbfa6e5, type: 2}
+    - target: {fileID: 826060875, guid: 5b4da0c22f232dd4b8ab2b9a2327f179, type: 3}
+      propertyPath: baseAttributes.maximumHealth
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 3480460645657372685, guid: 5b4da0c22f232dd4b8ab2b9a2327f179, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 

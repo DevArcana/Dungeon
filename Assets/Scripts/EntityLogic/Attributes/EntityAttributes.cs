@@ -11,7 +11,6 @@ namespace EntityLogic.Attributes
         public float DamageReduction { get; set; }
         public float WeaponDamage { get; set; }
         public float WeaponRange { get; set; }
-        public float MaximumHealth { get; set; }
         
         public List<AttributeModifier> PermanentModifiers { get; }
 

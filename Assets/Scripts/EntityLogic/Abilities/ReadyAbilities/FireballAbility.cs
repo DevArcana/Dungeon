@@ -9,6 +9,20 @@ namespace EntityLogic.Abilities.ReadyAbilities
   [CreateAssetMenu(fileName = "Fireball", menuName = "Abilities/Fireball", order = 1)]
   public class FireballAbility : AbilityBase
   {
+    public float baseDamage;
+    public float focusPercentage;
+    public int castRange;
+
+    public float CalculateDamage()
+    {
+      return baseDamage + focusPercentage / 100 * TurnManager.instance.CurrentTurnTaker.attributes.Focus;
+    }
+    
+    public override string TooltipDescription()
+    {
+      return $"Throw fireball at an enemy, dealing {CalculateDamage()} damage ({baseDamage} + {focusPercentage}% Focus).";
+    }
+    
     public override IEnumerable<GridPos> GetValidTargetPositions(GridPos? startingPosition = null)
     {
       var turnManager = TurnManager.instance;
@@ -16,7 +30,7 @@ namespace EntityLogic.Abilities.ReadyAbilities
       
       var turnTaker = turnManager.CurrentTurnTaker;
       
-      return startingPosition.Value.Circle(5).OccupiedByEnemiesOf(turnTaker).VisibleFrom(turnTaker.GridPos);
+      return startingPosition.Value.Circle(castRange).OccupiedByEnemiesOf(turnTaker).VisibleFrom(turnTaker.GridPos);
     }
 
     public override IEnumerable<GridPos> GetEffectiveRange(GridPos atPosition)
@@ -40,12 +54,7 @@ namespace EntityLogic.Abilities.ReadyAbilities
       var turnTaker = turnManager.CurrentTurnTaker;
       var occupant = World.World.instance.GetOccupant(atPosition);
       
-      TurnManager.instance.Transactions.EnqueueTransaction(new FireballTransaction(turnTaker, occupant, 20, true));
-    }
-
-    public override string GetCostForTooltip()
-    {
-      return GetMinimumPossibleCost().ToString();
+      TurnManager.instance.Transactions.EnqueueTransaction(new FireballTransaction(occupant, CalculateDamage(), true));
     }
   }
 }

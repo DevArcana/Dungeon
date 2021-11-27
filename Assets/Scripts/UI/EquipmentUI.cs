@@ -1,4 +1,5 @@
-﻿using Equipment;
+﻿using EntityLogic;
+using Equipment;
 using TMPro;
 using TurnSystem;
 using TurnSystem.Transactions;

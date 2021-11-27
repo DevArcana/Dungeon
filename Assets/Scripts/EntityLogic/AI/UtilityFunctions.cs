@@ -2,7 +2,6 @@
 using System.Linq;
 using EntityLogic.Abilities;
 using EntityLogic.Abilities.ReadyAbilities;
-using EntityLogic.Attributes;
 using TurnSystem;
 using UnityEngine;
 using World.Common;
@@ -15,9 +14,7 @@ namespace EntityLogic.AI
         {
             target = targetEntity.GridPos;
             var availableActionPoints = TurnManager.instance.ActionPoints.ActionPoints;
-            var hasWeapon = !(entity.equipment.weapon is null);
-            var range = hasWeapon ? entity.equipment.weapon.attributeModifiers.FirstOrDefault(x => x.attribute == Attribute.WeaponRange) : null;
-            var maxChargeDistance = 10f + (hasWeapon ? (range?.value ?? 1f) : 0f);
+            var maxChargeDistance = 10f + entity.attributes.WeaponRange;
             var influenceMap = InfluenceMap.instance;
             var pathfinding = new Pathfinding();
             var (path, cost, fullCost) = pathfinding.FindPartialPath(entity.GridPos, targetEntity.GridPos,
@@ -34,8 +31,8 @@ namespace EntityLogic.AI
             
             var influenceFactor = 1 / (1f + Mathf.Pow(2.718f, -(recalculatedInfluenceOnPos * 6) + 0.5f));
             
-            var health = entity.GetComponent<DamageableEntity>().damageable;
-            var healthPercentage = health.Health / (float) health.MaxHealth;
+            var health = entity.health;
+            var healthPercentage = health.Health / (float) health.MaximumHealth;
             var healthFactor = 1 / (1f + Mathf.Pow(2.718f * 1.2f, -(healthPercentage * 12) + 5.5f));
 
             return healthFactor * ((costFactor + influenceFactor) / 2f);
@@ -51,9 +48,9 @@ namespace EntityLogic.AI
                 return 0f;
             }
             var influenceMap = InfluenceMap.instance;
-            var health = entity.GetComponent<DamageableEntity>().damageable;
+            var health = entity.health;
 
-            var healthPercentage = health.Health / (float) health.MaxHealth;
+            var healthPercentage = health.Health / health.MaximumHealth;
             // logistic function
             var healthFactor = 1 - 1 / (1f + Mathf.Pow(2.718f * 1.2f, -(healthPercentage * 12) + 5.5f));
 
@@ -88,8 +85,8 @@ namespace EntityLogic.AI
             {
                 if (!abilityProcessor.CanExecute(currentTarget)) continue;
                 var currentEntity = map.GetOccupant(currentTarget);
-                var health = currentEntity.GetComponent<DamageableEntity>().damageable;
-                var healthPercentage = health.Health / (float) health.MaxHealth;
+                var health = currentEntity.health;
+                var healthPercentage = health.Health / (float) health.MaximumHealth;
                 var healthFactor = 1 - 1 / (1f + Mathf.Pow(2.718f * 1.2f, -(healthPercentage * 12) + 5.5f));
                 var playerInfluence = influenceMap.GetInfluenceOnPos(currentTarget).playersInfluence;
                 var threat = 1 / (1 + Mathf.Pow(2.718f * 1.2f, -(playerInfluence * 12) + 7f));
@@ -109,10 +106,10 @@ namespace EntityLogic.AI
         {
             // var abilityProcessor = AbilityProcessor.instance;
             var influenceMap = InfluenceMap.instance;
-            var health = entity.GetComponent<DamageableEntity>().damageable;
+            var health = entity.health;
             target = entity.GridPos;
 
-            var healthPercentage = health.Health / (float) health.MaxHealth;
+            var healthPercentage = health.Health / (float) health.MaximumHealth;
             // logistic function
             var healthFactor = 1 - 1 / (1f + Mathf.Pow(2.718f * 1.2f, -(healthPercentage * 12) + 4f));
 
@@ -175,13 +172,12 @@ namespace EntityLogic.AI
             {
                 var influenceFactor = 1 / (1f + Mathf.Pow(2.718f, -(influenceMap.GetInfluenceOnPos(target).overallInfluence * 6) + 0.5f));
             
-                var health = entity.GetComponent<DamageableEntity>().damageable;
-                var healthPercentage = health.Health / (float) health.MaxHealth;
+                var health = entity.health;
+                var healthPercentage = health.Health / (float) health.MaximumHealth;
                 var healthFactor = 1 / (1f + Mathf.Pow(2.718f * 1.2f, -(healthPercentage * 12) + 5.5f));
-
-                // var skillDamage = (FireballAbility) ability.CalculateDamage();
-                var skillDamage = 20f;
-                var playerHealth = map.GetOccupant(currentTarget).GetComponent<DamageableEntity>().damageable.Health;
+                
+                var skillDamage = (FireballAbility) ability.CalculateDamage();
+                var playerHealth = map.GetOccupant(currentTarget).health.Health;
                 var playerHealthFactor = Mathf.Min(Mathf.Pow(0.5f, playerHealth / (skillDamage / 2f)) + 0.7f, 1f);
 
                 var score = (healthFactor * influenceFactor + playerHealthFactor) / 2f;
@@ -202,8 +198,8 @@ namespace EntityLogic.AI
             
             var influenceMap = InfluenceMap.instance;
             var pathfinding = new Pathfinding();
-            var health = entity.GetComponent<DamageableEntity>().damageable;
-            var healthPercentage = health.Health / (float) health.MaxHealth;
+            var health = entity.health;
+            var healthPercentage = health.Health / (float) health.MaximumHealth;
             var healthFactor = 1 / (1f + Mathf.Pow(2.718f * 1.2f, -(healthPercentage * 12) + 5.5f));
 
             if (healthFactor < 0.05f) return 0f;

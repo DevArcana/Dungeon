@@ -4,21 +4,20 @@ namespace TurnSystem.Transactions
 {
   public class FireballTransaction : TransactionBase
   {
-    private readonly GridLivingEntity _attackingEntity;
     private readonly GridLivingEntity _attackedEntity;
-    private readonly int _damage;
+    private readonly float _damage;
 
-    public FireballTransaction(GridLivingEntity attackingEntity, GridLivingEntity attackedEntity, int damage, bool isAbility) : base(isAbility)
+    public FireballTransaction(GridLivingEntity attackedEntity, float damage, bool isAbility) : base(isAbility)
     {
-      _attackingEntity = attackingEntity;
       _attackedEntity = attackedEntity;
       _damage = damage;
     }
 
     protected override void Process()
     {
-      var victimHealth = _attackedEntity.GetComponent<DamageableEntity>()?.damageable;
-      victimHealth?.SufferDamage(_damage);
+      var victimHealth = _attackedEntity.health;
+      var victimDamageReduction = _attackedEntity.attributes.DamageReduction;
+      victimHealth?.SufferDamage(_damage, victimDamageReduction);
       Finish();
     }
   }

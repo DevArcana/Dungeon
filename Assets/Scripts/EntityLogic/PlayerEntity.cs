@@ -1,41 +1,19 @@
-﻿using System;
-using EntityLogic;
-using EntityLogic.AI;
+﻿using TurnSystem;
 using TurnSystem.Transactions;
-using UnityEngine;
-using Utils;
 
-namespace TurnSystem
+namespace EntityLogic
 {
   public class PlayerEntity : GridLivingEntity
   {
-    // unity components
-    private DamageableEntity _damageable;
-
-    protected override void Start()
+    protected override void OnDeath()
     {
-      base.Start();
-      
-      _damageable = GetComponent<DamageableEntity>();
-      _damageable.damageable.EntityDied += OnDeath;
-    }
-    
-    private void OnDestroy()
-    {
-      if (_damageable != null)
-      {
-        _damageable.damageable.EntityDied -= OnDeath;
-      }
-    }
-
-    private static void OnDeath()
-    {
+      base.OnDeath();
       TurnManager.instance.Transactions.EnqueueTransaction(new ChangeSceneTransaction("DeathScene", false));
     }
 
     public override string GetTooltip()
     {
-      return $"HP: {_damageable.damageable.Health}/{_damageable.damageable.MaxHealth}";
+      return $"HP: {health.Health}/{health.MaximumHealth}";
     }
   }
 }
