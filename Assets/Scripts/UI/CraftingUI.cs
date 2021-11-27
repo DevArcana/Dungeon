@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using Equipment;
 using TMPro;
@@ -98,6 +99,8 @@ namespace UI
                 EquipmentUI.isEnabled = false;
                 craftingUIGenerated = false;
                 currentPage = 1;
+                ClearPage();
+                isComponentsDescriptionEnabled = false;
             }
 
             if (isCraftingEnabled && !craftingUIGenerated)
@@ -189,6 +192,18 @@ namespace UI
             
             componentFields.Add(craftingRecipePage);
         }
-
+        
+        public void ClearPage()
+        {
+            var currentComponentPage = componentFields.FirstOrDefault(x => x.recipeType == recipeType);
+            if (!(currentComponentPage is null))
+            {
+                foreach (var field in currentComponentPage.componentFields)
+                {
+                    field.Clear();
+                    isWeaponDescriptionEnabled = false;
+                }
+            }
+        }
     }
 }

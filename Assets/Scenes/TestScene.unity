@@ -494,7 +494,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recipeType: 1
   componentFields:
-  - attributeNames: {fileID: 810320183}
+  - attributeNames: {fileID: 346027722}
     attributeValues: {fileID: 1172042795}
     icon: {fileID: 1722107427}
     componentTypeString: Pommel
@@ -1501,6 +1501,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   craftingButton: {fileID: 181342445}
+  craftingUI: {fileID: 1008370808}
 --- !u!114 &181342445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4126,8 +4127,8 @@ MonoBehaviour:
     attributeValues: {fileID: 448728860}
     icon: {fileID: 2068784338}
     componentTypeString: Bit
-  - attributeNames: {fileID: 1488551234}
-    attributeValues: {fileID: 951252203}
+  - attributeNames: {fileID: 411203922}
+    attributeValues: {fileID: 494561701}
     icon: {fileID: 1427849042}
     componentTypeString: Eye
   - attributeNames: {fileID: 1488551234}
@@ -31129,6 +31130,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 569dee06b32f69940bdef3ec9633626d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  craftingUI: {fileID: 1008370808}
   tabsButtons: []
   tabIdle: {r: 1, g: 0.78431374, b: 0.4392157, a: 1}
   tabHover: {r: 0.754717, g: 0.5394747, b: 0.19508718, a: 1}

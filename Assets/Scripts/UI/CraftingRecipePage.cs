@@ -16,6 +16,14 @@ namespace UI
         public Image icon;
         public string componentTypeString;
         [NonSerialized] public WeaponComponent selectedComponent;
+
+        public void Clear()
+        {
+            attributeNames.enabled = false;
+            attributeValues.enabled = false;
+            icon.enabled = false;
+            selectedComponent = null;
+        }
     }
     public class CraftingRecipePage : MonoBehaviour
     {
