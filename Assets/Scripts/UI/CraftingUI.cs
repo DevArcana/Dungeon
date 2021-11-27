@@ -158,8 +158,25 @@ namespace UI
                         {
                             craftButton.onClick.RemoveAllListeners();
                             isWeaponDescriptionEnabled = true;
-                            craftedWeaponIcon.sprite = swordSprite;
-                            //TODO Input on Name and description, onClick in craft button, correct weapon sprite
+                            switch (recipeType)
+                            {
+                                case RecipeType.Sword:
+                                {
+                                    craftedWeaponIcon.sprite = swordSprite;
+                                    break;
+                                }
+                                case RecipeType.Bow:
+                                {
+                                    craftedWeaponIcon.sprite = bowSprite;
+                                    break;
+                                }
+                                case RecipeType.Axe:
+                                {
+                                    craftedWeaponIcon.sprite = axeSprite;
+                                    break;
+                                }
+                            }
+                            //TODO onClick in craft button
                             var attributeList = CalculateAttributes(recipePage.componentFields.Select(x => x.selectedComponent).ToList());
                             var attributeText = "";
                             foreach (var attribute in attributeList) 
@@ -249,7 +266,7 @@ namespace UI
             return resultAttributeList;
         }
 
-        public void Craft(List<AttributeModifier> attributeUpgrades)
+        public void Craft(AttributeModifier[] attributeUpgrades)
         {
             Weapon w;
             switch (recipeType)
@@ -280,6 +297,7 @@ namespace UI
             w.itemName = craftedWeaponName.GetComponent<Text>().text;
             w.description = craftedWeaponDescriptionText.GetComponent<Text>().text;
             w.icon = craftedWeaponIcon.sprite;
+            w.attributeModifiers = attributeUpgrades;
         }
     }
 }

@@ -15,9 +15,8 @@ namespace EntityLogic.AI
         {
             target = targetEntity.GridPos;
             var availableActionPoints = TurnManager.instance.ActionPoints.ActionPoints;
-            // TODO
-            // range is now in attributeModifiers, we need to check if is present, else 1
-            var maxChargeDistance = 10f + (entity.equipment.weapon ? entity.equipment.weapon.attributeModifiers.First(x => x.attribute == Attribute.Range).value : 0);
+            var range = entity.equipment.weapon.attributeModifiers.FirstOrDefault(x => x.attribute == Attribute.Range);
+            var maxChargeDistance = 10f + (entity.equipment.weapon ? (range?.value ?? 1) : 0);
             var influenceMap = InfluenceMap.instance;
             var pathfinding = new Pathfinding();
             var (path, cost, fullCost) = pathfinding.FindPartialPath(entity.GridPos, targetEntity.GridPos,
