@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47fbd4d5a9ff4cea94cfbee6990dd1da, type: 3}
   m_Name: Leather Gloves
   m_EditorClassIdentifier: 
-  level: 1
   itemRarity: 0
   itemName: Leather Gloves
   description: Simple Leather Gloves
   icon: {fileID: 21300000, guid: 67bb52fd6b038e041b9815180477cc73, type: 3}
   ability: {fileID: 0}
-  damageReduction: 3
+  attributeModifiers:
+  - attribute: 2
+    value: 2
+    type: 0

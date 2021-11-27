@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b1c36424458493ebf04a3af08ad17b6, type: 3}
   m_Name: Jade Ring
   m_EditorClassIdentifier: 
-  level: 0
   itemRarity: 0
   itemName: Jade Ring
   description: Jade Ring
   icon: {fileID: 21300000, guid: 923a33b6a4245f345b644ca511059eb9, type: 3}
   ability: {fileID: 0}
-  damageReduction: 0
+  attributeModifiers:
+  - attribute: 4
+    value: 50
+    type: 0

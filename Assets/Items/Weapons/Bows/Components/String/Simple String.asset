@@ -17,8 +17,10 @@ MonoBehaviour:
   description: Simple String
   icon: {fileID: 21300000, guid: d98d937f2625a7341b9433f0dc1c3866, type: 3}
   ability: {fileID: 0}
-  attributesUpgrades:
-  - attribute: 5
-    value: 7
+  attributeModifiers:
+  - attribute: 6
+    value: 8
+    type: 0
   - attribute: 2
-    value: -4
+    value: 4
+    type: 0

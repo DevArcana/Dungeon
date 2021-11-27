@@ -17,6 +17,10 @@ MonoBehaviour:
   description: Pretty Pommel
   icon: {fileID: 21300000, guid: 8168f44886919774f9ca08bd82dfad79, type: 3}
   ability: {fileID: 0}
-  attributesUpgrades:
+  attributeModifiers:
   - attribute: 5
-    value: 5
+    value: 2
+    type: 0
+  - attribute: 1
+    value: -2
+    type: 0

@@ -20514,6 +20514,13 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 2e84fbfcededdc94597816d185242fe1, type: 2}
     - {fileID: 11400000, guid: 86f05841c4ac7434093b4db425788ced, type: 2}
     - {fileID: 11400000, guid: 8ff28ddea5b42db4fb07f24259da411b, type: 2}
+  baseAttributes:
+    strength: 0
+    agility: 0
+    focus: 0
+    initiative: 0
+    damageReduction: 0
+    maximumHealth: 0
   abilities:
   - {fileID: 11400000, guid: c76b923872d560c41ba697b33b016e49, type: 2}
   - {fileID: 11400000, guid: 34136f8b4de701440a976deb4cbfa6e5, type: 2}
@@ -20965,13 +20972,13 @@ MonoBehaviour:
   weaponIcon: {fileID: 1507201458}
   componentFields: []
   craftedWeapon: {fileID: 1243069590}
-  craftedWeaponName: {fileID: 1913608295}
-  craftedWeaponDescriptionText: {fileID: 1749552128}
+  craftedWeaponName: {fileID: 0}
+  craftedWeaponDescriptionText: {fileID: 0}
   craftedWeaponAttributesNamesText: {fileID: 508925638}
   craftedWeaponAttributesValuesText: {fileID: 716952642}
   craftedWeaponIcon: {fileID: 673073023}
   isWeaponDescriptionEnabled: 0
-  swordSprite: {fileID: 21300000, guid: 00d843ee8d0d0c84880c4bad1830d53d, type: 3}
+  swordSprite: {fileID: 21300000, guid: e92ed5837ca8dd3459776e6a232100be, type: 3}
   axeSprite: {fileID: 21300000, guid: 4ac41389fe449564e975f57a0e13fe57, type: 3}
   bowSprite: {fileID: 21300000, guid: 49ccb785aa9bd634480c543bdce1ebbf, type: 3}
   craftButton: {fileID: 1298652233}
