@@ -40,6 +40,9 @@ namespace UI
         public GameObject glovesSlot;
 
         private EntityEquipment _equipment;
+
+        public TextMeshProUGUI attributeNames;
+        public TextMeshProUGUI attributeValues;
         private void Start()
         {
             iconsGenerated = false;
@@ -68,6 +71,7 @@ namespace UI
             }
             if (isEnabled && !iconsGenerated)
             {
+                ShowStatistics();
                 for (var i = 0; i < _equipment.backpack.Count; i++)
                 {
                     _slots[i].GetComponent<Image>().sprite = _equipment.backpack[i].icon;
@@ -220,6 +224,14 @@ namespace UI
         private void MakeVisible(bool isEnabled)
         {
             inventory.transform.localScale = isEnabled ? new Vector3(1, 1, 1) : new Vector3(0, 0, 0);
+        }
+
+        private void ShowStatistics()
+        {
+            var player = TurnManager.instance.CurrentTurnTaker;
+            player.RecalculateAttributes();
+            attributeNames.text = player.attributes.AttributeNames();
+            attributeValues.text = player.attributes.AttributeValues() + player.health.MaximumHealth + "\n" + player.health.Health;
         }
     }
 }

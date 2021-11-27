@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using EntityLogic.Attributes;
+using TurnSystem;
 using UI;
 
 
@@ -83,6 +84,7 @@ namespace Equipment
 
             EquipmentUI.iconsGenerated = false;
             EquipmentUI.isItemDescriptionEnabled = false;
+            TurnManager.instance.CurrentTurnTaker.RecalculateAttributes();
         }
         
         public void UnEquip(Item item)
@@ -140,6 +142,7 @@ namespace Equipment
             }
             EquipmentUI.iconsGenerated = false;
             EquipmentUI.isItemDescriptionEnabled = false;
+            TurnManager.instance.CurrentTurnTaker.RecalculateAttributes();
         }
 
         public void RemoveItem(Item item, bool isEquiped)

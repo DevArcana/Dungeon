@@ -10,6 +10,7 @@ using TurnSystem;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Attribute = EntityLogic.Attributes.Attribute;
 
 namespace UI
 {
@@ -182,12 +183,23 @@ namespace UI
                             var attributeText = "";
                             foreach (var attribute in attributeList) 
                             { 
-                                attributeText = attributeText + attribute.attribute +":\n";
+                                if (attribute.attribute == Attribute.WeaponDamage)
+                                {
+                                    attributeText = attributeText + "Damage:\n";
+                                }
+                                else if (attribute.attribute == Attribute.WeaponRange)
+                                {
+                                    attributeText = attributeText +  "Range:\n";
+                                }
+                                else
+                                {
+                                    attributeText = attributeText + attribute.attribute + ":\n";
+                                }
                             }
                             var attributeValues = "";
                             foreach (var attribute in attributeList)
                             {
-                                attributeValues = attributeValues + attribute.value +"\n";
+                                attributeValues = attributeValues + attribute.value + ":\n";
                             }
                             
                             craftButton.onClick.AddListener(() => Craft(attributeList));
@@ -300,7 +312,11 @@ namespace UI
             w.itemName = craftedWeaponName.text;
             w.description = craftedWeaponDescriptionText.text;
             w.icon = craftedWeaponIcon.sprite;
-            w.attributeModifiers = attributeUpgrades;
+            var damage = attributeUpgrades.First(x => x.attribute == Attribute.WeaponDamage);
+            w.baseDamage = (float) (damage?.value ?? 1);
+            var range = attributeUpgrades.FirstOrDefault(x => x.attribute == Attribute.WeaponRange);
+            w.baseRange = (float) (range?.value ?? 1);
+            w.attributeModifiers = attributeUpgrades.Where(x => x.attribute!= Attribute.WeaponDamage && x.attribute != Attribute.WeaponRange).ToArray();
             
             var backpack = TurnManager.instance.CurrentTurnTaker.equipment.backpack;
             var recipePage = componentFields.FirstOrDefault(x => x.recipeType == recipeType);
