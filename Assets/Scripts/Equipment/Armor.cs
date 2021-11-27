@@ -5,6 +5,6 @@ namespace Equipment
 {
     public class Armor : Item
     {
-        public int damageReduction;
+
     }
 }

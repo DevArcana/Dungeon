@@ -1,5 +1,8 @@
-﻿namespace EntityLogic.Attributes
+﻿using System;
+
+namespace EntityLogic.Attributes
 {
+    [Serializable]
     public class AttributeModifier
     {
         public Attribute attribute;

@@ -22,5 +22,31 @@ namespace Equipment
         public Sprite icon;
         [CanBeNull] public AbilityBase ability;
         public AttributeModifier[] attributeModifiers;
+        
+        public string AttributeNames()
+        {
+            var res = "";
+            foreach (var mod in attributeModifiers)
+            {
+                res = res + mod.attribute + ":\n";
+            }
+            return res;
+        }
+
+        public string AttributeValues()
+        {
+            var res = "";
+            foreach (var mod in attributeModifiers)
+            {
+                res += mod.value;
+                if (mod.type == ModifierType.Multiplicative)
+                {
+                    res += "%";
+                }
+
+                res += "\n";
+            }
+            return res;
+        }
     }
 }
