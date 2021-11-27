@@ -20,7 +20,9 @@ namespace EntityLogic.Abilities
       var entityPosition = MapUtils.ToWorldPos(entityTile) + new Vector3(0, 0.5f, 0);
       var direction = entityPosition - tilePosition;
         
-      if (Physics.Raycast(tilePosition, direction, out var hit, maxDistance: direction.magnitude))
+      if (Physics.Raycast(tilePosition, direction, out var hit,
+                          maxDistance: direction.magnitude,
+                          layerMask: LayerMask.GetMask("Default", "Entities")))
       {
         var entityHit = hit.transform.GetComponent<GridLivingEntity>();
 

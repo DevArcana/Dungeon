@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using EntityLogic.Attributes;
 using UI;
 
 
@@ -151,6 +152,42 @@ namespace Equipment
             backpack.Remove(item);
             EquipmentUI.iconsGenerated = false;
             EquipmentUI.isItemDescriptionEnabled = false;
+        }
+
+        public IEnumerable<AttributeModifier> GetAllAttributeModifiers()
+        {
+            foreach (var modifier in weapon.attributeModifiers)
+            {
+                yield return modifier;
+            }
+            foreach (var modifier in helmet.attributeModifiers)
+            {
+                yield return modifier;
+            }
+            foreach (var modifier in breastplate.attributeModifiers)
+            {
+                yield return modifier;
+            }
+            foreach (var modifier in leggings.attributeModifiers)
+            {
+                yield return modifier;
+            }
+            foreach (var modifier in boots.attributeModifiers)
+            {
+                yield return modifier;
+            }
+            foreach (var modifier in necklace.attributeModifiers)
+            {
+                yield return modifier;
+            }
+            foreach (var modifier in ring.attributeModifiers)
+            {
+                yield return modifier;
+            }
+            foreach (var modifier in gloves.attributeModifiers)
+            {
+                yield return modifier;
+            }
         }
     }
 }

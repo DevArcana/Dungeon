@@ -1,4 +1,4 @@
-﻿namespace Equipment
+﻿namespace EntityLogic.Attributes
 {
     public enum Attribute
     {
@@ -11,5 +11,4 @@
         Range,
         DamageReduction
     }
-    
 }

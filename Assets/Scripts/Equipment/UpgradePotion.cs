@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using EntityLogic.Attributes;
+using UnityEngine;
 
 namespace Equipment
 {
