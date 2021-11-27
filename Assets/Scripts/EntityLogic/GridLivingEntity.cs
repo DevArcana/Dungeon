@@ -101,12 +101,12 @@ namespace EntityLogic
       
       // weapon damage
       var weaponDamageModifiers = attributeModifiers.Where(x => x.attribute == Attribute.WeaponDamage).ToList();
-      attributes.WeaponDamage = equipment.weapon == null ? 10 : CalculateAttribute(equipment.weapon.baseDamage, weaponDamageModifiers);
+      attributes.WeaponDamage = equipment.weapon is null ? 10 : CalculateAttribute(equipment.weapon.baseDamage, weaponDamageModifiers);
       
       // weapon range
       //  only additive modifiers
       var weaponRangeModifiers = attributeModifiers.Where(x => x.attribute == Attribute.WeaponRange).ToList();
-      attributes.WeaponRange = equipment.weapon == null ? 1 : (float)(equipment.weapon.baseRange + weaponRangeModifiers.Sum(x => x.value));
+      attributes.WeaponRange = equipment.weapon is null ? 1 : (float)(equipment.weapon.baseRange + weaponRangeModifiers.Sum(x => x.value));
       
       // maximum health
       var maximumHealthModifiers = attributeModifiers.Where(x => x.attribute == Attribute.MaximumHealth).ToList();
