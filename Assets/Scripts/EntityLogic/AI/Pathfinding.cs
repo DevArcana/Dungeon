@@ -63,9 +63,9 @@ namespace EntityLogic.AI
 
             return (null, int.MinValue);
         }
-        
+
         public (List<GridPos>, int, int) FindPartialPath(GridPos start, GridPos end, int maxPartialCost,
-            int maxSearchingCost = ActionPointsProcessor.MaxActionPoints * 3)
+            int maxSearchingCost = ActionPointsProcessor.MaxActionPoints * 3, bool includeEnemyCost = true)
         {
             var map = World.World.instance;
             var startNode = new PathNode(start.x, start.y, map.GetHeightAt(start), !map.IsOccupied(start));
@@ -86,22 +86,18 @@ namespace EntityLogic.AI
                     var path = GetPath(currentNode);
                     var partialPath = new List<GridPos>();
                     var cost = int.MaxValue;
-                    var fullCost = int.MaxValue;
                     foreach (var node in path)
                     {
                         var pos = GridPos.At(node.x, node.y);
-                        var tempCost = Mathf.FloorToInt(node.gCost) + (map.IsOccupied(pos) ? 1 : 0);
+                        var tempCost = Mathf.FloorToInt(node.gCost) + (includeEnemyCost ? (map.IsOccupied(pos) ? 1 : 0) : 0);
                         if (tempCost > maxPartialCost) break;
                         partialPath.Add(pos);
                         cost = tempCost;
                     }
 
-                    if (partialPath.Count > 0)
-                    {
-                        fullCost = Mathf.FloorToInt(path[path.Count - 1].gCost) +
-                                   (map.IsOccupied(GridPos.At(path[path.Count - 1].x, path[path.Count - 1].y)) ? 1 : 0);
-                    }
-
+                    if (partialPath.Count == 0) return (null, int.MaxValue, int.MaxValue);
+                    var fullCost = Mathf.FloorToInt(currentNode.gCost) +
+                                   (includeEnemyCost ? (map.IsOccupied(GridPos.At(currentNode.x, currentNode.y)) ? 1 : 0) : 0);
                     return (partialPath, cost, fullCost);
                 }
 

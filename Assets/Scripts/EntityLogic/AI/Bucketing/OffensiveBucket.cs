@@ -23,7 +23,7 @@ namespace EntityLogic.AI.Bucketing
             {
                 (ActionType.ChargePlayer, UtilityFunctions.ChargePlayerUtility(entity, targetEntity, out var chargeTarget)),
                 (ActionType.Fireball, UtilityFunctions.FireballUtility(entity, out var fireballTarget)),
-                (ActionType.TacticalMovement, UtilityFunctions.TacticalMovementUtility(entity, coverMap, out var tacticalMoveTarget)),
+                (ActionType.TacticalMovement, UtilityFunctions.TacticalMovementUtility(entity, targetEntity, coverMap, out var tacticalMoveTarget)),
                 (ActionType.Pass, UtilityFunctions.PassTurnUtility())
             }.Where(x => x.Item2 > 0.04f).OrderByDescending(x => x.Item2).ToList();
 
