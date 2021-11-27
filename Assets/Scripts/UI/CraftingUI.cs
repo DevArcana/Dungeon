@@ -150,11 +150,26 @@ namespace UI
                     {
                         if (recipePage.componentFields.TrueForAll(x => !(x.selectedComponent is null)))
                         {
+                            craftButton.onClick.RemoveAllListeners();
                             isWeaponDescriptionEnabled = true;
                             craftedWeaponName.text = "Some Weapon";
                             craftedWeaponDescriptionText.text = "Description";
                             craftedWeaponIcon.sprite = swordSprite;
-                            //TODO attributes values
+                            //TODO Input on Name and description, onClick in craft button, correct weapon sprite
+                            var attributeList = CalculateAttributes(recipePage.componentFields.Select(x => x.selectedComponent).ToList());
+                            var attributeText = "";
+                            foreach (var attribute in attributeList)
+                            {
+                                attributeText = attributeText + attribute.attribute +":\n";
+                            }
+                            var attributeValues = "";
+                            foreach (var attribute in attributeList)
+                            {
+                                attributeValues = attributeValues + attribute.value +"\n";
+                            }
+
+                            craftedWeaponAttributesNamesText.text = attributeText;
+                            craftedWeaponAttributesValuesText.text = attributeValues;
                         }
                     }
                 }
@@ -204,6 +219,28 @@ namespace UI
                     isWeaponDescriptionEnabled = false;
                 }
             }
+        }
+
+        public List<AttributeUpgrade> CalculateAttributes(List<WeaponComponent> usedComponents)
+        {
+            var attributeList = new List<AttributeUpgrade>();
+            var resultAttributeList = new List<AttributeUpgrade>();
+            foreach (var component in usedComponents)
+            {
+                attributeList = attributeList.Concat(component.attributesUpgrades).ToList();
+            }
+
+            var attributeNamesList = attributeList.Select(x => x.attribute).Distinct().ToList();
+            foreach (var attributeName in attributeNamesList)
+            {
+                var attribute = new AttributeUpgrade()
+                {
+                    attribute = attributeName,
+                    value = attributeList.Where(x => x.attribute == attributeName).Sum(x => x.value)
+                };
+                resultAttributeList.Add(attribute);
+            }
+            return resultAttributeList;
         }
     }
 }
