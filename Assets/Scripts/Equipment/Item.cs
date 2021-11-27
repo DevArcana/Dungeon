@@ -23,17 +23,28 @@ namespace Equipment
         [CanBeNull] public AbilityBase ability;
         public AttributeModifier[] attributeModifiers;
         
-        public string AttributeNames()
+        public virtual string AttributeNames()
         {
             var res = "";
             foreach (var mod in attributeModifiers)
             {
-                res = res + mod.attribute + ":\n";
+                if (mod.attribute == Attribute.WeaponDamage)
+                {
+                    res = res + "Damage:\n";
+                }
+                else if (mod.attribute == Attribute.WeaponRange)
+                {
+                    res = res +  "Range:\n";
+                }
+                else
+                {
+                    res = res + mod.attribute + ":\n";
+                }
             }
             return res;
         }
 
-        public string AttributeValues()
+        public virtual string AttributeValues()
         {
             var res = "";
             foreach (var mod in attributeModifiers)
