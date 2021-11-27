@@ -16,7 +16,7 @@ namespace EntityLogic.AI.Bucketing
         {
             var targetEntity = Pathfinding.FindClosestPlayer(entity.GridPos);
             var entities = TurnManager.instance.PeekQueue();
-            var players = entities.OfType<PlayerEntity>().Select(currentEntity => entity).Cast<GridLivingEntity>().ToList();
+            var players = entities.Where(x => x is PlayerEntity).ToList();
             var coverMap = new CoverMap(entity, InfluenceMap.instance.GetEntityInfluencedPos(entity), players).GetCoverMap();
             
             var utilities = new List<(ActionType, float)>

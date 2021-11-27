@@ -164,7 +164,7 @@ namespace EntityLogic.AI
 
         public float GetEntityInfluenceOnPos(GridLivingEntity entity, GridPos pos)
         {
-            if (!_influencedPoints.ContainsKey(pos) &&
+            if (!_influencedPoints.ContainsKey(pos) ||
                 !_influencedPoints[pos].ContainsKey(entity))
             {
                 throw new ArgumentException("This entity is not present in influenced points!");

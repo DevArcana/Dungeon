@@ -199,6 +199,7 @@ namespace EntityLogic.AI
             target = entity.GridPos;
             
             var influenceMap = InfluenceMap.instance;
+            var pathfinding = new Pathfinding();
             var health = entity.GetComponent<DamageableEntity>().damageable;
             var healthPercentage = health.Health / (float) health.MaxHealth;
             var healthFactor = 1 / (1f + Mathf.Pow(2.718f * 1.2f, -(healthPercentage * 12) + 5.5f));
@@ -208,10 +209,10 @@ namespace EntityLogic.AI
             var teamworkFactor = entity.teamwork - 0.5f;
 
             var bestScore = 0f;
+            var startPositionScore = 0f;
             foreach (var position in influenceMap.GetEntityInfluencedPos(entity))
             {
                 var occupant = World.World.instance.GetOccupant(position);
-                if (!(occupant is null) && occupant != entity) continue;
                 var coverFactor = coverMap[position] == CoverType.HardCover ? 1f :
                     coverMap[position] == CoverType.MediumCover ? 0.75f :
                     coverMap[position] == CoverType.SoftCover ? 0.4f : 0f;
@@ -220,21 +221,57 @@ namespace EntityLogic.AI
                 var alliance = currentInfluence.agentsInfluence -
                                influenceMap.GetEntityInfluenceOnPos(entity, position);
                 var allianceFactor = Mathf.Max(-Mathf.Pow(alliance * 2 - 0.4f, 2) + 1, 0);
-                var score = (coverFactor + threatFactor + (1 + teamworkFactor) * allianceFactor) / (3f + teamworkFactor);
+                var score = threatFactor * ((0.5f * coverFactor + (1 + teamworkFactor) * allianceFactor) / (1.5f + teamworkFactor));
+                if (occupant == entity)
+                {
+                    startPositionScore = score;
+                    continue;
+                }
                 if (score > bestScore)
                 {
                     bestScore = score;
                     target = position;
                 }
-                positions[position] = (coverFactor + threatFactor + allianceFactor) / 3f;
+                positions[position] = score;
             }
 
-            if (bestScore > positions[entity.GridPos] * 1.2)
+            var bestPositions = positions
+                .Where(x => x.Value > bestScore * 0.8 && x.Key != entity.GridPos);
+            
+            var closestDistance = int.MaxValue;
+            var closestDistanceScore = 0f;
+            var entities = TurnManager.instance.PeekQueue();
+            var players = entities.Where(x => x is PlayerEntity).ToList();
+
+            foreach (var position in bestPositions)
             {
-                return healthFactor * bestScore;
+                foreach (var player in players)
+                {
+                    var (_, distance) = pathfinding.FindPath(position.Key, player.GridPos);
+                    if (distance < closestDistance || distance == closestDistance && position.Value > closestDistanceScore)
+                    {
+                    
+                        closestDistance = distance;
+                        closestDistanceScore = position.Value;
+                        target = position.Key;
+                    }
+                }
             }
 
-            return 0f;
+            var distanceFromStart = int.MaxValue;
+
+            foreach (var player in players)
+            {
+                var (_, distance) = pathfinding.FindPath(entity.GridPos, player.GridPos);
+                if (distance < distanceFromStart)
+                {
+                    distanceFromStart = distance;
+                }
+            }
+
+            if (distanceFromStart < closestDistance || bestScore < startPositionScore) return 0f;
+
+            return healthFactor * bestScore;
         }
         
         public static float PassTurnUtility() => 0.05f;
