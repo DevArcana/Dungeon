@@ -1,4 +1,7 @@
-﻿using EntityLogic.Attributes;
+﻿using System.Linq;
+using EntityLogic.Attributes;
+using TurnSystem;
+using TurnSystem.Transactions;
 using UnityEngine;
 
 namespace Equipment
@@ -14,7 +17,8 @@ namespace Equipment
         public override void Use()
         {
             base.Use();
-            //TODO
+            TurnManager.instance.Transactions.EnqueueTransaction(
+                new UpgradeAttributeTransaction(TurnManager.instance.CurrentTurnTaker, attributeModifiers.First().attribute, attributeModifiers.First().value, false));
         }
     }
 }
