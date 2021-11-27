@@ -15,7 +15,7 @@ namespace EntityLogic.AI
         {
             target = targetEntity.GridPos;
             var availableActionPoints = TurnManager.instance.ActionPoints.ActionPoints;
-            var range = entity.equipment.weapon.attributeModifiers.FirstOrDefault(x => x.attribute == Attribute.Range);
+            var range = entity.equipment.weapon.attributeModifiers.FirstOrDefault(x => x.attribute == Attribute.WeaponRange);
             var maxChargeDistance = 10f + (entity.equipment.weapon ? (range?.value ?? 1) : 0);
             var influenceMap = InfluenceMap.instance;
             var pathfinding = new Pathfinding();
