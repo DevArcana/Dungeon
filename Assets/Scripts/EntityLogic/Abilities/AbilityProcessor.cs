@@ -98,13 +98,13 @@ namespace EntityLogic.Abilities
       return true;
     }
 
-    public bool SelectAbility(Type ability)
+    public bool SelectAbility<T>()
     {
       var turnTaker = TurnManager.instance.CurrentTurnTaker;
       
       for (var i = 0; i < turnTaker.abilities.Count; i++)
       {
-        if (turnTaker.abilities[i].GetType() != ability)
+        if (!(turnTaker.abilities[i] is T))
         {
           continue;
         }
@@ -138,11 +138,10 @@ namespace EntityLogic.Abilities
     public bool CanExecute(GridPos atPosition, GridPos? startingPosition = null)
     {
       TurnManager.instance.ActionPoints.ReservePoints(SelectedAbility.GetEffectiveCost(atPosition));
-      
+
       return !AbilityInExecution
-             && SelectedAbility.GetValidTargetPositions(startingPosition).Contains(atPosition)
-             && TurnManager.instance.ActionPoints.CanSpendReservedPoints()
-             && SelectedAbility.CanExecute(atPosition);
+          && SelectedAbility.GetValidTargetPositions(startingPosition).Contains(atPosition)
+          && TurnManager.instance.ActionPoints.CanSpendReservedPoints();
     }
 
     public void Execute(GridPos pos)

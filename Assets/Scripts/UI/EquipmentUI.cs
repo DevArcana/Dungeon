@@ -1,4 +1,5 @@
-﻿using Equipment;
+﻿using EntityLogic;
+using Equipment;
 using TMPro;
 using TurnSystem;
 using TurnSystem.Transactions;
@@ -39,6 +40,9 @@ namespace UI
         public GameObject glovesSlot;
 
         private EntityEquipment _equipment;
+
+        public TextMeshProUGUI attributeNames;
+        public TextMeshProUGUI attributeValues;
         private void Start()
         {
             iconsGenerated = false;
@@ -56,6 +60,7 @@ namespace UI
         private void Update()
         {
             if (!(TurnManager.instance.CurrentTurnTaker is PlayerEntity)) return;
+            if (CraftingUI.IsEditingInputField) return;
             _equipment = TurnManager.instance.CurrentTurnTaker.equipment;
             if (Input.GetKeyDown(KeyCode.I))
             {
@@ -66,6 +71,7 @@ namespace UI
             }
             if (isEnabled && !iconsGenerated)
             {
+                ShowStatistics();
                 for (var i = 0; i < _equipment.backpack.Count; i++)
                 {
                     _slots[i].GetComponent<Image>().sprite = _equipment.backpack[i].icon;
@@ -74,7 +80,7 @@ namespace UI
                     _slots[i].GetComponent<Button>().onClick.AddListener(()=>OnItemClicked(_equipment.backpack[x], false));
                 }
 
-                for (var i = _equipment.backpack.Count; i < _equipment.backpack.Capacity; i++)
+                for (var i = _equipment.backpack.Count; i < _numberOfSlots; i++)
                 {
                     _slots[i].GetComponent<Button>().onClick.RemoveAllListeners();
                     _slots[i].GetComponent<Image>().sprite = background;
@@ -209,40 +215,23 @@ namespace UI
             }
             removeButton.onClick.RemoveAllListeners();
             removeButton.onClick.AddListener(() => TurnManager.instance.Transactions.EnqueueTransaction( new RemoveItemTransaction(TurnManager.instance.CurrentTurnTaker, item, isEquipped, false)));
-            switch (item)
-            {
-                case Weapon w:
-                    itemAttributesNamesText.text = "Damage:\nRange:";
-                    itemAttributesValuesText.text = $"{w.damage}\n{w.range}";
-                    useButton.interactable = true;
-                    break;
-                case Armor a:
-                    itemAttributesNamesText.text = "Damage reduction:";
-                    itemAttributesValuesText.text = $"{a.damageReduction}";
-                    useButton.interactable = true;
-                    break;
-                case HealthPotion h:
-                    itemAttributesNamesText.text = "Health Amount:";
-                    itemAttributesValuesText.text = $"{h.amountToHeal}";
-                    useButton.interactable = true;
-                    break;
-                case UpgradePotion u:
-                    itemAttributesNamesText.text = $"{u.attribute}:";
-                    itemAttributesValuesText.text = $"{u.amount}";
-                    useButton.interactable = true;
-                    break;
-                case WeaponComponent wc:
-                    itemAttributesNamesText.text = wc.AttributeNames();
-                    itemAttributesValuesText.text = wc.AttributeValues();
-                    useButton.interactable = false;
-                    buttonText.text = "USE";
-                    break;
-            }
+
+            itemAttributesNamesText.text = item.AttributeNames();
+            itemAttributesValuesText.text = item.AttributeValues();
+            useButton.interactable = !(item is WeaponComponent);
         }
 
         private void MakeVisible(bool isEnabled)
         {
             inventory.transform.localScale = isEnabled ? new Vector3(1, 1, 1) : new Vector3(0, 0, 0);
+        }
+
+        private void ShowStatistics()
+        {
+            var player = TurnManager.instance.CurrentTurnTaker;
+            player.RecalculateAttributes();
+            attributeNames.text = player.attributes.AttributeNames();
+            attributeValues.text = player.attributes.AttributeValues() + player.health.MaximumHealth + "\n" + player.health.Health;
         }
     }
 }

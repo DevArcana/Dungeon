@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using EntityLogic.Abilities;
 using EntityLogic.Abilities.ReadyAbilities;
+using EntityLogic.AI.Bucketing;
 using TurnSystem;
 using UnityEngine;
 using World.Common;
@@ -29,38 +30,33 @@ namespace EntityLogic.AI
                 else if (entity is EnemyEntity) _agents.Add(entity);
             }
         }
-        
-        private (ActionType, GridPos?) ChooseNextAction(EnemyEntity entity)
+
+        private static (ActionType, GridPos?) ChooseNextAction(EnemyEntity entity)
         {
-            var targetEntity = Pathfinding.FindClosestPlayer(entity.GridPos);
-            var coverMap = new CoverMap(entity, InfluenceMap.instance.GetEntityInfluencedPos(entity), _players).GetCoverMap();
-            var utilities = new List<(ActionType, float)>
-            {
-                (ActionType.ChargePlayer, UtilityFunctions.ChargePlayerUtility(entity, targetEntity, out var chargeTarget)),
-                (ActionType.Pass, UtilityFunctions.PassTurnUtility()),
-                (ActionType.HealSelf, UtilityFunctions.HealSelfUtility(entity)),
-                (ActionType.HealAlly, UtilityFunctions.HealAllyUtility(entity, out var healAllyTarget)),
-                (ActionType.Retreat, UtilityFunctions.RetreatUtility(entity, coverMap, out var retreatTarget))
-            }.Where(x => x.Item2 > 0.04f).OrderByDescending(x => x.Item2).ToList();
+            var buckets = new List<IBucket>
+                {
+                    new OffensiveBucket(entity),
+                    new DefensiveBucket(entity),
+                    new TeamworkBucket(entity)
+                }.Where(bucket => bucket.Score > 0.04f)
+                .OrderByDescending(bucket => bucket.Score);
 
-            var message = $"{entity.name}\n";
-            foreach (var (actionType, score) in utilities)
+            foreach (var bucket in buckets)
             {
-                message += $"{actionType} - {score:F2}\n";
+                var (action, target) = bucket.EvaluateBucketActions(entity);
+                if (action == ActionType.Pass) continue;
+                AILogs.AddMainLogEndl($"{entity.name}");
+                AILogs.AddMainLog($"Chosen action: {action},");
+                AILogs.AddMainLog($"Points left: {TurnManager.instance.ActionPoints.ActionPoints},");
+                return (action, target);
             }
-            var result = Helpers.WeightedRandom(utilities);
-            message += $"Chosen action: {result}\nPoints left: {TurnManager.instance.ActionPoints.ActionPoints}";
-            Debug.Log(message);
 
-            return result switch
-            {
-                ActionType.Retreat => (result, retreatTarget),
-                ActionType.ChargePlayer => (result, chargeTarget),
-                ActionType.HealAlly => (result, healAllyTarget),
-                _ => (result, null)
-            };
+            AILogs.AddMainLogEndl($"{entity.name}");
+            AILogs.AddMainLog($"Chosen action: {ActionType.Pass},");
+            AILogs.AddMainLog($"Points left: {TurnManager.instance.ActionPoints.ActionPoints},");
+            return (ActionType.Pass, null);
         }
-
+        
         public void PerformNextAction(EnemyEntity entity)
         {
             var abilityProcessor = AbilityProcessor.instance;
@@ -72,36 +68,64 @@ namespace EntityLogic.AI
             {
                 case ActionType.HealSelf:
                 {
-                    abilityProcessor.SelectAbility(typeof(HealSelfAbility));
+                    abilityProcessor.SelectAbility<HealSelfAbility>();
                     var ability = abilityProcessor.SelectedAbility;
-                    Debug.Log($"Cost of heal: {ability.GetEffectiveCost(entity.GridPos)}");
+                    AILogs.AddMainLogEndl($"Cost of heal self: {ability.GetEffectiveCost(entity.GridPos)}");
                     if (abilityProcessor.CanExecute(entity.GridPos))
                     {
                         abilityProcessor.Execute(entity.GridPos);
                     }
                     else throw new Exception($"Ability {action} is not possible, but it was chosen for execution.");
-                    return;
+                    break;
                 }
-                case ActionType.Retreat:
-                case ActionType.ChargePlayer:
+                case ActionType.HealAlly:
                 {
+                    abilityProcessor.SelectAbility<HealAllyAbility>();
                     var ability = abilityProcessor.SelectedAbility;
-                    Debug.Log($"Cost of move: {ability.GetEffectiveCost((GridPos) target!)}");
+                    AILogs.AddMainLogEndl($"Cost of heal ally: {ability.GetEffectiveCost((GridPos)target!)}");
                     if (abilityProcessor.CanExecute((GridPos)target!))
                     {
                         abilityProcessor.Execute((GridPos)target!);
                     }
                     else throw new Exception($"Ability {action} is not possible, but it was chosen for execution.");
-                    return;
+                    break;
+                }
+                case ActionType.Fireball:
+                {
+                    abilityProcessor.SelectAbility<FireballAbility>();
+                    var ability = abilityProcessor.SelectedAbility;
+                    AILogs.AddMainLogEndl($"Cost of fireball: {ability.GetEffectiveCost((GridPos)target!)}");
+                    if (abilityProcessor.CanExecute((GridPos)target!))
+                    {
+                        abilityProcessor.Execute((GridPos)target!);
+                    }
+                    else throw new Exception($"Ability {action} is not possible, but it was chosen for execution.");
+                    break;
+                }
+                case ActionType.Retreat:
+                case ActionType.ChargePlayer:
+                case ActionType.TacticalMovement:
+                {
+                    var ability = abilityProcessor.SelectedAbility;
+                    AILogs.AddMainLogEndl($"Cost of move: {ability.GetEffectiveCost((GridPos) target!)}");
+                    if (abilityProcessor.CanExecute((GridPos)target!))
+                    {
+                        abilityProcessor.Execute((GridPos)target!);
+                    }
+                    else throw new Exception($"Ability {action} is not possible, but it was chosen for execution.");
+                    break;
                 }
                 case ActionType.Pass:
                     TurnManager.instance.NextTurn();
-                    return;
+                    break;
                 default:
                     Debug.Log("No action found");
                     TurnManager.instance.NextTurn();
-                    return;
+                    break;
             }
+            
+            entity.currentTurnActions.Add(action);
+            AILogs.Log();
         }
     }
 }

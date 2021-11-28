@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45dc421a3d5c4d6fad5d695e50989e25, type: 3}
   m_Name: Rusty Axe
   m_EditorClassIdentifier: 
-  level: 1
   itemRarity: 0
   itemName: Rusty Axe
   description: Old rusty axe
   icon: {fileID: 21300000, guid: 4ac41389fe449564e975f57a0e13fe57, type: 3}
   ability: {fileID: 0}
-  damage: 12
-  range: 1
+  attributeModifiers: []
+  baseDamage: 10
+  baseRange: 1
   isRanged: 0

@@ -17,6 +17,8 @@ namespace EntityLogic.AI.Editor
             EditorGUILayout.MinMaxSlider(ref personality.minTeamwork, ref personality.maxTeamwork, 0.0f, 1.0f);
             personality.minTeamwork = EditorGUILayout.FloatField(personality.minTeamwork);
             personality.maxTeamwork = EditorGUILayout.FloatField(personality.maxTeamwork);
+            
+            personality.isRanged = EditorGUILayout.ToggleLeft("Is Ranged", personality.isRanged);
         }
     }
 }

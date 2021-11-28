@@ -118,7 +118,7 @@ namespace TurnSystem
       
       for (var i = 0; i < _entities.Count; i++)
       {
-        if (entity.initiative >= _entities[i].initiative)
+        if (entity.attributes.Initiative >= _entities[i].attributes.Initiative)
         {
           inserted = true;
           _entities.Insert(i, entity);

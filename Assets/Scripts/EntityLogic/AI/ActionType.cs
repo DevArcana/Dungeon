@@ -6,6 +6,8 @@
         Retreat,
         HealSelf,
         HealAlly,
+        Fireball,
+        TacticalMovement,
         Pass
     }
 }

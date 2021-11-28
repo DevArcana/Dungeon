@@ -109,9 +109,9 @@ namespace EntityLogic.AI
             _influenceMap[pos.x, pos.y] = new Influence(playerInfluence, enemyInfluence, overallInfluence);
         }
         
-        public List<GridLivingEntity> GetInfluencersOnPos(GridPos pos)
+        public HashSet<GridLivingEntity> GetInfluencersOnPos(GridPos pos)
         {
-            return _influencedPoints.ContainsKey(pos) ? _influencedPoints[pos].Keys.ToList() : new List<GridLivingEntity>();
+            return _influencedPoints.ContainsKey(pos) ? new HashSet<GridLivingEntity>(_influencedPoints[pos].Keys) : new HashSet<GridLivingEntity>();
         }
 
         private void TurnEntityRemoved(object sender, TurnManager.TurnEventArgs e)
@@ -140,7 +140,9 @@ namespace EntityLogic.AI
             }
             else
             {
+                var previousPos = GetInfluencedPosOfCost(entity, 0).ToList()[0];
                 var influencers = GetInfluencersOnPos(entity.GridPos);
+                influencers.UnionWith(GetInfluencersOnPos(previousPos));
                 foreach (var influencer in influencers)
                 {
                     AddEntityInfluence(influencer);
@@ -162,7 +164,7 @@ namespace EntityLogic.AI
 
         public float GetEntityInfluenceOnPos(GridLivingEntity entity, GridPos pos)
         {
-            if (!_influencedPoints.ContainsKey(pos) &&
+            if (!_influencedPoints.ContainsKey(pos) ||
                 !_influencedPoints[pos].ContainsKey(entity))
             {
                 throw new ArgumentException("This entity is not present in influenced points!");

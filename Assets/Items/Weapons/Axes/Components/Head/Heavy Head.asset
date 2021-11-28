@@ -17,7 +17,10 @@ MonoBehaviour:
   description: Heavy Head
   icon: {fileID: 21300000, guid: c203f342246883f4490b9bf1dd1313ec, type: 3}
   ability: {fileID: 0}
-  playerAttributesList: 
-  playerAttributeValues: 
-  weaponAttributesList: 00000000
-  weaponAttributeValues: 03000000
+  attributeModifiers:
+  - attribute: 5
+    value: 6
+    type: 0
+  - attribute: 3
+    value: -1
+    type: 0

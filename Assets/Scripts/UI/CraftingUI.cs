@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using EntityLogic;
+using EntityLogic.Attributes;
 using Equipment;
 using TMPro;
 using TurnSystem;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Attribute = EntityLogic.Attributes.Attribute;
 
 namespace UI
 {
@@ -47,10 +52,28 @@ namespace UI
         public TextMeshProUGUI weaponAttributesValuesText;
         public Image weaponIcon;
 
+        public List<CraftingRecipePage> componentFields;
+
+        public GameObject craftedWeapon;
+        public TextMeshProUGUI craftedWeaponName;
+        public TextMeshProUGUI craftedWeaponDescriptionText;
+        public TextMeshProUGUI craftedWeaponAttributesNamesText;
+        public TextMeshProUGUI craftedWeaponAttributesValuesText;
+        public Image craftedWeaponIcon;
+        public bool isWeaponDescriptionEnabled;
+        public Sprite swordSprite;
+        public Sprite axeSprite;
+        public Sprite bowSprite;
+        public Button craftButton;
+        
+        public static bool IsEditingInputField =>
+            EventSystem.current.currentSelectedGameObject?.TryGetComponent(out TMP_InputField _) ?? false;
 
         private void Start()
         {
             isCraftingEnabled = false;
+            isComponentsDescriptionEnabled = false;
+            craftingUIGenerated = true;
             recipeType = RecipeType.None;
             _numberOfSlots = 6;
             currentPage = 1;
@@ -76,6 +99,7 @@ namespace UI
         private void Update()
         {
             if (!(TurnManager.instance.CurrentTurnTaker is PlayerEntity)) return;
+            if (IsEditingInputField) return;
             _equipment = TurnManager.instance.CurrentTurnTaker.equipment;
             if (Input.GetKeyDown(KeyCode.C))
             {
@@ -83,6 +107,8 @@ namespace UI
                 EquipmentUI.isEnabled = false;
                 craftingUIGenerated = false;
                 currentPage = 1;
+                ClearPage();
+                isComponentsDescriptionEnabled = false;
             }
 
             if (isCraftingEnabled && !craftingUIGenerated)
@@ -119,13 +145,72 @@ namespace UI
                 {
                     weaponName.text = _equipment.weapon.itemName;
                     weaponDescriptionText.text = _equipment.weapon.description;
-                    weaponAttributesNamesText.text = "Damage:\nRange:";
-                    weaponAttributesValuesText.text = $"{_equipment.weapon.damage}\n{_equipment.weapon.range}";
+                    weaponAttributesNamesText.text = _equipment.weapon.AttributeNames();
+                    weaponAttributesValuesText.text = _equipment.weapon.AttributeValues();
                     weaponIcon.enabled = true;
                     weaponIcon.sprite = _equipment.weapon.icon;
                 }
                 
+                if (!isWeaponDescriptionEnabled)
+                {
+                    var recipePage = componentFields.FirstOrDefault(x => x.recipeType == recipeType);
+                    if (!(recipePage is null))
+                    {
+                        if (recipePage.componentFields.TrueForAll(x => !(x.selectedComponent is null)))
+                        {
+                            craftButton.onClick.RemoveAllListeners();
+                            
+                            isWeaponDescriptionEnabled = true;
+                            switch (recipeType)
+                            {
+                                case RecipeType.Sword:
+                                {
+                                    craftedWeaponIcon.sprite = swordSprite;
+                                    break;
+                                }
+                                case RecipeType.Bow:
+                                {
+                                    craftedWeaponIcon.sprite = bowSprite;
+                                    break;
+                                }
+                                case RecipeType.Axe:
+                                {
+                                    craftedWeaponIcon.sprite = axeSprite;
+                                    break;
+                                }
+                            }
+                            AttributeModifier[] attributeList = CalculateAttributes(recipePage.componentFields.Select(x => x.selectedComponent).ToList());
+                            var attributeText = "";
+                            foreach (var attribute in attributeList) 
+                            { 
+                                if (attribute.attribute == Attribute.WeaponDamage)
+                                {
+                                    attributeText = attributeText + "Damage:\n";
+                                }
+                                else if (attribute.attribute == Attribute.WeaponRange)
+                                {
+                                    attributeText = attributeText +  "Range:\n";
+                                }
+                                else
+                                {
+                                    attributeText = attributeText + attribute.attribute + ":\n";
+                                }
+                            }
+                            var attributeValues = "";
+                            foreach (var attribute in attributeList)
+                            {
+                                attributeValues = attributeValues + attribute.value + ":\n";
+                            }
+                            
+                            craftButton.onClick.AddListener(() => Craft(attributeList));
+
+                            craftedWeaponAttributesNamesText.text = attributeText;
+                            craftedWeaponAttributesValuesText.text = attributeValues;
+                        }
+                    }
+                }
             }
+            craftedWeapon.SetActive(isWeaponDescriptionEnabled);
             MakeVisible(isCraftingEnabled);
             componentsDescription.SetActive(isComponentsDescriptionEnabled);
         }
@@ -137,7 +222,8 @@ namespace UI
             componentsDescriptionText.text = component.description;
             componentIcon.sprite = component.icon;
             
-            //TODO - use button listener
+            useButton.onClick.RemoveAllListeners();
+            useButton.onClick.AddListener(() => componentFields.First(x => x.recipeType == recipeType).Show(component));
             
             componentsAttributesNamesText.text = component.AttributeNames();
             componentsAttributesValuesText.text = component.AttributeValues();
@@ -146,6 +232,105 @@ namespace UI
         private void MakeVisible(bool isEnabled)
         {
             crafting.transform.localScale = isEnabled ? new Vector3(1, 1, 1) : new Vector3(0, 0, 0);
+        }
+        
+        public void Subscribe(CraftingRecipePage craftingRecipePage)
+        {
+            if (componentFields == null)
+            {
+                componentFields = new List<CraftingRecipePage>();
+            }
+            
+            componentFields.Add(craftingRecipePage);
+        }
+        
+        public void ClearPage()
+        {
+            var currentComponentPage = componentFields.FirstOrDefault(x => x.recipeType == recipeType);
+            if (!(currentComponentPage is null))
+            {
+                foreach (var field in currentComponentPage.componentFields)
+                {
+                    field.Clear();
+                    isWeaponDescriptionEnabled = false;
+                }
+            }
+        }
+
+        private AttributeModifier[] CalculateAttributes(IEnumerable<WeaponComponent> usedComponents)
+        {
+            var attributeList = new List<AttributeModifier>();
+            var resultAttributeList = new List<AttributeModifier>();
+            foreach (var component in usedComponents)
+            {
+                attributeList = attributeList.Concat(component.attributeModifiers).ToList();
+            }
+
+            var attributeNamesList = attributeList.Select(x => x.attribute).Distinct().ToList();
+            foreach (var attributeName in attributeNamesList)
+            {
+                var attribute = new AttributeModifier()
+                {
+                    attribute = attributeName,
+                    value = attributeList.Where(x => x.attribute == attributeName).Sum(x => x.value),
+                    type = ModifierType.Additive
+                };
+                resultAttributeList.Add(attribute);
+            }
+
+            return resultAttributeList.ToArray();
+        }
+
+        public void Craft(AttributeModifier[] attributeUpgrades)
+        {
+            Weapon w;
+            switch (recipeType)
+            {
+                case RecipeType.Sword:
+                {
+                    w = ScriptableObject.CreateInstance<Sword>();
+                    break;
+                }
+                case RecipeType.Bow:
+                {
+                    w = ScriptableObject.CreateInstance<Bow>();
+                    break;
+                }
+                case RecipeType.Axe:
+                {
+                    w = ScriptableObject.CreateInstance<Axe>();
+                    break;
+                }
+                default:
+                {
+                    w = null;
+                    break;
+                }
+            }
+            if (w is null) return;
+            
+            w.itemName = craftedWeaponName.text;
+            w.description = craftedWeaponDescriptionText.text;
+            w.icon = craftedWeaponIcon.sprite;
+            var damage = attributeUpgrades.First(x => x.attribute == Attribute.WeaponDamage);
+            w.baseDamage = (float) (damage?.value ?? 1);
+            var range = attributeUpgrades.FirstOrDefault(x => x.attribute == Attribute.WeaponRange);
+            w.baseRange = (float) (range?.value ?? 1);
+            w.attributeModifiers = attributeUpgrades.Where(x => x.attribute!= Attribute.WeaponDamage && x.attribute != Attribute.WeaponRange).ToArray();
+            
+            var backpack = TurnManager.instance.CurrentTurnTaker.equipment.backpack;
+            var recipePage = componentFields.FirstOrDefault(x => x.recipeType == recipeType);
+            if (recipePage is null) return;
+            backpack.Add(w);
+            foreach (var component in recipePage.componentFields)
+            {
+                backpack.Remove(component.selectedComponent);
+                component.selectedComponent = null;
+            }
+
+            isWeaponDescriptionEnabled = false;
+            isComponentsDescriptionEnabled = false;
+            craftingUIGenerated = false;
         }
     }
 }

@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e10cf55e1564be7b018738f2817032d, type: 3}
   m_Name: Warrior
   m_EditorClassIdentifier: 
-  minAggressiveness: 0
-  maxAggressiveness: 0
-  minTeamwork: 0
-  maxTeamwork: 0
+  minAggressiveness: 0.3
+  maxAggressiveness: 0.7
+  minTeamwork: 0.8
+  maxTeamwork: 1
+  isRanged: 0

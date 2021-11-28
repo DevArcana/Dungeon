@@ -1,8 +1,6 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
 using EntityLogic.AI;
 using TurnSystem;
-using UnityEngine;
-using World.Common;
 
 namespace EntityLogic
 {
@@ -10,6 +8,7 @@ namespace EntityLogic
   {
     public float teamwork;
     public float aggressiveness;
+    public List<ActionType> currentTurnActions;
     
     private void Update()
     {
@@ -19,22 +18,33 @@ namespace EntityLogic
         utilityAI.PerformNextAction(this);
       }
     }
-    
-    // unity components
-    private DamageableEntity _damageable;
 
     protected override void Start()
     {
       base.Start();
-      _damageable = GetComponent<DamageableEntity>();
       var personality = GetComponent<PersonalityProvider>();
       teamwork = personality.teamwork;
       aggressiveness = personality.aggressiveness;
+      currentTurnActions = new List<ActionType>();
+      TurnManager.instance.TurnChanged += TurnChanged;
+    }
+    
+    private void OnDestroy()
+    {
+      TurnManager.instance.TurnChanged -= TurnChanged;
+    }
+
+    private void TurnChanged(object sender, TurnManager.TurnEventArgs e)
+    {
+      if (e.PreviousEntity == this)
+      {
+        currentTurnActions.Clear();
+      }
     }
 
     public override string GetTooltip()
     {
-      return $"HP: {_damageable.damageable.Health}/{_damageable.damageable.MaxHealth}";
+      return $"HP: {health.Health}/{health.MaximumHealth}";
     }
   }
 }

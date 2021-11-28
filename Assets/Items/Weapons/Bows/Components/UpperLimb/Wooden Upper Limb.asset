@@ -17,7 +17,10 @@ MonoBehaviour:
   description: Wooden Upper Limb
   icon: {fileID: 21300000, guid: c3f7bf81ac4a3ac42ab5b27eeef57eeb, type: 3}
   ability: {fileID: 0}
-  playerAttributesList: 
-  playerAttributeValues: 
-  weaponAttributesList: 0000000001000000
-  weaponAttributeValues: 0400000003000000
+  attributeModifiers:
+  - attribute: 3
+    value: -1
+    type: 0
+  - attribute: 5
+    value: 5
+    type: 0

@@ -1,13 +1,14 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using EntityLogic.Attributes;
+using TurnSystem;
+using TurnSystem.Transactions;
+using UnityEngine;
 
 namespace Equipment
 {
     [CreateAssetMenu(fileName = "UpgradePotion", menuName = "Consumable/UpgradePotion", order = 2)]
     public class UpgradePotion : Consumable
     {
-        public PlayerAttribute attribute;
-        public int amount;
-
         public UpgradePotion()
         {
             
@@ -16,7 +17,8 @@ namespace Equipment
         public override void Use()
         {
             base.Use();
-            //TODO
+            TurnManager.instance.Transactions.EnqueueTransaction(
+                new UpgradeAttributeTransaction(TurnManager.instance.CurrentTurnTaker, attributeModifiers.First().attribute, attributeModifiers.First().value, false));
         }
     }
 }

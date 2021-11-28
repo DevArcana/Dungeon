@@ -9,14 +9,24 @@ namespace EntityLogic.Abilities.ReadyAbilities
   [CreateAssetMenu(fileName = "HealSelf", menuName = "Abilities/Heal Self", order = 1)]
   public class HealSelfAbility : AbilityBase
   {
-    public int healAmount;
+    public float baseHeal;
+    public float focusPercentage;
 
+    public float CalculateHeal()
+    {
+      return baseHeal + focusPercentage / 100 * TurnManager.instance.CurrentTurnTaker.attributes.Focus;
+    }
+    
+    public override string TooltipDescription()
+    {
+      return $"Restore {CalculateHeal()} health ({baseHeal} + {focusPercentage}% Focus) to yourself.";
+    }
     public override IEnumerable<GridPos> GetValidTargetPositions(GridPos? startingPosition = null)
     {
       var turnManager = TurnManager.instance;
       startingPosition ??= turnManager.CurrentTurnTaker.GridPos;
-      
-      return new[] { startingPosition.Value };
+
+      yield return startingPosition.Value;
     }
 
     public override IEnumerable<GridPos> GetEffectiveRange(GridPos atPosition)
@@ -34,20 +44,9 @@ namespace EntityLogic.Abilities.ReadyAbilities
       return 2;
     }
 
-    public override bool CanExecute(GridPos atPosition, GridPos? startingPosition = null)
-    {
-      // TODO
-      return true;
-    }
-
     public override void Execute(GridPos atPosition)
     {
-      TurnManager.instance.Transactions.EnqueueTransaction(new HealSelfTransaction(TurnManager.instance.CurrentTurnTaker, healAmount, true));
-    }
-
-    public override string GetCostForTooltip()
-    {
-      return GetMinimumPossibleCost().ToString();
+      TurnManager.instance.Transactions.EnqueueTransaction(new HealSelfTransaction(TurnManager.instance.CurrentTurnTaker, CalculateHeal(), true));
     }
   }
 }

@@ -5,6 +5,7 @@ namespace UI
 {
     public class TabGroup : MonoBehaviour
     {
+        public CraftingUI craftingUI;
         public List<TabsButton> tabsButtons;
         public Color tabIdle;
         public Color tabHover;
@@ -35,10 +36,15 @@ namespace UI
         public void OnTabExit(TabsButton button)
         {
             ResetTabs();
+            
         }
 
         public void OnTabSelected(TabsButton button)
         {
+            if (!(selectedTab is null))
+            {
+                craftingUI.ClearPage();
+            }
             selectedTab = button;
             ResetTabs();
             button.background.color = tabActive;
@@ -65,5 +71,8 @@ namespace UI
                 button.background.color = tabIdle;
             }
         }
+
+
+        
     }
 }

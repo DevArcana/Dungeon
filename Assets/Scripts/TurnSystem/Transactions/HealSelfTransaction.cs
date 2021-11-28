@@ -5,9 +5,9 @@ namespace TurnSystem.Transactions
   public class HealSelfTransaction : TransactionBase
   {
     private readonly GridLivingEntity _entity;
-    private readonly int _healAmount;
+    private readonly float _healAmount;
 
-    public HealSelfTransaction(GridLivingEntity entity, int healAmount, bool isAbility) : base(isAbility)
+    public HealSelfTransaction(GridLivingEntity entity, float healAmount, bool isAbility) : base(isAbility)
     {
       _entity = entity;
       _healAmount = healAmount;
@@ -15,7 +15,7 @@ namespace TurnSystem.Transactions
 
     protected override void Process()
     {
-      var entityHealth = _entity.GetComponent<DamageableEntity>()?.damageable;
+      var entityHealth = _entity.health;
       entityHealth?.Heal(_healAmount);
       Finish();
     }

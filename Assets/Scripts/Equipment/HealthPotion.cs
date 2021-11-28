@@ -20,5 +20,15 @@ namespace Equipment
             TurnManager.instance.Transactions.EnqueueTransaction(
                 new HealSelfTransaction(TurnManager.instance.CurrentTurnTaker, amountToHeal, false));
         }
+
+        public override string AttributeNames()
+        {
+            return "Amount to Heal:";
+        }
+
+        public override string AttributeValues()
+        {
+            return amountToHeal.ToString();
+        }
     }
 }

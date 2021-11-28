@@ -8,7 +8,7 @@ namespace Tests.EditMode
     [Test]
     public void DefaultHealthIs100()
     {
-      var sut = new Damageable();
+      var sut = new EntityHealth();
       Assert.That(sut.Health, Is.EqualTo(100));
     }
     
@@ -17,14 +17,14 @@ namespace Tests.EditMode
     [TestCase(200)]
     public void HealthIsInitializedToMaxHealthByDefault(int health)
     {
-      var sut = new Damageable(health);
-      Assert.That(sut.Health, Is.EqualTo(sut.MaxHealth));
+      var sut = new EntityHealth(health);
+      Assert.That(sut.Health, Is.EqualTo(sut.MaximumHealth));
     }
 
     [Test]
     public void EventIsEmittedOnEachHealthChange()
     {
-      var sut = new Damageable();
+      var sut = new EntityHealth();
 
       var count = 0;
       void OnHealthChange()
@@ -33,7 +33,7 @@ namespace Tests.EditMode
       }
 
       sut.HealthChanged += OnHealthChange;
-      sut.SufferDamage(10);
+      sut.SufferDamage(10, 0);
       sut.Heal(10);
       sut.SetHealth(50);
       sut.HealthChanged -= OnHealthChange;
@@ -46,7 +46,7 @@ namespace Tests.EditMode
     [TestCase(235)]
     public void EventIsNotEmittedWhenHealthDoesNotChange(int health)
     {
-      var sut = new Damageable(health);
+      var sut = new EntityHealth(health);
 
       var count = 0;
       void OnHealthChange()
@@ -64,7 +64,7 @@ namespace Tests.EditMode
     [Test]
     public void DeathEventIsEmittedWhenHealthReachesZero()
     {
-      var sut = new Damageable();
+      var sut = new EntityHealth();
 
       var died = false;
       void OnDeath()
@@ -73,7 +73,7 @@ namespace Tests.EditMode
       }
 
       sut.EntityDied += OnDeath;
-      sut.SufferDamage(100);
+      sut.SufferDamage(100, 0);
       sut.EntityDied -= OnDeath;
       
       Assert.That(died, Is.True);
@@ -82,7 +82,7 @@ namespace Tests.EditMode
     [Test]
     public void DeathEventIsEmittedWhenHealthReachesBelowZero()
     {
-      var sut = new Damageable();
+      var sut = new EntityHealth();
 
       var died = false;
       void OnDeath()
@@ -91,7 +91,7 @@ namespace Tests.EditMode
       }
 
       sut.EntityDied += OnDeath;
-      sut.SufferDamage(1000);
+      sut.SufferDamage(1000, 0);
       sut.EntityDied -= OnDeath;
       
       Assert.That(died, Is.True);
@@ -100,7 +100,7 @@ namespace Tests.EditMode
     [Test]
     public void DeathEventIsEmittedAfterHealthChangeEvent()
     {
-      var sut = new Damageable();
+      var sut = new EntityHealth();
 
       var e = string.Empty;
       void OnDeath()
@@ -115,7 +115,7 @@ namespace Tests.EditMode
       
       sut.EntityDied += OnDeath;
       sut.HealthChanged += OnHealthChange;
-      sut.SufferDamage(1000);
+      sut.SufferDamage(1000, 0);
       sut.EntityDied -= OnDeath;
       sut.HealthChanged -= OnHealthChange;
       
@@ -125,16 +125,16 @@ namespace Tests.EditMode
     [Test]
     public void TakingDamageDecreasesHealth()
     {
-      var sut = new Damageable(50);
-      sut.SufferDamage(30);
+      var sut = new EntityHealth(50);
+      sut.SufferDamage(30, 0);
       Assert.That(sut.Health, Is.EqualTo(20));
     }
     
     [Test]
     public void HealingIncreasesHealth()
     {
-      var sut = new Damageable(50);
-      sut.SufferDamage(49);
+      var sut = new EntityHealth(50);
+      sut.SufferDamage(49, 0);
       sut.Heal(9);
       Assert.That(sut.Health, Is.EqualTo(10));
     }
@@ -142,9 +142,17 @@ namespace Tests.EditMode
     [Test]
     public void CanNotOverHeal()
     {
-      var sut = new Damageable(50);
+      var sut = new EntityHealth(50);
       sut.Heal(1000);
       Assert.That(sut.Health, Is.EqualTo(50));
+    }
+
+    [Test]
+    public void DamageReductionLowersDamageTaken()
+    {
+      var sut = new EntityHealth(100);
+      sut.SufferDamage(50, 50);
+      Assert.That(sut.Health, Is.EqualTo(75));
     }
   }
 }
