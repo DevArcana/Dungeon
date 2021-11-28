@@ -28,6 +28,9 @@ namespace EntityLogic.AI
                 Destroy(gameObject);
                 return;
             }
+            
+            _influencedPoints = new Dictionary<GridPos, Dictionary<GridLivingEntity, int>>();
+            _entityInfluence = new Dictionary<GridLivingEntity, List<GridPos>>();
 
             TurnManager.instance.TurnEntityAdded += TurnEntityAdded;
             TurnManager.instance.TurnEntityRemoved += TurnEntityRemoved;
@@ -38,8 +41,6 @@ namespace EntityLogic.AI
         private void Start()
         {
             var map = World.World.instance;
-            _influencedPoints = new Dictionary<GridPos, Dictionary<GridLivingEntity, int>>();
-            _entityInfluence = new Dictionary<GridLivingEntity, List<GridPos>>();
             _influenceMap = new Influence[map.MapWidth, map.MapHeight];
         }
 
@@ -47,11 +48,11 @@ namespace EntityLogic.AI
         {
             if (!_entityInfluence.ContainsKey(entity)) return;
             var positions = _entityInfluence[entity];
+            _entityInfluence.Remove(entity);
             foreach (var position in positions)
             {
                 var influence = _influencedPoints[position];
                 influence.Remove(entity);
-                _entityInfluence.Remove(entity);
                 CalculateInfluenceOnPos(position);
             }
         }
@@ -167,7 +168,7 @@ namespace EntityLogic.AI
             if (!_influencedPoints.ContainsKey(pos) ||
                 !_influencedPoints[pos].ContainsKey(entity))
             {
-                throw new ArgumentException("This entity is not present in influenced points!");
+                return 0;
             }
             return 1 - _influencedPoints[pos][entity] / (float) TurnManager.instance.ActionPoints.ActionPoints;
         }
