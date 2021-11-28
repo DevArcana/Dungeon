@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e10cf55e1564be7b018738f2817032d, type: 3}
   m_Name: Mage
   m_EditorClassIdentifier: 
-  minAggressiveness: 0
-  maxAggressiveness: 0
-  minTeamwork: 0
-  maxTeamwork: 0
-  isRanged: 0
+  minAggressiveness: 0.6
+  maxAggressiveness: 0.8
+  minTeamwork: 0.7
+  maxTeamwork: 1
+  isRanged: 1

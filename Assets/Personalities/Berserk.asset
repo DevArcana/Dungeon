@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e10cf55e1564be7b018738f2817032d, type: 3}
   m_Name: Berserk
   m_EditorClassIdentifier: 
-  minAggressiveness: 0
-  maxAggressiveness: 0
+  minAggressiveness: 0.8
+  maxAggressiveness: 1
   minTeamwork: 0
-  maxTeamwork: 0
+  maxTeamwork: 0.2
   isRanged: 0
