@@ -34,11 +34,12 @@ namespace EntityLogic.AI
         private static (ActionType, GridPos?) ChooseNextAction(EnemyEntity entity)
         {
             var buckets = new List<IBucket>
-            {
-                new OffensiveBucket(),
-                new DefensiveBucket(),
-                new TeamworkBucket()
-            }.OrderByDescending(bucket => bucket.EvaluateBucketUtility(entity));
+                {
+                    new OffensiveBucket(entity),
+                    new DefensiveBucket(entity),
+                    new TeamworkBucket(entity)
+                }.Where(bucket => bucket.Score > 0.04f)
+                .OrderByDescending(bucket => bucket.Score);
 
             foreach (var bucket in buckets)
             {
@@ -55,44 +56,7 @@ namespace EntityLogic.AI
             AILogs.AddMainLog($"Points left: {TurnManager.instance.ActionPoints.ActionPoints},");
             return (ActionType.Pass, null);
         }
-
-        // private (ActionType, GridPos?) ChooseNextAction(EnemyEntity entity)
-        // {
-        //     var targetEntity = Pathfinding.FindClosestPlayer(entity.GridPos);
-        //     var coverMap = new CoverMap(entity, InfluenceMap.instance.GetEntityInfluencedPos(entity), _players).GetCoverMap();
-        //     var utilities = new List<(ActionType, float)>
-        //     {
-        //         (ActionType.ChargePlayer, UtilityFunctions.ChargePlayerUtility(entity, targetEntity, out var chargeTarget)),
-        //         (ActionType.Pass, UtilityFunctions.PassTurnUtility()),
-        //         (ActionType.HealSelf, UtilityFunctions.HealSelfUtility(entity)),
-        //         (ActionType.HealAlly, UtilityFunctions.HealAllyUtility(entity, out var healAllyTarget)),
-        //         (ActionType.Retreat, UtilityFunctions.RetreatUtility(entity, coverMap, out var retreatTarget)),
-        //         (ActionType.Fireball, UtilityFunctions.FireballUtility(entity, out var fireballTarget)),
-        //         (ActionType.TacticalMovement, UtilityFunctions.TacticalMovementUtility(entity, targetEntity, coverMap, out var tacticalMoveTarget)),
-        //     }.Where(x => x.Item2 > 0.04f).OrderByDescending(x => x.Item2).ToList();
-        //
-        //     AILogs.AddMainLogEndl($"{entity.name}");
-        //     var message = "";
-        //     foreach (var (actionType, score) in utilities)
-        //     {
-        //         message += $"{actionType} - {score:F2}\n";
-        //     }
-        //     var result = Helpers.WeightedRandom(utilities);
-        //     AILogs.AddMainLog($"Chosen action: {result},");
-        //     AILogs.AddMainLog($"Points left: {TurnManager.instance.ActionPoints.ActionPoints},");
-        //     AILogs.AddSecondaryLogEndl(message.Trim());
-        //
-        //     return result switch
-        //     {
-        //         ActionType.Retreat => (result, retreatTarget),
-        //         ActionType.ChargePlayer => (result, chargeTarget),
-        //         ActionType.HealAlly => (result, healAllyTarget),
-        //         ActionType.Fireball => (result, fireballTarget),
-        //         ActionType.TacticalMovement => (result, tacticalMoveTarget),
-        //         _ => (result, null)
-        //     };
-        // }
-
+        
         public void PerformNextAction(EnemyEntity entity)
         {
             var abilityProcessor = AbilityProcessor.instance;
@@ -160,6 +124,7 @@ namespace EntityLogic.AI
                     break;
             }
             
+            entity.currentTurnActions.Add(action);
             AILogs.Log();
         }
     }

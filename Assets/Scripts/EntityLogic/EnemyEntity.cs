@@ -1,4 +1,5 @@
-﻿using EntityLogic.AI;
+﻿using System.Collections.Generic;
+using EntityLogic.AI;
 using TurnSystem;
 
 namespace EntityLogic
@@ -7,6 +8,7 @@ namespace EntityLogic
   {
     public float teamwork;
     public float aggressiveness;
+    public List<ActionType> currentTurnActions;
     
     private void Update()
     {
@@ -23,6 +25,21 @@ namespace EntityLogic
       var personality = GetComponent<PersonalityProvider>();
       teamwork = personality.teamwork;
       aggressiveness = personality.aggressiveness;
+      currentTurnActions = new List<ActionType>();
+      TurnManager.instance.TurnChanged += TurnChanged;
+    }
+    
+    private void OnDestroy()
+    {
+      TurnManager.instance.TurnChanged -= TurnChanged;
+    }
+
+    private void TurnChanged(object sender, TurnManager.TurnEventArgs e)
+    {
+      if (e.PreviousEntity == this)
+      {
+        currentTurnActions.Clear();
+      }
     }
 
     public override string GetTooltip()

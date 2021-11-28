@@ -13,6 +13,8 @@ namespace EntityLogic.AI
         public static float ChargePlayerUtility(EnemyEntity entity, GridLivingEntity targetEntity, out GridPos target)
         {
             target = targetEntity.GridPos;
+            if (entity.currentTurnActions.Contains(ActionType.TacticalMovement)) return 0f;
+            
             var availableActionPoints = TurnManager.instance.ActionPoints.ActionPoints;
             var maxChargeDistance = 10f + entity.attributes.WeaponRange;
             var influenceMap = InfluenceMap.instance;

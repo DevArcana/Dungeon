@@ -12,5 +12,7 @@ namespace EntityLogic.AI
         public float minTeamwork;
         
         public float maxTeamwork;
+
+        public bool isRanged;
     }
 }

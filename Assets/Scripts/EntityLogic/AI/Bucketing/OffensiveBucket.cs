@@ -8,8 +8,16 @@ namespace EntityLogic.AI.Bucketing
 {
     public class OffensiveBucket : IBucket
     {
-        public float EvaluateBucketUtility(EnemyEntity entity)
+        public float Score { get; }
+
+        public OffensiveBucket(EnemyEntity entity)
         {
+            if (entity.currentTurnActions.Contains(ActionType.Retreat))
+            {
+                AILogs.AddSecondaryLogEndl("Offensive bucket is not available.");
+                return;
+            }
+            
             var aggressivenessFactor = (entity.aggressiveness - 0.5f) * 0.5f;
             
             var health = entity.health;
@@ -24,8 +32,7 @@ namespace EntityLogic.AI.Bucketing
             
             var result = Mathf.Min(Mathf.Max(healthFactor * playerHealthFactor + aggressivenessFactor, 0), 1);
             AILogs.AddSecondaryLogEndl($"Offensive bucket score: {result:F2}");
-            return result;
-
+            Score = result;
         }
 
         public (ActionType, GridPos?) EvaluateBucketActions(EnemyEntity entity)
@@ -58,6 +65,16 @@ namespace EntityLogic.AI.Bucketing
                 ActionType.Fireball => (result, fireballTarget),
                 ActionType.TacticalMovement => (result, tacticalMoveTarget),
                 _ => (result, null)
+            };
+        }
+
+        public static List<ActionType> GetActions()
+        {
+            return new List<ActionType>
+            {
+                ActionType.ChargePlayer,
+                ActionType.Fireball,
+                ActionType.TacticalMovement
             };
         }
     }

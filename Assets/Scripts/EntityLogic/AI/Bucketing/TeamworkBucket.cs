@@ -7,13 +7,15 @@ namespace EntityLogic.AI.Bucketing
 {
     public class TeamworkBucket : IBucket
     {
-        public float EvaluateBucketUtility(EnemyEntity entity)
+        public float Score { get; }
+
+        public TeamworkBucket(EnemyEntity entity)
         {
             var teamworkFactor = (entity.teamwork - 0.5f) * 0.5f;
             
             var result = Mathf.Min(Mathf.Max(UtilityFunctions.HealAllyUtility(entity, out _) + teamworkFactor, 0), 1);
             AILogs.AddSecondaryLogEndl($"Teamwork bucket score: {result:F2}");
-            return result;
+            Score = result;
         }
 
         public (ActionType, GridPos?) EvaluateBucketActions(EnemyEntity entity)
@@ -25,6 +27,14 @@ namespace EntityLogic.AI.Bucketing
                 return (ActionType.HealAlly, healAllyTarget);
             }
             return (ActionType.Pass, null);
+        }
+
+        public static List<ActionType> GetActions()
+        {
+            return new List<ActionType>
+            {
+                ActionType.HealAlly
+            };
         }
     }
 }

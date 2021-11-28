@@ -8,8 +8,16 @@ namespace EntityLogic.AI.Bucketing
 {
     public class DefensiveBucket : IBucket
     {
-        public float EvaluateBucketUtility(EnemyEntity entity)
+        public float Score { get; }
+
+        public DefensiveBucket(EnemyEntity entity)
         {
+            if (entity.currentTurnActions.Any(x => OffensiveBucket.GetActions().Any(y => y == x)))
+            {
+                AILogs.AddSecondaryLogEndl("Defensive bucket is not available.");
+                return;
+            }
+            
             var influenceMap = InfluenceMap.instance;
 
             // -0.25 to 0.25
@@ -24,9 +32,9 @@ namespace EntityLogic.AI.Bucketing
 
             var result = Mathf.Min(Mathf.Max(healthFactor * threat + aggressivenessFactor, 0), 1);
             AILogs.AddSecondaryLogEndl($"Defensive bucket score: {result:F2}");
-            return result;
+            Score = result;
         }
-
+        
         public (ActionType, GridPos?) EvaluateBucketActions(EnemyEntity entity)
         {
             var entities = TurnManager.instance.PeekQueue();
@@ -46,6 +54,15 @@ namespace EntityLogic.AI.Bucketing
             {
                 ActionType.Retreat => (result, retreatTarget),
                 _ => (result, null)
+            };
+        }
+
+        public static List<ActionType> GetActions()
+        {
+            return new List<ActionType>
+            {
+                ActionType.HealSelf,
+                ActionType.HealAlly
             };
         }
     }
