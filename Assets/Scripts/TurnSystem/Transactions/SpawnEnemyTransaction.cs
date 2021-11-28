@@ -1,6 +1,7 @@
 ﻿using EntityLogic;
 using UnityEngine;
 using Utils;
+using World;
 using World.Common;
 
 namespace TurnSystem.Transactions
@@ -25,6 +26,13 @@ namespace TurnSystem.Transactions
 
       var position = MapUtils.ToWorldPos(_pos);
       var enemy = Object.Instantiate(_enemyPrefab, position, Quaternion.identity);
+      var statIncrement = 0.1f * (CrossSceneContainer.instance.currentFloor.CurrentValue - 1) + 1;
+      enemy.baseAttributes.maximumHealth = Mathf.Floor(statIncrement * enemy.baseAttributes.maximumHealth);
+      enemy.health.SetHealth(enemy.baseAttributes.maximumHealth);
+      enemy.baseAttributes.agility = Mathf.Floor(statIncrement * enemy.baseAttributes.agility);
+      enemy.baseAttributes.focus = Mathf.Floor(statIncrement * enemy.baseAttributes.focus);
+      enemy.baseAttributes.strength = Mathf.Floor(statIncrement * enemy.baseAttributes.strength);
+      enemy.RecalculateAttributes();
       TurnManager.instance.RegisterTurnBasedEntity(enemy);
     }
   }

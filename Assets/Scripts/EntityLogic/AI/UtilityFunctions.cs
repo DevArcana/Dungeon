@@ -199,6 +199,8 @@ namespace EntityLogic.AI
         {
             target = entity.GridPos;
             
+            if (entity.currentTurnActions.Contains(ActionType.ChargePlayer)) return 0f;
+            
             var influenceMap = InfluenceMap.instance;
             var availableActionPoints = TurnManager.instance.ActionPoints.ActionPoints;
             var pathfinding = new Pathfinding();
@@ -231,7 +233,7 @@ namespace EntityLogic.AI
                 var allianceFactor = Mathf.Max(-Mathf.Pow((alliance - 0.4f) * 2.5f, 2) + 1, 0);
                 var (_, distance) = pathfinding.FindPath(position, targetEntity.GridPos);
                 var distanceFactor = ((fullCost - cost) / (float)distance) * ((fullCost - cost) / (float)distance);
-                var score = threatFactor * ((0.5f * coverFactor + (1 + teamworkFactor) * allianceFactor + 1.5f * distanceFactor)  / (3f + teamworkFactor));
+                var score = threatFactor * ((coverFactor + (1 + teamworkFactor) * allianceFactor + 1.5f * distanceFactor)  / (3.5f + teamworkFactor));
                 if (score > bestScore)
                 {
                     bestScore = score;
