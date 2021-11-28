@@ -249,15 +249,17 @@ namespace World.Generation
               break;
             
             case 5:
-              AddWall(topLeft.right, bottomLeft.up);
-              AddWall(bottomLeft.right, bottomRight.up);
-              Fill(bottomLeft.corner, bottomLeft.up, topLeft.right, topRight.corner, bottomRight.up, bottomLeft.right);
+              AddWall(bottomLeft.right, bottomLeft.up);
+              AddWall(topLeft.right, bottomRight.up);
+              Fill(bottomLeft.corner, bottomLeft.up, bottomLeft.right);
+              Fill(topLeft.right, topRight.corner, bottomRight.up);
               break;
             
             case 10:
-              AddWall(bottomLeft.up, bottomLeft.right);
-              AddWall(bottomRight.up, topLeft.right);
-              Fill(bottomRight.corner, bottomLeft.right, bottomLeft.up, topLeft.corner, topLeft.right, bottomRight.up);
+              AddWall(bottomLeft.up, topLeft.right);
+              AddWall(bottomRight.up, bottomLeft.right);
+              Fill(bottomRight.corner, bottomLeft.right, bottomRight.up);
+              Fill(topLeft.corner, topLeft.right, bottomLeft.up);
               break;
 
             case 15:
