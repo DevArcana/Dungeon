@@ -240,67 +240,6 @@ namespace EntityLogic.AI
             }
 
             if (target == entity.GridPos) return 0f;
-            // foreach (var position in influenceMap.GetEntityInfluencedPos(entity))
-            // {
-            //     var occupant = World.World.instance.GetOccupant(position);
-            //     var coverFactor = coverMap[position] == CoverType.HardCover ? 1f :
-            //         coverMap[position] == CoverType.MediumCover ? 0.75f :
-            //         coverMap[position] == CoverType.SoftCover ? 0.4f : 0f;
-            //     var currentInfluence = influenceMap.GetInfluenceOnPos(position);
-            //     var threatFactor = 1 - Mathf.Min(Mathf.Pow(currentInfluence.playersInfluence / 0.8f , 4), 1);
-            //     var alliance = currentInfluence.agentsInfluence -
-            //                    influenceMap.GetEntityInfluenceOnPos(entity, position);
-            //     var allianceFactor = Mathf.Max(-Mathf.Pow(alliance * 2 - 0.4f, 2) + 1, 0);
-            //     var score = threatFactor * ((0.5f * coverFactor + (1 + teamworkFactor) * allianceFactor) / (1.5f + teamworkFactor));
-            //     if (occupant == entity)
-            //     {
-            //         startPositionScore = score;
-            //         continue;
-            //     }
-            //     if (score > bestScore)
-            //     {
-            //         bestScore = score;
-            //         target = position;
-            //     }
-            //     positions[position] = score;
-            // }
-            //
-            // var bestPositions = positions
-            //     .Where(x => x.Value > bestScore * 0.8 && x.Key != entity.GridPos);
-            //
-            // var closestDistance = int.MaxValue;
-            // var closestDistanceScore = 0f;
-            // var entities = TurnManager.instance.PeekQueue();
-            // var players = entities.Where(x => x is PlayerEntity).ToList();
-            //
-            // foreach (var position in bestPositions)
-            // {
-            //     foreach (var player in players)
-            //     {
-            //         var (_, distance) = pathfinding.FindPath(position.Key, player.GridPos);
-            //         if (distance > 0 && (distance < closestDistance || distance == closestDistance && position.Value > closestDistanceScore))
-            //         {
-            //         
-            //             closestDistance = distance;
-            //             closestDistanceScore = position.Value;
-            //             target = position.Key;
-            //         }
-            //     }
-            // }
-            //
-            // var distanceFromStart = int.MaxValue;
-            //
-            // foreach (var player in players)
-            // {
-            //     var (_, distance) = pathfinding.FindPath(entity.GridPos, player.GridPos);
-            //     if (distance < distanceFromStart)
-            //     {
-            //         distanceFromStart = distance;
-            //     }
-            // }
-            //
-            // if (distanceFromStart < closestDistance || bestScore < startPositionScore) return 0f;
-
             return healthFactor * bestScore;
         }
         
