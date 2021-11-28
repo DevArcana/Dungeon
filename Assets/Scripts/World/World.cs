@@ -67,11 +67,6 @@ namespace World
       return Math.Abs(worldPos.y - _mapDataProvider.settings.layers) > 0.01;
     }
 
-    /// <summary>
-    /// Reactive variable showing current floor of the dungeon.
-    /// </summary>
-    public ReactiveVariable<int> currentFloor = new ReactiveVariable<int>();
-
     private void Start()
     {
       _mapDataProvider = FindObjectOfType<MapDataProvider>();
@@ -100,8 +95,6 @@ namespace World
       {
         _mapDataProvider.Generate();
       }
-
-      currentFloor.CurrentValue++;
     }
 
     public int GetRegionIndex(GridPos pos)
