@@ -16,3 +16,4 @@ MonoBehaviour:
   maxAggressiveness: 0
   minTeamwork: 0
   maxTeamwork: 0
+  isRanged: 0
