@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using EntityLogic.Abilities;
 using EntityLogic.Abilities.ReadyAbilities;
+using EntityLogic.AI.Bucketing;
 using TurnSystem;
 using UnityEngine;
 using World.Common;
@@ -29,43 +30,68 @@ namespace EntityLogic.AI
                 else if (entity is EnemyEntity) _agents.Add(entity);
             }
         }
-        
-        private (ActionType, GridPos?) ChooseNextAction(EnemyEntity entity)
+
+        private static (ActionType, GridPos?) ChooseNextAction(EnemyEntity entity)
         {
-            var targetEntity = Pathfinding.FindClosestPlayer(entity.GridPos);
-            var coverMap = new CoverMap(entity, InfluenceMap.instance.GetEntityInfluencedPos(entity), _players).GetCoverMap();
-            var utilities = new List<(ActionType, float)>
+            var buckets = new List<IBucket>
             {
-                (ActionType.ChargePlayer, UtilityFunctions.ChargePlayerUtility(entity, targetEntity, out var chargeTarget)),
-                (ActionType.Pass, UtilityFunctions.PassTurnUtility()),
-                (ActionType.HealSelf, UtilityFunctions.HealSelfUtility(entity)),
-                (ActionType.HealAlly, UtilityFunctions.HealAllyUtility(entity, out var healAllyTarget)),
-                (ActionType.Retreat, UtilityFunctions.RetreatUtility(entity, coverMap, out var retreatTarget)),
-                (ActionType.Fireball, UtilityFunctions.FireballUtility(entity, out var fireballTarget)),
-                (ActionType.TacticalMovement, UtilityFunctions.TacticalMovementUtility(entity, targetEntity, coverMap, out var tacticalMoveTarget)),
-            }.Where(x => x.Item2 > 0.04f).OrderByDescending(x => x.Item2).ToList();
+                new OffensiveBucket(),
+                new DefensiveBucket(),
+                new TeamworkBucket()
+            }.OrderByDescending(bucket => bucket.EvaluateBucketUtility(entity));
+
+            foreach (var bucket in buckets)
+            {
+                var (action, target) = bucket.EvaluateBucketActions(entity);
+                if (action == ActionType.Pass) continue;
+                AILogs.AddMainLogEndl($"{entity.name}");
+                AILogs.AddMainLog($"Chosen action: {action},");
+                AILogs.AddMainLog($"Points left: {TurnManager.instance.ActionPoints.ActionPoints},");
+                return (action, target);
+            }
 
             AILogs.AddMainLogEndl($"{entity.name}");
-            var message = "";
-            foreach (var (actionType, score) in utilities)
-            {
-                message += $"{actionType} - {score:F2}\n";
-            }
-            var result = Helpers.WeightedRandom(utilities);
-            AILogs.AddMainLog($"Chosen action: {result},");
+            AILogs.AddMainLog($"Chosen action: {ActionType.Pass},");
             AILogs.AddMainLog($"Points left: {TurnManager.instance.ActionPoints.ActionPoints},");
-            AILogs.AddSecondaryLogEndl(message.Trim());
-
-            return result switch
-            {
-                ActionType.Retreat => (result, retreatTarget),
-                ActionType.ChargePlayer => (result, chargeTarget),
-                ActionType.HealAlly => (result, healAllyTarget),
-                ActionType.Fireball => (result, fireballTarget),
-                ActionType.TacticalMovement => (result, tacticalMoveTarget),
-                _ => (result, null)
-            };
+            return (ActionType.Pass, null);
         }
+
+        // private (ActionType, GridPos?) ChooseNextAction(EnemyEntity entity)
+        // {
+        //     var targetEntity = Pathfinding.FindClosestPlayer(entity.GridPos);
+        //     var coverMap = new CoverMap(entity, InfluenceMap.instance.GetEntityInfluencedPos(entity), _players).GetCoverMap();
+        //     var utilities = new List<(ActionType, float)>
+        //     {
+        //         (ActionType.ChargePlayer, UtilityFunctions.ChargePlayerUtility(entity, targetEntity, out var chargeTarget)),
+        //         (ActionType.Pass, UtilityFunctions.PassTurnUtility()),
+        //         (ActionType.HealSelf, UtilityFunctions.HealSelfUtility(entity)),
+        //         (ActionType.HealAlly, UtilityFunctions.HealAllyUtility(entity, out var healAllyTarget)),
+        //         (ActionType.Retreat, UtilityFunctions.RetreatUtility(entity, coverMap, out var retreatTarget)),
+        //         (ActionType.Fireball, UtilityFunctions.FireballUtility(entity, out var fireballTarget)),
+        //         (ActionType.TacticalMovement, UtilityFunctions.TacticalMovementUtility(entity, targetEntity, coverMap, out var tacticalMoveTarget)),
+        //     }.Where(x => x.Item2 > 0.04f).OrderByDescending(x => x.Item2).ToList();
+        //
+        //     AILogs.AddMainLogEndl($"{entity.name}");
+        //     var message = "";
+        //     foreach (var (actionType, score) in utilities)
+        //     {
+        //         message += $"{actionType} - {score:F2}\n";
+        //     }
+        //     var result = Helpers.WeightedRandom(utilities);
+        //     AILogs.AddMainLog($"Chosen action: {result},");
+        //     AILogs.AddMainLog($"Points left: {TurnManager.instance.ActionPoints.ActionPoints},");
+        //     AILogs.AddSecondaryLogEndl(message.Trim());
+        //
+        //     return result switch
+        //     {
+        //         ActionType.Retreat => (result, retreatTarget),
+        //         ActionType.ChargePlayer => (result, chargeTarget),
+        //         ActionType.HealAlly => (result, healAllyTarget),
+        //         ActionType.Fireball => (result, fireballTarget),
+        //         ActionType.TacticalMovement => (result, tacticalMoveTarget),
+        //         _ => (result, null)
+        //     };
+        // }
 
         public void PerformNextAction(EnemyEntity entity)
         {

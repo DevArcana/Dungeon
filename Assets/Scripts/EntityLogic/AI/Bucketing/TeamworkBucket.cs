@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 using World.Common;
 
 namespace EntityLogic.AI.Bucketing
@@ -8,24 +9,22 @@ namespace EntityLogic.AI.Bucketing
     {
         public float EvaluateBucketUtility(EnemyEntity entity)
         {
-            throw new System.NotImplementedException();
+            var teamworkFactor = (entity.teamwork - 0.5f) * 0.5f;
+            
+            var result = Mathf.Min(Mathf.Max(UtilityFunctions.HealAllyUtility(entity, out _) + teamworkFactor, 0), 1);
+            AILogs.AddSecondaryLogEndl($"Teamwork bucket score: {result:F2}");
+            return result;
         }
 
         public (ActionType, GridPos?) EvaluateBucketActions(EnemyEntity entity)
         {
-            var utilities = new List<(ActionType, float)>
-            {
-                (ActionType.HealAlly, UtilityFunctions.HealAllyUtility(entity, out var healAllyTarget)),
-                (ActionType.Pass, UtilityFunctions.PassTurnUtility())
-            }.Where(x => x.Item2 > 0.04f).OrderByDescending(x => x.Item2).ToList();
+            var score = UtilityFunctions.HealAllyUtility(entity, out var healAllyTarget);
 
-            var result = Helpers.WeightedRandom(utilities);
-            
-            return result switch
+            if (score > 0.04f)
             {
-                ActionType.HealAlly => (result, healAllyTarget),
-                _ => (result, null)
-            };
+                return (ActionType.HealAlly, healAllyTarget);
+            }
+            return (ActionType.Pass, null);
         }
     }
 }

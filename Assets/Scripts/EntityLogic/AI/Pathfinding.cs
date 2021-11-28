@@ -257,10 +257,12 @@ namespace EntityLogic.AI
             var lowestDistance = int.MaxValue;
             
             GridLivingEntity target = null;
+
+            var pathfinding = new Pathfinding();
             
             foreach (var entity in entities)
             {
-                var distance = Mathf.Abs(startPos.x - entity.GridPos.x) + Mathf.Abs(startPos.y - entity.GridPos.y);
+                var (_, distance) = pathfinding.FindPath(startPos, entity.GridPos);
                 if (distance >= lowestDistance) continue;
                 lowestDistance = distance;
                 target = entity;

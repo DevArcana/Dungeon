@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using TurnSystem;
+using UnityEngine;
 using World.Common;
 
 namespace EntityLogic.AI.Bucketing
@@ -9,7 +10,22 @@ namespace EntityLogic.AI.Bucketing
     {
         public float EvaluateBucketUtility(EnemyEntity entity)
         {
-            throw new System.NotImplementedException();
+            var aggressivenessFactor = (entity.aggressiveness - 0.5f) * 0.5f;
+            
+            var health = entity.health;
+            var healthPercentage = health.Health / health.MaximumHealth;
+            var healthFactor = 1 / (1f + Mathf.Pow(2.718f * 1.2f, -(healthPercentage * 12) + 5.5f));
+
+            var map = World.World.instance;
+            var targetEntity = Pathfinding.FindClosestPlayer(entity.GridPos);
+            var playerHealth = map.GetOccupant(targetEntity.GridPos).health;
+            var playerHealthPercentage = playerHealth.Health / playerHealth.MaximumHealth;
+            var playerHealthFactor = Mathf.Min(Mathf.Pow(0.5f, playerHealthPercentage * 5f) + 0.7f, 1f);
+            
+            var result = Mathf.Min(Mathf.Max(healthFactor * playerHealthFactor + aggressivenessFactor, 0), 1);
+            AILogs.AddSecondaryLogEndl($"Offensive bucket score: {result:F2}");
+            return result;
+
         }
 
         public (ActionType, GridPos?) EvaluateBucketActions(EnemyEntity entity)
@@ -27,7 +43,14 @@ namespace EntityLogic.AI.Bucketing
                 (ActionType.Pass, UtilityFunctions.PassTurnUtility())
             }.Where(x => x.Item2 > 0.04f).OrderByDescending(x => x.Item2).ToList();
 
+            var message = "";
+            foreach (var (actionType, score) in utilities)
+            {
+                message += $"{actionType} - {score:F2}\n";
+            }
+
             var result = Helpers.WeightedRandom(utilities);
+            AILogs.AddSecondaryLogEndl(message.Trim());
             
             return result switch
             {

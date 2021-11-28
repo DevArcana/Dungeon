@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using TurnSystem;
+using UnityEngine;
 using World.Common;
 
 namespace EntityLogic.AI.Bucketing
@@ -9,7 +10,21 @@ namespace EntityLogic.AI.Bucketing
     {
         public float EvaluateBucketUtility(EnemyEntity entity)
         {
-            throw new System.NotImplementedException();
+            var influenceMap = InfluenceMap.instance;
+
+            // -0.25 to 0.25
+            var aggressivenessFactor = (0.5f - entity.aggressiveness) * 0.5f;
+            
+            var health = entity.health;
+            var healthPercentage = health.Health / health.MaximumHealth;
+            var healthFactor = 1 - 1 / (1f + Mathf.Pow(2.718f * 1.2f, -(healthPercentage * 12) + 5.5f));
+            
+            var playerInfluence = influenceMap.GetInfluenceOnPos(entity.GridPos).playersInfluence;
+            var threat = 1 / (1 + Mathf.Pow(2.718f * 1.2f, -(playerInfluence * 12) + 7f));
+
+            var result = Mathf.Min(Mathf.Max(healthFactor * threat + aggressivenessFactor, 0), 1);
+            AILogs.AddSecondaryLogEndl($"Defensive bucket score: {result:F2}");
+            return result;
         }
 
         public (ActionType, GridPos?) EvaluateBucketActions(EnemyEntity entity)

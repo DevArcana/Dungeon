@@ -32,7 +32,7 @@ namespace EntityLogic.AI
             var influenceFactor = 1 / (1f + Mathf.Pow(2.718f, -(recalculatedInfluenceOnPos * 6) + 0.5f));
             
             var health = entity.health;
-            var healthPercentage = health.Health / (float) health.MaximumHealth;
+            var healthPercentage = health.Health / health.MaximumHealth;
             var healthFactor = 1 / (1f + Mathf.Pow(2.718f * 1.2f, -(healthPercentage * 12) + 5.5f));
 
             return healthFactor * ((costFactor + influenceFactor) / 2f);
@@ -168,15 +168,16 @@ namespace EntityLogic.AI
 
             var bestScore = 0f;
             
+            var influenceFactor = 1 / (1f + Mathf.Pow(2.718f, -(influenceMap.GetInfluenceOnPos(target).overallInfluence * 6) + 0.5f));
+
+            var health = entity.health;
+            var healthPercentage = health.Health / health.MaximumHealth;
+            var healthFactor = 1 / (1f + Mathf.Pow(2.718f * 1.2f, -(healthPercentage * 12) + 5.5f));
+                
+            var skillDamage = ((FireballAbility) ability).CalculateDamage();
+            
             foreach (var currentTarget in targets)
             {
-                var influenceFactor = 1 / (1f + Mathf.Pow(2.718f, -(influenceMap.GetInfluenceOnPos(target).overallInfluence * 6) + 0.5f));
-            
-                var health = entity.health;
-                var healthPercentage = health.Health / (float) health.MaximumHealth;
-                var healthFactor = 1 / (1f + Mathf.Pow(2.718f * 1.2f, -(healthPercentage * 12) + 5.5f));
-                
-                var skillDamage = ((FireballAbility) ability).CalculateDamage();
                 var playerHealth = map.GetOccupant(currentTarget).health.Health;
                 var playerHealthFactor = Mathf.Min(Mathf.Pow(0.5f, playerHealth / (skillDamage / 2f)) + 0.7f, 1f);
 
@@ -225,7 +226,7 @@ namespace EntityLogic.AI
                 var threatFactor = 1 - Mathf.Min(Mathf.Pow(currentInfluence.playersInfluence / 0.8f , 4), 1);
                 var alliance = currentInfluence.agentsInfluence -
                                influenceMap.GetEntityInfluenceOnPos(entity, position);
-                var allianceFactor = Mathf.Max(-Mathf.Pow(alliance * 2 - 0.4f, 2) + 1, 0);
+                var allianceFactor = Mathf.Max(-Mathf.Pow((alliance - 0.4f) * 2.5f, 2) + 1, 0);
                 var (_, distance) = pathfinding.FindPath(position, targetEntity.GridPos);
                 var distanceFactor = ((fullCost - cost) / (float)distance) * ((fullCost - cost) / (float)distance);
                 var score = threatFactor * ((0.5f * coverFactor + (1 + teamworkFactor) * allianceFactor + 1.5f * distanceFactor)  / (3f + teamworkFactor));
