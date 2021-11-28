@@ -26,20 +26,20 @@ namespace World.Interaction
       if (instance == null)
       {
         instance = this;
+        
+        _selected = new Dictionary<GridPos, HighlightedTile>();
+        _availableTargets = new HashSet<GridPos>();
+
+        TurnManager.instance.TurnChanged += OnTurnChanged;
+        TurnManager.instance.Transactions.TransactionsProcessed += OnTransactionsProcessed;
+        AbilityProcessor.instance.SelectedAbilityChanged += OnSelectedAbilityChanged;
+      
+        Refresh();
       }
       else if (instance != this)
       {
         Destroy(gameObject);
       }
-
-      _selected = new Dictionary<GridPos, HighlightedTile>();
-      _availableTargets = new HashSet<GridPos>();
-
-      TurnManager.instance.TurnChanged += OnTurnChanged;
-      TurnManager.instance.Transactions.TransactionsProcessed += OnTransactionsProcessed;
-      AbilityProcessor.instance.SelectedAbilityChanged += OnSelectedAbilityChanged;
-      
-      Refresh();
     }
 
     private void OnDestroy()
@@ -108,6 +108,11 @@ namespace World.Interaction
       if (TurnManager.instance.Transactions.HasPendingTransactions)
       {
         return;
+      }
+
+      if (_camera == null)
+      {
+        _camera = UnityEngine.Camera.main;
       }
       
       if (!EventSystem.current.IsPointerOverGameObject() && Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out var hit, float.MaxValue, layerMask: LayerMask.GetMask("Selections")))

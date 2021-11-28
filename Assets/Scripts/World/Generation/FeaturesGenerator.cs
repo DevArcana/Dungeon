@@ -78,6 +78,11 @@ namespace World.Generation
                 if (width > 1)
                 {
                   width--;
+
+                  if (width == 0)
+                  {
+                    break;
+                  }
                   if (_random.Next() % 2 == 0)
                   {
                     start = start.West;
@@ -89,6 +94,11 @@ namespace World.Generation
                 if (height > 1)
                 {
                   height--;
+                  
+                  if (height == 0)
+                  {
+                    break;
+                  }
                   if (_random.Next() % 2 == 0)
                   {
                     start = start.North;

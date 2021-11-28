@@ -3,6 +3,7 @@ using EntityLogic;
 using TurnSystem;
 using TurnSystem.Transactions;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Utils;
 using World.Common;
 using Random = System.Random;
@@ -22,12 +23,21 @@ namespace World.Interaction
     {
       _currentRegion = -1;
       _random = new Random();
-      TurnManager.instance.Transactions.TransactionsProcessed += OnTransactionsProcessed;
-      TurnManager.instance.TurnChanged += OnTurnChanged;
       _regions = World.instance.AllRegions();
       _enemies = new Dictionary<int, List<GridPos>>();
       PopulateRegions();
       OnTransactionsProcessed();
+      
+      TurnManager.instance.Transactions.TransactionsProcessed += OnTransactionsProcessed;
+      TurnManager.instance.TurnChanged += OnTurnChanged;
+
+      SceneManager.sceneUnloaded += OnSceneUnloaded;
+    }
+
+    private void OnSceneUnloaded(Scene scene)
+    {
+      TurnManager.instance.Transactions.TransactionsProcessed -= OnTransactionsProcessed;
+      TurnManager.instance.TurnChanged -= OnTurnChanged;
     }
 
     private void OnTurnChanged(object sender, TurnManager.TurnEventArgs e)
