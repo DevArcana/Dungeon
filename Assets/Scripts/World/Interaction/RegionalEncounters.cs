@@ -65,13 +65,16 @@ namespace World.Interaction
       if (region != _currentRegion)
       {
         _currentRegion = region;
-        foreach (var pos in _enemies[region])
+        if (_enemies.ContainsKey(region))
         {
-          TurnManager.instance.Transactions.EnqueueTransaction(new PanCameraTransaction(false, MapUtils.ToWorldPos(pos), false));
-          TurnManager.instance.Transactions.EnqueueTransaction(new SpawnEnemyTransaction(spawnList[_random.Next(spawnList.Count)], pos, false));
+          foreach (var pos in _enemies[region])
+          {
+            TurnManager.instance.Transactions.EnqueueTransaction(new PanCameraTransaction(false, MapUtils.ToWorldPos(pos), false));
+            TurnManager.instance.Transactions.EnqueueTransaction(new SpawnEnemyTransaction(spawnList[_random.Next(spawnList.Count)], pos, false));
+          }
+          _enemies[region].Clear();
+          TurnManager.instance.Transactions.EnqueueTransaction(new PanCameraTransaction(false));
         }
-        _enemies[region].Clear();
-        TurnManager.instance.Transactions.EnqueueTransaction(new PanCameraTransaction(false));
       }
     }
 
@@ -87,8 +90,15 @@ namespace World.Interaction
       {
         positions.Clear();
         var count = 0;
+        var maxTries = 20;
         while (count < enemyCount)
         {
+          maxTries--;
+          if (maxTries == 0)
+          {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            return;
+          }
           var position = region.cells[_random.Next(region.cells.Count)];
 
           if (World.instance.GetHeightAt(position) == 0 && !positions.Contains(position) && !World.instance.IsOccupied(position))
