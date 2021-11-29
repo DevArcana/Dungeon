@@ -52,16 +52,9 @@ namespace EntityLogic
       }
     }
 
-    private void OnDestroy()
-    {
-      health.EntityDied -= OnDeath;
-    }
-
     protected virtual void OnDeath()
     {
       Destroy(gameObject);
-      health.EntityDied -= OnDeath;
-      TurnManager.instance.UnregisterTurnBasedEntity(this);
     }
 
     public void Highlighted(bool active)
