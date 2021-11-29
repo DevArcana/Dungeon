@@ -87,8 +87,15 @@ namespace World.Interaction
       {
         positions.Clear();
         var count = 0;
+        var maxTries = 20;
         while (count < enemyCount)
         {
+          maxTries--;
+          if (maxTries == 0)
+          {
+            break;
+          }
+          
           var position = region.cells[_random.Next(region.cells.Count)];
 
           if (World.instance.GetHeightAt(position) == 0 && !positions.Contains(position) && !World.instance.IsOccupied(position))

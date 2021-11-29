@@ -44,6 +44,10 @@ Material:
     - Vector1_217e87bb99fa49c1892441f4c146c3e3: 3.03
     - Vector1_84a6ecd3dacd4df392b9be42e74fcfd9: 0.75
     - Vector1_e1447ace66fd4ab99d24dba1a4fbc621: 0.3
+    - _CutoutOffset: 0
+    - _CutoutSize: 0.5
+    - _FalloffSize: 0.1
     m_Colors:
     - Color_645da899e4b947c88997959d221d7dfd: {r: 1, g: 1, b: 1, a: 0}
+    - _CutoutPos: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []

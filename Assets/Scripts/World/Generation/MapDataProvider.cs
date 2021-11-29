@@ -90,6 +90,11 @@ namespace World.Generation
         obj.AddComponent<MeshRenderer>().material = layers[i];
         obj.AddComponent<MeshFilter>().mesh = mesh;
         obj.AddComponent<MeshCollider>().sharedMesh = mesh;
+
+        if (i > 0)
+        {
+          obj.AddComponent<Cutout>();
+        }
       }
     }
 
