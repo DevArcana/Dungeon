@@ -2,6 +2,8 @@
 using System.Linq;
 using EntityLogic.AI;
 using TurnSystem;
+using UnityEngine;
+using World.Triggers;
 
 namespace EntityLogic
 {
@@ -10,7 +12,8 @@ namespace EntityLogic
     public float teamwork;
     public float aggressiveness;
     public List<ActionType> currentTurnActions;
-    
+    public GameObject lootBoxPrefab;
+
     private void Update()
     {
       if (TurnManager.instance.CurrentTurnTaker == this && !TurnManager.instance.Transactions.HasPendingTransactions
@@ -29,6 +32,12 @@ namespace EntityLogic
       aggressiveness = personality.aggressiveness;
       currentTurnActions = new List<ActionType>();
       TurnManager.instance.TurnChanged += TurnChanged;
+    }
+
+    protected override void OnDeath()
+    {
+      base.OnDeath();
+      Instantiate(lootBoxPrefab, transform.position, Quaternion.identity);
     }
 
     private void OnDestroy()
