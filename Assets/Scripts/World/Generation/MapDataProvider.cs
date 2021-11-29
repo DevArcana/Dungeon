@@ -42,6 +42,10 @@ namespace World.Generation
 
       var region = allRegions[random.Next(allRegions.Length)];
       var pos = region.cells[random.Next(region.cells.Count)];
+      while (heightmap[pos] > 0)
+      {
+        pos = region.cells[random.Next(region.cells.Count)];
+      }
       Instantiate(settings.playerPrefab, new Vector3(pos.x, heightmap[pos], pos.y), Quaternion.identity, transform);
 
       var endRegion = region;
@@ -50,7 +54,10 @@ namespace World.Generation
         endRegion = allRegions[random.Next(allRegions.Length)];
       }
       pos = endRegion.cells[random.Next(endRegion.cells.Count)];
-      
+      while (heightmap[pos] > 0)
+      {
+        pos = endRegion.cells[random.Next(endRegion.cells.Count)];
+      }
       Instantiate(settings.staircasePrefab, new Vector3(pos.x, heightmap[pos], pos.y), Quaternion.identity, transform);
     }
 

@@ -91,7 +91,7 @@ namespace World.Interaction
         {
           var position = region.cells[_random.Next(region.cells.Count)];
 
-          if (!positions.Contains(position) && !World.instance.IsOccupied(position))
+          if (World.instance.GetHeightAt(position) == 0 && !positions.Contains(position) && !World.instance.IsOccupied(position))
           {
             positions.Add(position);
             count++;
