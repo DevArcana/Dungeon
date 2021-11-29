@@ -182,7 +182,7 @@ namespace UI
         private void OnItemClicked(Item item, bool isEquipped = true)
         {
             isItemDescriptionEnabled = true;
-            itemName.text = item.itemName;
+            itemName.text = item.itemName + " (" + item.itemRarity + ")";
             itemDescriptionText.text = item.description;
             icon.sprite = item.icon;
             if (item is Consumable consumable)

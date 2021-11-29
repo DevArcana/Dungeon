@@ -143,7 +143,7 @@ namespace UI
                 }
                 else
                 {
-                    weaponName.text = _equipment.weapon.itemName;
+                    weaponName.text = _equipment.weapon.itemName + " (" + _equipment.weapon.itemRarity + ")";
                     weaponDescriptionText.text = _equipment.weapon.description;
                     weaponAttributesNamesText.text = _equipment.weapon.AttributeNames();
                     weaponAttributesValuesText.text = _equipment.weapon.AttributeValues();
@@ -218,7 +218,7 @@ namespace UI
          private void OnItemClicked(WeaponComponent component)
         {
             isComponentsDescriptionEnabled = true;
-            componentsName.text = component.itemName;
+            componentsName.text = component.itemName + " (" + component.itemRarity + ")";;
             componentsDescriptionText.text = component.description;
             componentIcon.sprite = component.icon;
             
@@ -317,6 +317,7 @@ namespace UI
             var range = attributeUpgrades.FirstOrDefault(x => x.attribute == Attribute.WeaponRange);
             w.baseRange = (float) (range?.value ?? 1);
             w.attributeModifiers = attributeUpgrades.Where(x => x.attribute!= Attribute.WeaponDamage && x.attribute != Attribute.WeaponRange).ToArray();
+            w.itemRarity = calculateItemRarity();
             
             var backpack = TurnManager.instance.CurrentTurnTaker.equipment.backpack;
             var recipePage = componentFields.FirstOrDefault(x => x.recipeType == recipeType);
@@ -331,6 +332,18 @@ namespace UI
             isWeaponDescriptionEnabled = false;
             isComponentsDescriptionEnabled = false;
             craftingUIGenerated = false;
+        }
+
+        private ItemRarity calculateItemRarity()
+        {
+            var recipePage = componentFields.First(x => x.recipeType == recipeType);
+            var sumOfRarityID = 0;
+            foreach (var component in recipePage.componentFields)
+            {
+                sumOfRarityID += (int) component.selectedComponent.itemRarity;
+            }
+            var avgRarity = Math.Ceiling(sumOfRarityID / (float) recipePage.componentFields.Count);
+            return (ItemRarity) avgRarity;
         }
     }
 }
