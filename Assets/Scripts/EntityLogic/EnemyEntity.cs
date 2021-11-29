@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using EntityLogic.AI;
 using TurnSystem;
 
@@ -12,7 +13,8 @@ namespace EntityLogic
     
     private void Update()
     {
-      if (TurnManager.instance.CurrentTurnTaker == this && !TurnManager.instance.Transactions.HasPendingTransactions)
+      if (TurnManager.instance.CurrentTurnTaker == this && !TurnManager.instance.Transactions.HasPendingTransactions
+      && TurnManager.instance.PeekQueue().Any(x => x is PlayerEntity))
       {
         var utilityAI = new UtilityAI();
         utilityAI.PerformNextAction(this);
@@ -28,10 +30,12 @@ namespace EntityLogic
       currentTurnActions = new List<ActionType>();
       TurnManager.instance.TurnChanged += TurnChanged;
     }
-    
+
     private void OnDestroy()
     {
+      health.EntityDied -= OnDeath;
       TurnManager.instance.TurnChanged -= TurnChanged;
+      TurnManager.instance.UnregisterTurnBasedEntity(this);
     }
 
     private void TurnChanged(object sender, TurnManager.TurnEventArgs e)

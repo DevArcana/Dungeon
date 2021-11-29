@@ -29,7 +29,7 @@ namespace TurnSystem.Transactions
       
       if (distance > 0.0001f)
       {
-        transform.position = Vector3.SmoothDamp(position, _targetPosition, ref _velocity, 0.15f, 100.0f);
+        transform.position = Vector3.SmoothDamp(position, _targetPosition, ref _velocity, 0.08f, 100.0f);
         transform.rotation = Quaternion.LookRotation(difference.normalized);
       }
       else

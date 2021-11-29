@@ -199,7 +199,7 @@ namespace EntityLogic.AI
         {
             target = entity.GridPos;
             
-            if (entity.currentTurnActions.Contains(ActionType.ChargePlayer)) return 0f;
+            if (entity.currentTurnActions.Contains(ActionType.ChargePlayer) || entity.currentTurnActions.Contains(ActionType.TacticalMovement)) return 0f;
             
             var influenceMap = InfluenceMap.instance;
             var availableActionPoints = TurnManager.instance.ActionPoints.ActionPoints;
