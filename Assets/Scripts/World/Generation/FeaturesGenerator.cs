@@ -66,6 +66,8 @@ namespace World.Generation
 
           var start = cell;
           var aabb = start.AxisAlignedRect(start.Shift(width + 1, height + 1)).ToList();
+          var lastWidth = 0;
+          var lastHeight = 0;
 
           if (regions.Contains(region.index, aabb) && Mask(aabb))
           {
@@ -73,39 +75,32 @@ namespace World.Generation
             {
               layers--;
 
-              if (_random.Next() % 2 == 0)
+              if (width > 1 && _random.Next() % 2 == 0)
               {
-                if (width > 1)
-                {
-                  width--;
-
-                  if (width == 0)
-                  {
-                    break;
-                  }
-                  if (_random.Next() % 2 == 0)
-                  {
-                    start = start.West;
-                  }
-                }
-              }
-              else
-              {
-                if (height > 1)
-                {
-                  height--;
+                width--;
                   
-                  if (height == 0)
-                  {
-                    break;
-                  }
-                  if (_random.Next() % 2 == 0)
-                  {
-                    start = start.North;
-                  }
+                if (_random.Next() % 2 == 0)
+                {
+                  start = start.West;
+                }
+              }
+              else if (height > 1)
+              {
+                height--;
+                  
+                if (_random.Next() % 2 == 0)
+                {
+                  start = start.North;
                 }
               }
 
+              if (width == lastWidth && height == lastHeight)
+              {
+                break;
+              }
+              
+              lastWidth = width;
+              lastHeight = height;
               foreach (var tile in start.AxisAlignedRect(start.Shift(width, height)))
               {
                 _heightMap[tile]++;

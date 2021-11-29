@@ -159,9 +159,8 @@ namespace EntityLogic.Abilities
       AbilityInExecution = true;
       OnAbilityStartedExecution();
       
-      TurnManager.instance.ActionPoints.SpendReservedPoints();
-      var selectedAbility = SelectedAbility;
-      selectedAbility.Execute(pos);
+      turnManager.ActionPoints.SpendReservedPoints();
+      SelectedAbility.Execute(pos);
     }
   }
 }
