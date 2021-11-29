@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffc2d30aaecd408090106d03c342c787, type: 3}
+  m_Name: BigCaves
+  m_EditorClassIdentifier: 
+  seed: 0
+  width: 48
+  height: 32
+  layers: 5
+  fillPercent: 20
+  maxRegionSize: 100
+  minRegionSize: 0
+  playerPrefab: {fileID: 168577634632048304, guid: ea9606cd225c235449bebd1807c35f68, type: 3}
+  staircasePrefab: {fileID: 971944668040218621, guid: aef783dc31990be48b840f70485601b0, type: 3}
+  iterations: 5
+  r1CellsToLive: 5
+  r1CellsToDie: 2
+  rn: 5
+  rnCellsToLive: 3

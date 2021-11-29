@@ -10,6 +10,7 @@ namespace World.Generation
     // settings
     public bool regenerate;
     public MapGenerationSettings settings;
+    public MapGenerationSettings[] configurations;
     public Material[] layers;
     
     // serialized data
@@ -18,6 +19,8 @@ namespace World.Generation
 
     public void Generate(bool force = false)
     {
+      settings = configurations[UnityEngine.Random.Range(0, configurations.Length)];
+      
       if (!regenerate && !force)
       {
         return;

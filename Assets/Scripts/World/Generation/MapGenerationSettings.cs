@@ -20,5 +20,11 @@ namespace World.Generation
     
     public Transform playerPrefab;
     public Transform staircasePrefab;
+
+    public int iterations = 5;
+    public int r1CellsToLive = 5;
+    public int r1CellsToDie = 2;
+    public int rn = 3;
+    public int rnCellsToLive = 3;
   }
 }

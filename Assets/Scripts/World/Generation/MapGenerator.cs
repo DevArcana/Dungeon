@@ -38,9 +38,9 @@ namespace World.Generation
       // step 2, apply ca
       var ca = new CellularAutomata(map);
       
-      for (var i = 0; i < 5; i++)
+      for (var i = 0; i < _settings.iterations; i++)
       {
-        ca.Apply();
+        ca.Apply(_settings);
       }
 
       map = ca.Result;

@@ -40,22 +40,22 @@ namespace World.Generation
       return count;
     }
 
-    public void Apply()
+    public void Apply(MapGenerationSettings settings)
     {
       for (var y = 0; y < _map.height; y++)
       {
         for (var x = 0; x < _map.width; x++)
         {
           var r1 = NeighboursInRadius(x, y, 1);
-          var r3 = NeighboursInRadius(x, y, 3);
+          var r3 = NeighboursInRadius(x, y, settings.rn);
 
           _buffer[x, y] = _map[x, y];
           
-          if (r1 >= 5 || r3 <= 3)
+          if (r1 >= settings.r1CellsToLive || r3 <= settings.rnCellsToLive)
           {
             _buffer[x, y] = true;
           }
-          else if (r1 <= 2)
+          else if (r1 <= settings.r1CellsToDie)
           {
             _buffer[x, y] = false;
           }
