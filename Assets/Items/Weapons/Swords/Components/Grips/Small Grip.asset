@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cced765c274e475e83fce95e842a3d65, type: 3}
   m_Name: Small Grip
   m_EditorClassIdentifier: 
-  itemRarity: 0
+  itemRarity: 2
   itemName: Small Grip
   description: Small Grip
   icon: {fileID: 21300000, guid: 4e1686bc7ac5791489759c2c13604502, type: 3}

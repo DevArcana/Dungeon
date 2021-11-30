@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 527c30111ed049709d0260559d82db58, type: 3}
   m_Name: Blunt Eye
   m_EditorClassIdentifier: 
-  itemRarity: 0
+  itemRarity: 3
   itemName: Blunt Eye
   description: Blunt Eye
   icon: {fileID: 21300000, guid: 86de901eb47c3a94f9109202364ef03b, type: 3}
