@@ -125,6 +125,9 @@ namespace EntityLogic.AI
             }
             
             entity.currentTurnActions.Add(action);
+            
+            AILogs.AdjustMainLog();
+            LogConsole.Log(AILogs.GetMainLog());
             AILogs.Log();
         }
     }

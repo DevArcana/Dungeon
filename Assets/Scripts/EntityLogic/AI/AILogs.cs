@@ -34,5 +34,22 @@ namespace EntityLogic.AI
             MainLog = "";
             SecondaryLog = "";
         }
+
+        public static string GetMainLog()
+        {
+            return MainLog;
+        }
+
+        public static string GetLog()
+        {
+            return MainLog + SecondaryLog;
+        }
+
+        public static void AdjustMainLog()
+        {
+            if (!MainLog.EndsWith(", ")) return;
+            MainLog = MainLog.Remove(MainLog.Length - 2);
+            MainLog += "\n";
+        }
     }
 }

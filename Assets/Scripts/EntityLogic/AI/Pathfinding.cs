@@ -88,7 +88,7 @@ namespace EntityLogic.AI
                     var cost = int.MaxValue;
                     foreach (var node in path)
                     {
-                        var pos = GridPos.At(node.x, node.y);
+                        var pos = GridPos.At(node.x, node.y); 
                         var tempCost = Mathf.FloorToInt(node.gCost) + (includeEnemyCost ? (map.IsOccupied(pos) ? 1 : 0) : 0);
                         if (tempCost > maxPartialCost) break;
                         partialPath.Add(pos);
