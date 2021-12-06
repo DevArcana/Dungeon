@@ -128,10 +128,10 @@ namespace World.Generation
     {
       var pos = GridPos.At(x, y);
       _map[pos] = false;
-      _map[pos.North] = false;
-      _map[pos.East] = false;
-      _map[pos.South] = false;
-      _map[pos.West] = false;
+      if (_map.WithinBounds(pos.North)) _map[pos.North] = false;
+      if (_map.WithinBounds(pos.East)) _map[pos.East] = false;
+      if (_map.WithinBounds(pos.South)) _map[pos.South] = false;
+      if (_map.WithinBounds(pos.West)) _map[pos.West] = false;
     }
 
     private void Carve(int x0, int y0, int x1, int y1)
@@ -214,7 +214,12 @@ namespace World.Generation
           bestRegionA.Connect(bestRegionB, bestA, bestB);
         }
       }
-      main!.connectedToMain = true;
+
+      if (main == null)
+      {
+        return;
+      }
+      main.connectedToMain = true;
 
       var connected = new List<MapRegion>();
       var disconnected = new List<MapRegion>();

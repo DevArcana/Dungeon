@@ -103,7 +103,7 @@ namespace World.Generation
               lastHeight = height;
               foreach (var tile in start.AxisAlignedRect(start.Shift(width, height)))
               {
-                _heightMap[tile]++;
+                if (_heightMap.WithinBounds(tile)) _heightMap[tile]++;
               }
             }
           }
