@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Camera
 {
@@ -101,6 +102,11 @@ namespace Camera
 
         private void Update()
         {
+            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+            {
+                return;
+            }
+            
             _smoothOrigin = Vector3.SmoothDamp(_smoothOrigin, _origin, ref _smoothingVelocity, smoothing);
             _distanceSmooth = Mathf.SmoothDamp(_distanceSmooth, _distance, ref _distanceVelocity, smoothing);
 
