@@ -120,6 +120,8 @@ namespace UI
                 for (var i = 0; i <= (endingIndex - 1) % _numberOfSlots; i++)
                 {
                     _slots[i].GetComponent<Image>().sprite = listOfComponents[startingIndex + i].icon;
+                    _slots[i].GetComponent<Image>().color =
+                        EquipmentUI.AssignRarityColor(listOfComponents[startingIndex + i].itemRarity);
                     _slots[i].GetComponent<Button>().onClick.RemoveAllListeners();
                     var x = i;
                     _slots[i].GetComponent<Button>().onClick.AddListener(() => OnItemClicked((WeaponComponent)listOfComponents[startingIndex + x]));
@@ -127,6 +129,7 @@ namespace UI
                 for (var i = ((endingIndex - 1) % _numberOfSlots) + 1; i < _numberOfSlots; i++)
                 {
                     _slots[i].GetComponent<Image>().sprite = background;
+                    _slots[i].GetComponent<Image>().color = Color.white;
                     _slots[i].GetComponent<Button>().onClick.RemoveAllListeners();
                 }
                 craftingUIGenerated = true;
@@ -143,12 +146,13 @@ namespace UI
                 }
                 else
                 {
-                    weaponName.text = _equipment.weapon.itemName + " (" + _equipment.weapon.itemRarity + ")";
+                    weaponName.text = _equipment.weapon.itemName;
                     weaponDescriptionText.text = _equipment.weapon.description;
                     weaponAttributesNamesText.text = _equipment.weapon.AttributeNames();
                     weaponAttributesValuesText.text = _equipment.weapon.AttributeValues();
                     weaponIcon.enabled = true;
                     weaponIcon.sprite = _equipment.weapon.icon;
+                    weaponIcon.color = EquipmentUI.AssignRarityColor(_equipment.weapon.itemRarity);
                 }
                 
                 if (!isWeaponDescriptionEnabled)
@@ -203,7 +207,7 @@ namespace UI
                             }
                             
                             craftButton.onClick.AddListener(() => Craft(attributeList));
-
+                            craftedWeaponIcon.color = EquipmentUI.AssignRarityColor(CalculateItemRarity());
                             craftedWeaponAttributesNamesText.text = attributeText;
                             craftedWeaponAttributesValuesText.text = attributeValues;
                         }
@@ -218,9 +222,10 @@ namespace UI
          private void OnItemClicked(WeaponComponent component)
         {
             isComponentsDescriptionEnabled = true;
-            componentsName.text = component.itemName + " (" + component.itemRarity + ")";;
+            componentsName.text = component.itemName;
             componentsDescriptionText.text = component.description;
             componentIcon.sprite = component.icon;
+            componentIcon.color = EquipmentUI.AssignRarityColor(component.itemRarity);
             
             useButton.onClick.RemoveAllListeners();
             useButton.onClick.AddListener(() => componentFields.First(x => x.recipeType == recipeType).Show(component));
@@ -255,6 +260,8 @@ namespace UI
                     isWeaponDescriptionEnabled = false;
                 }
             }
+            craftedWeaponName.text = "";
+            craftedWeaponDescriptionText.text = "";
         }
 
         private AttributeModifier[] CalculateAttributes(IEnumerable<WeaponComponent> usedComponents)
@@ -317,7 +324,7 @@ namespace UI
             var range = attributeUpgrades.FirstOrDefault(x => x.attribute == Attribute.WeaponRange);
             w.baseRange = (float) (range?.value ?? 1);
             w.attributeModifiers = attributeUpgrades.Where(x => x.attribute!= Attribute.WeaponDamage && x.attribute != Attribute.WeaponRange).ToArray();
-            w.itemRarity = calculateItemRarity();
+            w.itemRarity = CalculateItemRarity();
             
             var backpack = TurnManager.instance.CurrentTurnTaker.equipment.backpack;
             var recipePage = componentFields.FirstOrDefault(x => x.recipeType == recipeType);
@@ -332,9 +339,10 @@ namespace UI
             isWeaponDescriptionEnabled = false;
             isComponentsDescriptionEnabled = false;
             craftingUIGenerated = false;
+            ClearPage();
         }
 
-        private ItemRarity calculateItemRarity()
+        private ItemRarity CalculateItemRarity()
         {
             var recipePage = componentFields.First(x => x.recipeType == recipeType);
             var sumOfRarityID = 0;

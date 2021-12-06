@@ -25,6 +25,7 @@ namespace TurnSystem.Transactions
                 type = ModifierType.Additive,
                 value = _amount
             });
+            Finish();
         }
     }
 }

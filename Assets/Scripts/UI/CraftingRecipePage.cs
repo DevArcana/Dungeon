@@ -48,6 +48,7 @@ namespace UI
         {
             var componentField = componentFields.First(x => Type.GetType("Equipment." + x.componentTypeString) == component.GetType());
             componentField.icon.sprite = component.icon;
+            componentField.icon.color = EquipmentUI.AssignRarityColor(component.itemRarity);
             componentField.icon.enabled = true;
             componentField.attributeNames.text = component.AttributeNames();
             componentField.attributeNames.enabled = true;

@@ -74,6 +74,7 @@ namespace UI
                 ShowStatistics();
                 for (var i = 0; i < _equipment.backpack.Count; i++)
                 {
+                    _slots[i].GetComponent<Image>().color = AssignRarityColor(_equipment.backpack[i].itemRarity);
                     _slots[i].GetComponent<Image>().sprite = _equipment.backpack[i].icon;
                     var x = i;
                     _slots[i].GetComponent<Button>().onClick.RemoveAllListeners();
@@ -84,10 +85,12 @@ namespace UI
                 {
                     _slots[i].GetComponent<Button>().onClick.RemoveAllListeners();
                     _slots[i].GetComponent<Image>().sprite = background;
+                    _slots[i].GetComponent<Image>().color = Color.white;
                 }
                 if (!(_equipment.weapon is null))
                 {
                     weaponSlot.GetComponent<Image>().sprite = _equipment.weapon.icon;
+                    weaponSlot.GetComponent<Image>().color = AssignRarityColor(_equipment.weapon.itemRarity);
                     weaponSlot.GetComponent<Button>().onClick.RemoveAllListeners();
                     weaponSlot.GetComponent<Button>().onClick.AddListener(()=>OnItemClicked(_equipment.weapon));
                     weaponSlot.SetActive(true);
@@ -99,6 +102,7 @@ namespace UI
                 if (!(_equipment.helmet is null))
                 {
                     helmetSlot.GetComponent<Image>().sprite = _equipment.helmet.icon;
+                    helmetSlot.GetComponent<Image>().color = AssignRarityColor(_equipment.helmet.itemRarity);
                     helmetSlot.GetComponent<Button>().onClick.RemoveAllListeners();
                     helmetSlot.GetComponent<Button>().onClick.AddListener(()=>OnItemClicked(_equipment.helmet));
                     helmetSlot.SetActive(true);
@@ -110,6 +114,7 @@ namespace UI
                 if (!(_equipment.breastplate is null))
                 {
                     breastplateSlot.GetComponent<Image>().sprite = _equipment.breastplate.icon;
+                    breastplateSlot.GetComponent<Image>().color = AssignRarityColor(_equipment.breastplate.itemRarity);
                     breastplateSlot.GetComponent<Button>().onClick.RemoveAllListeners();
                     breastplateSlot.GetComponent<Button>().onClick.AddListener(()=>OnItemClicked(_equipment.breastplate));
                     breastplateSlot.SetActive(true);
@@ -121,6 +126,7 @@ namespace UI
                 if (!(_equipment.leggings is null))
                 {
                     leggingsSlot.GetComponent<Image>().sprite = _equipment.leggings.icon;
+                    leggingsSlot.GetComponent<Image>().color = AssignRarityColor(_equipment.leggings.itemRarity);
                     leggingsSlot.GetComponent<Button>().onClick.RemoveAllListeners();
                     leggingsSlot.GetComponent<Button>().onClick.AddListener(()=>OnItemClicked(_equipment.leggings));
                     leggingsSlot.SetActive(true);
@@ -132,6 +138,7 @@ namespace UI
                 if (!(_equipment.boots is null))
                 {
                     bootsSlot.GetComponent<Image>().sprite = _equipment.boots.icon;
+                    bootsSlot.GetComponent<Image>().color = AssignRarityColor(_equipment.boots.itemRarity);
                     bootsSlot.GetComponent<Button>().onClick.RemoveAllListeners();
                     bootsSlot.GetComponent<Button>().onClick.AddListener(()=>OnItemClicked(_equipment.boots));
                     bootsSlot.SetActive(true);
@@ -143,6 +150,7 @@ namespace UI
                 if (!(_equipment.necklace is null))
                 {
                     necklaceSlot.GetComponent<Image>().sprite = _equipment.necklace.icon;
+                    necklaceSlot.GetComponent<Image>().color = AssignRarityColor(_equipment.necklace.itemRarity);
                     necklaceSlot.GetComponent<Button>().onClick.RemoveAllListeners();
                     necklaceSlot.GetComponent<Button>().onClick.AddListener(()=>OnItemClicked(_equipment.necklace));
                     necklaceSlot.SetActive(true);
@@ -154,6 +162,7 @@ namespace UI
                 if (!(_equipment.ring is null))
                 {
                     ringSlot.GetComponent<Image>().sprite = _equipment.ring.icon;
+                    ringSlot.GetComponent<Image>().color = AssignRarityColor(_equipment.ring.itemRarity);
                     ringSlot.GetComponent<Button>().onClick.RemoveAllListeners();
                     ringSlot.GetComponent<Button>().onClick.AddListener(()=>OnItemClicked(_equipment.ring));
                     ringSlot.SetActive(true);
@@ -165,6 +174,7 @@ namespace UI
                 if (!(_equipment.gloves is null))
                 {
                     glovesSlot.GetComponent<Image>().sprite = _equipment.gloves.icon;
+                    glovesSlot.GetComponent<Image>().color = AssignRarityColor(_equipment.gloves.itemRarity);
                     glovesSlot.GetComponent<Button>().onClick.RemoveAllListeners();
                     glovesSlot.GetComponent<Button>().onClick.AddListener(()=>OnItemClicked(_equipment.gloves));
                     glovesSlot.SetActive(true);
@@ -182,9 +192,10 @@ namespace UI
         private void OnItemClicked(Item item, bool isEquipped = true)
         {
             isItemDescriptionEnabled = true;
-            itemName.text = item.itemName + " (" + item.itemRarity + ")";
+            itemName.text = item.itemName;
             itemDescriptionText.text = item.description;
             icon.sprite = item.icon;
+            icon.color = AssignRarityColor(item.itemRarity);
             if (item is Consumable consumable)
             {
                 useButton.onClick.RemoveAllListeners();
@@ -232,6 +243,40 @@ namespace UI
             player.RecalculateAttributes();
             attributeNames.text = player.attributes.AttributeNames();
             attributeValues.text = player.attributes.AttributeValues() + player.health.MaximumHealth + "\n" + player.health.Health;
+        }
+
+        public static Color AssignRarityColor(ItemRarity rarity)
+        {
+            Color c = Color.white;
+            switch (rarity)
+            {
+                case ItemRarity.Common:
+                {
+                    c = Color.white;
+                    break;
+                }
+                case ItemRarity.Rare:
+                {
+                    c = Color.blue;
+                    break;
+                }
+                case ItemRarity.Epic:
+                {
+                    c = Color.magenta;
+                    break;
+                }
+                case ItemRarity.Legendary:
+                {
+                    c = Color.yellow;
+                    break;
+                }
+                case ItemRarity.Mythic:
+                {
+                    c = Color.red;
+                    break;
+                }
+            }
+            return c;
         }
     }
 }
