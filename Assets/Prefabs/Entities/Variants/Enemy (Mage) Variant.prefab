@@ -21,7 +21,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 826060875, guid: 5b4da0c22f232dd4b8ab2b9a2327f179, type: 3}
       propertyPath: abilities.Array.size
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 826060875, guid: 5b4da0c22f232dd4b8ab2b9a2327f179, type: 3}
       propertyPath: abilities.Array.data[1]
@@ -30,7 +30,7 @@ PrefabInstance:
     - target: {fileID: 826060875, guid: 5b4da0c22f232dd4b8ab2b9a2327f179, type: 3}
       propertyPath: abilities.Array.data[2]
       value: 
-      objectReference: {fileID: 11400000, guid: fe1c60c20955cc74ca3d1313b93a3a8f, type: 2}
+      objectReference: {fileID: 11400000, guid: cfe8d9fe703a61b438aad29169721ce0, type: 2}
     - target: {fileID: 826060875, guid: 5b4da0c22f232dd4b8ab2b9a2327f179, type: 3}
       propertyPath: abilities.Array.data[3]
       value: 

@@ -16,8 +16,11 @@ namespace EntityLogic
 
     private void Update()
     {
-      if (TurnManager.instance.CurrentTurnTaker == this && !TurnManager.instance.Transactions.HasPendingTransactions
-      && TurnManager.instance.PeekQueue().Any(x => x is PlayerEntity))
+      var turnManager = TurnManager.instance;
+      if (turnManager.CurrentTurnTaker == this
+          && !turnManager.Transactions.HasPendingTransactions
+          && turnManager.ActionPoints.ActionPoints > 0
+          && turnManager.PeekQueue().Any(x => x is PlayerEntity))
       {
         var utilityAI = new UtilityAI();
         utilityAI.PerformNextAction(this);
