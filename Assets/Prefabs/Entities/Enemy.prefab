@@ -75,6 +75,11 @@ MonoBehaviour:
   aggressiveness: 0
   currentTurnActions: 
   lootBoxPrefab: {fileID: 1205852612056236418, guid: 17a1c3afcc727a1468887eadea64db1e, type: 3}
+  lootTable:
+    loot:
+    - item: {fileID: 11400000, guid: 6e57c2d70983b83478ace389fc3c4cee, type: 2}
+      weight: 100
+    numberOfItemDropped: 1
 --- !u!136 &527564245098237591
 CapsuleCollider:
   m_ObjectHideFlags: 0
