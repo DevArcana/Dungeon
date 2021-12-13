@@ -15,8 +15,13 @@ namespace World.Triggers
             {
                 return;
             }
-            entity.equipment.backpack.AddRange(items);
-            Destroy(gameObject);
+
+            var availableSlots = entity.equipment.backpack.Capacity - entity.equipment.backpack.Count;
+            if (availableSlots > items.Count)
+            {
+                entity.equipment.backpack.AddRange(items);
+                Destroy(gameObject);
+            }
         }
     }
 }

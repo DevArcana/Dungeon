@@ -21,6 +21,6 @@ MonoBehaviour:
   - attribute: 0
     value: 4
     type: 0
-  baseDamage: 10
+  baseDamage: 180
   baseRange: 1
   isRanged: 0

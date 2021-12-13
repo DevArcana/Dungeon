@@ -1,4 +1,6 @@
-﻿using Equipment;
+﻿using System;
+using EntityLogic.Attributes;
+using Equipment;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Utils;
@@ -9,7 +11,8 @@ namespace World
   {
     public static CrossSceneContainer instance;
 
-    public EntityEquipment equipment = null;
+    [NonSerialized]public EntityEquipment equipment = null;
+    [NonSerialized] public EntityAttributes attributes = null;
     
     private void Awake()
     {

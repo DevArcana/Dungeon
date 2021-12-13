@@ -133,7 +133,7 @@ MonoBehaviour:
   highlight: {fileID: 0}
   autoRegister: 1
   equipment:
-    weapon: {fileID: 11400000, guid: 80f1559e44d407a48be99c80ec764296, type: 2}
+    weapon: {fileID: 11400000, guid: c84d1370eb7955542adad9aefd517ec3, type: 2}
     helmet: {fileID: 11400000, guid: 3e41a619426b7d041bbc748fc8446967, type: 2}
     breastplate: {fileID: 11400000, guid: b044889912473e64a8f1689e3fa121d2, type: 2}
     leggings: {fileID: 11400000, guid: efd9b08af844d4f4080d4827c5423190, type: 2}
@@ -142,7 +142,7 @@ MonoBehaviour:
     ring: {fileID: 11400000, guid: 634a1b04b6a66bb43ac8cd744efb0000, type: 2}
     gloves: {fileID: 11400000, guid: 8cb87086c79255542bc38b5595c51e99, type: 2}
     backpack:
-    - {fileID: 11400000, guid: c84d1370eb7955542adad9aefd517ec3, type: 2}
+    - {fileID: 11400000, guid: 80f1559e44d407a48be99c80ec764296, type: 2}
     - {fileID: 11400000, guid: 8892495a893f1f644abb5cb6694e1fc1, type: 2}
     - {fileID: 11400000, guid: bed33d9e21cc6464a943dbbd898c1c4b, type: 2}
     - {fileID: 11400000, guid: 4ed2f0f81f3a02f4f91212c15127bd05, type: 2}

@@ -62,6 +62,7 @@ namespace UI
             if (!(TurnManager.instance.CurrentTurnTaker is PlayerEntity)) return;
             if (CraftingUI.IsEditingInputField) return;
             _equipment = TurnManager.instance.CurrentTurnTaker.equipment;
+            _equipment.backpack.Capacity = _numberOfSlots;
             if (Input.GetKeyDown(KeyCode.I))
             {
                 isEnabled = !isEnabled;
