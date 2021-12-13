@@ -86,13 +86,11 @@ namespace UI
             {
                 currentPage -= 1;
                 craftingUIGenerated = false;
-                Debug.Log(currentPage);
             });
             nextButton.onClick.AddListener(() =>
             {
                 currentPage += 1;
                 craftingUIGenerated = false;
-                Debug.Log(currentPage);
             });
         }
 

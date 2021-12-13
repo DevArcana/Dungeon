@@ -5,6 +5,7 @@ using EntityLogic.Attributes;
 using Equipment;
 using TurnSystem;
 using UnityEngine;
+using World;
 
 namespace EntityLogic
 {
@@ -27,6 +28,8 @@ namespace EntityLogic
 
     private void Awake()
     {
+
+
       health = new EntityHealth(baseAttributes.maximumHealth);
       attributes = new EntityAttributes();
       RecalculateAttributes();
@@ -40,6 +43,27 @@ namespace EntityLogic
 
     protected virtual void Start()
     {
+      if (this is PlayerEntity)
+      {
+        if (CrossSceneContainer.instance.equipment == null)
+        {
+          CrossSceneContainer.instance.equipment = equipment;
+        }
+        else
+        {
+          equipment = CrossSceneContainer.instance.equipment;
+        }
+        
+        if (CrossSceneContainer.instance.attributes == null)
+        {
+          CrossSceneContainer.instance.attributes = attributes;
+        }
+        else
+        {
+          attributes = CrossSceneContainer.instance.attributes;
+        }
+      }
+      
       health.EntityDied += OnDeath;
       
       highlight = transform.Find("Highlight").gameObject;

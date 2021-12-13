@@ -7,17 +7,6 @@ namespace EntityLogic
 {
   public class PlayerEntity : GridLivingEntity
   {
-    protected override void Start()
-    {
-      if (CrossSceneContainer.instance.equipment == null)
-      {
-        CrossSceneContainer.instance.equipment = equipment;
-      }
-      else
-      {
-        equipment = CrossSceneContainer.instance.equipment;
-      }
-    }
     protected override void OnDeath()
     {
       base.OnDeath();
