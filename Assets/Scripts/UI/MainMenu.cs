@@ -11,7 +11,7 @@ namespace UI
     {
       var obj = (GameObject) Instantiate(Resources.Load("Level Loader"));
       var loader = obj.GetComponent<SceneLoader>();
-      loader.scene = "GameScene";
+      loader.scene = "TestScene";
       loader.hard = true;
     }
     

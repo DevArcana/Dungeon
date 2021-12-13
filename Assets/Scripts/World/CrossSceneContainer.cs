@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Equipment;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using Utils;
 
@@ -7,6 +8,8 @@ namespace World
   public class CrossSceneContainer : MonoBehaviour
   {
     public static CrossSceneContainer instance;
+
+    public EntityEquipment equipment = null;
     
     private void Awake()
     {

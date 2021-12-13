@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿#if (UNITY_EDITOR)
+using UnityEditor;
 using UnityEngine;
 
 namespace World.Generation.Editor
@@ -18,3 +19,4 @@ namespace World.Generation.Editor
     }
   }
 }
+#endif

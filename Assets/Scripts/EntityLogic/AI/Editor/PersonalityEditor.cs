@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿#if (UNITY_EDITOR)
+using UnityEditor;
 
 namespace EntityLogic.AI.Editor
 {
@@ -24,3 +25,4 @@ namespace EntityLogic.AI.Editor
         }
     }
 }
+#endif

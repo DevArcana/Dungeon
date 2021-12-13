@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using EntityLogic.Abilities;
 using TurnSystem;
-using Unity.Plastic.Newtonsoft.Json.Serialization;
 using UnityEngine;
 using World.Common;
 

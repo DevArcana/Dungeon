@@ -50,7 +50,7 @@ namespace EntityLogic.AI
                 nameStart = entity.name.IndexOf('(') + 1;
                 nameLength = entity.name.IndexOf(')') - nameStart;
                 AILogs.AddMainLogEndl($"{entity.name.Substring(nameStart, nameLength)}, " +
-                                      $"HP: {entity.health.Health}/{entity.health.MaximumHealth}");
+                                      $"HP: {Mathf.Ceil(entity.health.Health)}/{entity.health.MaximumHealth}");
                 AILogs.AddMainLog($"Chosen action: {action},");
                 AILogs.AddMainLog($"Points left: {TurnManager.instance.ActionPoints.ActionPoints},");
                 return (action, target);
@@ -59,7 +59,7 @@ namespace EntityLogic.AI
             nameStart = entity.name.IndexOf('(') + 1;
             nameLength = entity.name.IndexOf(')') - nameStart;
             AILogs.AddMainLogEndl($"{entity.name.Substring(nameStart, nameLength)}, " +
-                                  $"HP: {entity.health.Health}/{entity.health.MaximumHealth}");
+                                  $"HP: {Mathf.Ceil(entity.health.Health)}/{entity.health.MaximumHealth}");
             AILogs.AddMainLog($"Chosen action: {ActionType.Pass},");
             AILogs.AddMainLog($"Points left: {TurnManager.instance.ActionPoints.ActionPoints},");
             return (ActionType.Pass, null);
