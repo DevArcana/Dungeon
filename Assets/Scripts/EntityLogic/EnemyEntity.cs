@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using EntityLogic.AI;
+using Equipment;
 using TurnSystem;
 using UnityEngine;
 using World.Triggers;
@@ -13,6 +14,7 @@ namespace EntityLogic
     public float aggressiveness;
     public List<ActionType> currentTurnActions;
     public GameObject lootBoxPrefab;
+    public LootTable lootTable;
 
     private void Update()
     {
@@ -40,7 +42,8 @@ namespace EntityLogic
     protected override void OnDeath()
     {
       base.OnDeath();
-      Instantiate(lootBoxPrefab, transform.position, Quaternion.identity);
+      var lootBox = Instantiate(lootBoxPrefab, transform.position, Quaternion.identity);
+      lootBox.GetComponent<LootBox>().items = lootTable.GetDrop();
     }
 
     private void OnDestroy()
