@@ -96,13 +96,15 @@ namespace World.Interaction
           maxTries--;
           if (maxTries == 0)
           {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            // SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            Debug.Log("AAAAAAAAAAAAA");
             return;
           }
           var position = region.cells[_random.Next(region.cells.Count)];
 
           if (World.instance.GetHeightAt(position) == 0 && !positions.Contains(position) && !World.instance.IsOccupied(position))
           {
+            maxTries = 20;
             positions.Add(position);
             count++;
             if (!_enemies.ContainsKey(region.index))

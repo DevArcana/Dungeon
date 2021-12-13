@@ -33,6 +33,8 @@ namespace EntityLogic.AI
 
         private static (ActionType, GridPos?) ChooseNextAction(EnemyEntity entity)
         {
+            int nameStart, nameLength;
+            
             var buckets = new List<IBucket>
                 {
                     new OffensiveBucket(entity),
@@ -45,13 +47,19 @@ namespace EntityLogic.AI
             {
                 var (action, target) = bucket.EvaluateBucketActions(entity);
                 if (action == ActionType.Pass) continue;
-                AILogs.AddMainLogEndl($"{entity.name}");
+                nameStart = entity.name.IndexOf('(') + 1;
+                nameLength = entity.name.IndexOf(')') - nameStart;
+                AILogs.AddMainLogEndl($"{entity.name.Substring(nameStart, nameLength)}, " +
+                                      $"HP: {entity.health.Health}/{entity.health.MaximumHealth}");
                 AILogs.AddMainLog($"Chosen action: {action},");
                 AILogs.AddMainLog($"Points left: {TurnManager.instance.ActionPoints.ActionPoints},");
                 return (action, target);
             }
 
-            AILogs.AddMainLogEndl($"{entity.name}");
+            nameStart = entity.name.IndexOf('(') + 1;
+            nameLength = entity.name.IndexOf(')') - nameStart;
+            AILogs.AddMainLogEndl($"{entity.name.Substring(nameStart, nameLength)}, " +
+                                  $"HP: {entity.health.Health}/{entity.health.MaximumHealth}");
             AILogs.AddMainLog($"Chosen action: {ActionType.Pass},");
             AILogs.AddMainLog($"Points left: {TurnManager.instance.ActionPoints.ActionPoints},");
             return (ActionType.Pass, null);

@@ -20,32 +20,32 @@ namespace EntityLogic.AI
             var startNode = new PathNode(start.x, start.y, map.GetHeightAt(start), !map.IsOccupied(start));
             var endNode = new PathNode(end.x, end.y, map.GetHeightAt(end), !map.IsOccupied(end));
 
-            var openList = new Dictionary<PathNode, PathNode> { {startNode, startNode} };
-            var closedList = new HashSet<PathNode>();
+            var openSet = new Dictionary<PathNode, PathNode> { {startNode, startNode} };
+            var closedSet = new HashSet<PathNode>();
 
             startNode.gCost = 0;
             startNode.hCost = CalculateDistanceCost(startNode, endNode);
             startNode.CalculateFCost();
 
-            while (openList.Any())
+            while (openSet.Any())
             {
-                var currentNode = GetLowestFCostNode(openList.Keys);
+                var currentNode = GetLowestFCostNode(openSet.Keys);
                 if (currentNode == endNode)
                 {
                     var path = GetPath(currentNode);
                     return (path.Select(node => GridPos.At(node.x, node.y)).ToList(), Mathf.FloorToInt(currentNode.gCost));
                 }
 
-                openList.Remove(currentNode);
-                closedList.Add(currentNode);
+                openSet.Remove(currentNode);
+                closedSet.Add(currentNode);
 
                 foreach (var neighbour in GetNeighbourNodes(currentNode))
                 {
-                    if (closedList.Contains(neighbour)) continue;
-                    var neighbourNode = openList.ContainsKey(neighbour) ? openList[neighbour] : neighbour;
+                    if (closedSet.Contains(neighbour)) continue;
+                    var neighbourNode = openSet.ContainsKey(neighbour) ? openSet[neighbour] : neighbour;
                     if (!neighbourNode.isWalkable && neighbourNode != endNode)
                     {
-                        closedList.Add(neighbourNode);
+                        closedSet.Add(neighbourNode);
                         continue;
                     }
                     var tempGCost = currentNode.gCost + CalculateDistanceCost(currentNode, neighbourNode);
@@ -57,7 +57,7 @@ namespace EntityLogic.AI
                     neighbourNode.hCost = CalculateDistanceCost(neighbourNode, endNode);
                     neighbourNode.CalculateFCost();
                     
-                    openList[neighbourNode] = neighbourNode;
+                    openSet[neighbourNode] = neighbourNode;
                 }
             }
 
@@ -71,16 +71,16 @@ namespace EntityLogic.AI
             var startNode = new PathNode(start.x, start.y, map.GetHeightAt(start), !map.IsOccupied(start));
             var endNode = new PathNode(end.x, end.y, map.GetHeightAt(end), !map.IsOccupied(end));
 
-            var openList = new Dictionary<PathNode, PathNode> { {startNode, startNode} };
-            var closedList = new HashSet<PathNode>();
+            var openSet = new Dictionary<PathNode, PathNode> { {startNode, startNode} };
+            var closedSet = new HashSet<PathNode>();
 
             startNode.gCost = 0;
             startNode.hCost = CalculateDistanceCost(startNode, endNode);
             startNode.CalculateFCost();
 
-            while (openList.Any())
+            while (openSet.Any())
             {
-                var currentNode = GetLowestFCostNode(openList.Keys);
+                var currentNode = GetLowestFCostNode(openSet.Keys);
                 if (currentNode == endNode)
                 {
                     var path = GetPath(currentNode);
@@ -101,16 +101,16 @@ namespace EntityLogic.AI
                     return (partialPath, cost, fullCost);
                 }
 
-                openList.Remove(currentNode);
-                closedList.Add(currentNode);
+                openSet.Remove(currentNode);
+                closedSet.Add(currentNode);
 
                 foreach (var neighbour in GetNeighbourNodes(currentNode))
                 {
-                    if (closedList.Contains(neighbour)) continue;
-                    var neighbourNode = openList.ContainsKey(neighbour) ? openList[neighbour] : neighbour;
+                    if (closedSet.Contains(neighbour)) continue;
+                    var neighbourNode = openSet.ContainsKey(neighbour) ? openSet[neighbour] : neighbour;
                     if (!neighbourNode.isWalkable && neighbourNode != endNode)
                     {
-                        closedList.Add(neighbourNode);
+                        closedSet.Add(neighbourNode);
                         continue;
                     }
                     var tempGCost = currentNode.gCost + CalculateDistanceCost(currentNode, neighbourNode);
@@ -122,7 +122,7 @@ namespace EntityLogic.AI
                     neighbourNode.hCost = CalculateDistanceCost(neighbourNode, endNode);
                     neighbourNode.CalculateFCost();
                     
-                    openList[neighbourNode] = neighbourNode;
+                    openSet[neighbourNode] = neighbourNode;
                 }
             }
 
@@ -134,26 +134,26 @@ namespace EntityLogic.AI
             var map = World.World.instance;
             var startNode = new PathNode(start.x, start.y, map.GetHeightAt(start), !map.IsOccupied(start));
 
-            var openList = new HashSet<PathNode> { startNode };
-            var resultList = new Dictionary<PathNode, PathNode> { {startNode, startNode} };
-            var closedList = new HashSet<PathNode>();
+            var openSet = new HashSet<PathNode> { startNode };
+            var resultSet = new Dictionary<PathNode, PathNode> { {startNode, startNode} };
+            var closedSet = new HashSet<PathNode>();
             
             startNode.gCost = startNode.fCost = 0;
             
-            while (openList.Any())
+            while (openSet.Any())
             {
-                var currentNode = GetLowestFCostNode(openList);
-                openList.Remove(currentNode);
-                closedList.Add(currentNode);
+                var currentNode = GetLowestFCostNode(openSet);
+                openSet.Remove(currentNode);
+                closedSet.Add(currentNode);
                 
                 foreach (var neighbour in GetNeighbourNodes(currentNode))
                 {
-                    if (closedList.Contains(neighbour)) continue;
-                    var neighbourNode = resultList.ContainsKey(neighbour) ? resultList[neighbour] : neighbour;
+                    if (closedSet.Contains(neighbour)) continue;
+                    var neighbourNode = resultSet.ContainsKey(neighbour) ? resultSet[neighbour] : neighbour;
                     var isOccupied = !(map.GetOccupant(GridPos.At(neighbourNode.x, neighbourNode.y)) is null);
                     if (!neighbourNode.isWalkable && !isOccupied)
                     {
-                        closedList.Add(neighbourNode);
+                        closedSet.Add(neighbourNode);
                         continue;
                     }
                     var tempGCost = currentNode.gCost + CalculateDistanceCost(currentNode, neighbourNode);
@@ -169,18 +169,18 @@ namespace EntityLogic.AI
                     neighbourNode.previousNode = currentNode;
                     neighbourNode.gCost = neighbourNode.fCost = tempGCost;
 
-                    if (!isOccupied) openList.Add(neighbourNode);
-                    resultList[neighbourNode] = neighbourNode;
+                    if (!isOccupied) openSet.Add(neighbourNode);
+                    resultSet[neighbourNode] = neighbourNode;
                 }
                 
             }
 
-            foreach (var pathNode in resultList.Keys)
+            foreach (var pathNode in resultSet.Keys)
             {
                 pathNode.gCost = Mathf.FloorToInt(pathNode.gCost);
             }
 
-            return resultList.Keys;
+            return resultSet.Keys;
         }
         
         private static float CalculateDistanceCost(PathNode a, PathNode b)
