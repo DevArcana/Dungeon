@@ -1,5 +1,6 @@
 ﻿using TurnSystem;
 using TurnSystem.Transactions;
+using UnityEngine;
 using World;
 
 namespace EntityLogic
@@ -31,7 +32,7 @@ namespace EntityLogic
     
     public override string GetTooltip()
     {
-      return $"HP: {health.Health}/{health.MaximumHealth}";
+      return $"HP: {Mathf.Ceil(health.Health)}/{health.MaximumHealth}";
     }
   }
 }

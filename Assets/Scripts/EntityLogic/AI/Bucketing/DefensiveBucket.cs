@@ -30,7 +30,7 @@ namespace EntityLogic.AI.Bucketing
             var playerInfluence = influenceMap.GetInfluenceOnPos(entity.GridPos).playersInfluence;
             var threat = 1 / (1 + Mathf.Pow(2.718f * 1.2f, -(playerInfluence * 12) + 7f));
 
-            var result = Mathf.Min(Mathf.Max(healthFactor * threat + aggressivenessFactor, 0), 1);
+            var result = Mathf.Min(Mathf.Max((healthFactor + threat) / 2f + aggressivenessFactor, 0), 1);
             AILogs.AddSecondaryLogEndl($"Defensive bucket score: {result:F2}");
             Score = result;
         }
