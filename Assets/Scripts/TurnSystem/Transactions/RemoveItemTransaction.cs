@@ -1,4 +1,6 @@
-﻿using EntityLogic;
+﻿using System;
+using EntityLogic;
+using EntityLogic.AI;
 using Equipment;
 
 namespace TurnSystem.Transactions
@@ -20,6 +22,7 @@ namespace TurnSystem.Transactions
         {
             base.Process();
             _entity.equipment.RemoveItem(_item, _isEquiped);
+            LogConsole.Log($"{_item.itemName} removed." + Environment.NewLine);
             Finish();
         }
     }

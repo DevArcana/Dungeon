@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using EntityLogic;
+using EntityLogic.AI;
 using EntityLogic.Attributes;
 using Equipment;
 using TMPro;
@@ -201,7 +202,7 @@ namespace UI
                             var attributeValues = "";
                             foreach (var attribute in attributeList)
                             {
-                                attributeValues = attributeValues + attribute.value + ":\n";
+                                attributeValues = attributeValues + attribute.value + "\n";
                             }
                             
                             craftButton.onClick.AddListener(() => Craft(attributeList));
@@ -338,6 +339,7 @@ namespace UI
             isComponentsDescriptionEnabled = false;
             craftingUIGenerated = false;
             ClearPage();
+            LogConsole.Log($"Crafted {w.itemRarity} weapon!" + Environment.NewLine);
         }
 
         private ItemRarity CalculateItemRarity()

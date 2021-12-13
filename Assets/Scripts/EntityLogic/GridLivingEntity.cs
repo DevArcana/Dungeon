@@ -11,7 +11,6 @@ namespace EntityLogic
 {
   public class GridLivingEntity : GridEntity
   {
-    public string entityName = "Unnamed";
     public string faction = "Enemies";
     public Sprite portrait;
     public GameObject highlight;
@@ -84,13 +83,8 @@ namespace EntityLogic
     public void Highlighted(bool active)
     {
       highlight.SetActive(active);
-    }
-
-    public virtual string GetTooltip()
-    {
-      return "this is an entity";
-    }
-
+    } 
+    
     public void RecalculateAttributes()
     {
       var attributeModifiers = new List<AttributeModifier>(equipment.GetAllAttributeModifiers());

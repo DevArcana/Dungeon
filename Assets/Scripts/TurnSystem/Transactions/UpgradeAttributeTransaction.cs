@@ -1,6 +1,9 @@
-﻿using EntityLogic;
+﻿using System;
+using EntityLogic;
+using EntityLogic.AI;
 using EntityLogic.Attributes;
 using UnityEngine;
+using Attribute = EntityLogic.Attributes.Attribute;
 
 namespace TurnSystem.Transactions
 {
@@ -25,6 +28,7 @@ namespace TurnSystem.Transactions
                 type = ModifierType.Additive,
                 value = _amount
             });
+            LogConsole.Log($"Upgraded {_attribute} by {_amount}!" + Environment.NewLine);
             Finish();
         }
     }

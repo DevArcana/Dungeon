@@ -45,7 +45,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 826060875, guid: 5b4da0c22f232dd4b8ab2b9a2327f179, type: 3}
       propertyPath: lootTable.numberOfItemDropped
-      value: 30
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 826060875, guid: 5b4da0c22f232dd4b8ab2b9a2327f179, type: 3}
       propertyPath: lootTable.loot.Array.data[1].item

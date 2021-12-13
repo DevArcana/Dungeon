@@ -33,6 +33,7 @@ namespace Equipment
                     if (roll < weightedSum)
                     {
                         returnedLoot.Add(drop.item);
+                        break;
                     }
                 }
             }

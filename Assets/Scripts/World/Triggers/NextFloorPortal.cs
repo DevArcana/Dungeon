@@ -7,6 +7,12 @@ namespace World.Triggers
 {
   public class NextFloorPortal : GridTriggerEntity
   {
+    
+    private void Start()
+    {
+      entityName = "Next Floor Portal";
+    }
+    
     public override void OnTileEntered(GridLivingEntity entity)
     {
       if (entity == null || !(entity is PlayerEntity))
@@ -16,6 +22,11 @@ namespace World.Triggers
       
       TurnManager.instance.Transactions.EnqueueTransaction(new ChangeSceneTransaction(SceneManager.GetActiveScene().name, false));
       Destroy(gameObject);
+    }
+
+    public override string GetTooltip()
+    {
+      return "Next level staircase";
     }
   }
 }

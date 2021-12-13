@@ -95,6 +95,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cc48a4b891a46ca83c54cb41bcbbb7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  entityName: Unnamed
   items:
   - {fileID: 11400000, guid: 4ed2f0f81f3a02f4f91212c15127bd05, type: 2}
 --- !u!65 &7578207569327903052

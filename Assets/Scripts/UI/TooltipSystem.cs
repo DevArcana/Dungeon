@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using PlasticPipe.PlasticProtocol.Messages;
 using TurnSystem;
 using UnityEngine;
 using Utils;
@@ -39,7 +41,7 @@ namespace UI
 
     private void Update()
     {
-      if (Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out var hit, float.MaxValue, layerMask: LayerMask.GetMask("Default")))
+      if (Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out var hit, float.MaxValue, layerMask: LayerMask.GetMask("Default", "Triggers")))
       {
         var pos = MapUtils.ToMapPos(hit.point);
 
@@ -64,7 +66,15 @@ namespace UI
       }
       else
       {
-        Hide();
+        var trigger = World.World.instance.GetTriggers(_pos).FirstOrDefault();
+        if (trigger)
+        {
+          Show(trigger.entityName, "");
+        }
+        else
+        {
+          Hide();
+        }
       }
     }
 
