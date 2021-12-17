@@ -119,7 +119,7 @@ namespace EntityLogic.AI
             // exponential function
             var threat = Mathf.Min(Mathf.Pow(influence.playersInfluence / 0.8f , 4), 1);
             // if threat is above average
-            if (!(threat > 0.5f)) return 0f;
+            if (threat < 0.5f || healthFactor < 0.04f) return 0f;
             
             var bestScore = 0f;
             var positions = new Dictionary<GridPos, float>();
@@ -195,7 +195,7 @@ namespace EntityLogic.AI
             return bestScore;
         }
 
-        public static float TacticalMovementUtility(EnemyEntity entity, GridLivingEntity targetEntity, Dictionary<GridPos, CoverType> coverMap, out GridPos target)
+        public static float TacticalMovementUtility(EnemyEntity entity, GridLivingEntity targetEntity, out GridPos target)
         {
             target = entity.GridPos;
             
@@ -208,7 +208,7 @@ namespace EntityLogic.AI
             var healthPercentage = health.Health / health.MaximumHealth;
             var healthFactor = 1 / (1f + Mathf.Pow(2.718f * 1.2f, -(healthPercentage * 12) + 5.5f));
 
-            if (healthFactor < 0.05f) return 0f;
+            if (healthFactor < 0.04f) return 0f;
             // var positions = new Dictionary<GridPos, float>();
             var teamworkFactor = entity.teamwork - 0.5f;
 
@@ -218,6 +218,10 @@ namespace EntityLogic.AI
             var closestPoint = path[path.Count - 1];
             var positionsToCheck = new HashSet<GridPos>(closestPoint.Circle(3));
             positionsToCheck.IntersectWith(influenceMap.GetEntityInfluencedPos(entity));
+            
+            var entities = TurnManager.instance.PeekQueue();
+            var players = entities.Where(x => x is PlayerEntity).ToList();
+            var coverMap = new CoverMap(new List<GridPos>(positionsToCheck), players).GetCoverMap();
 
             foreach (var position in positionsToCheck)
             {
@@ -227,7 +231,8 @@ namespace EntityLogic.AI
                     coverMap[position] == CoverType.MediumCover ? 0.75f :
                     coverMap[position] == CoverType.SoftCover ? 0.4f : 0f;
                 var currentInfluence = influenceMap.GetInfluenceOnPos(position);
-                var threatFactor = 1 - Mathf.Min(Mathf.Pow(currentInfluence.playersInfluence / 0.8f , 4), 1);
+                var threatFactor = 1 - Mathf.Min(Mathf.Pow(currentInfluence.playersInfluence / 0.6f , 2), 1);
+                if (threatFactor < 0.04f) continue;
                 var alliance = currentInfluence.agentsInfluence -
                                influenceMap.GetEntityInfluenceOnPos(entity, position);
                 var allianceFactor = Mathf.Max(-Mathf.Pow((alliance - 0.4f) * 2.5f, 2) + 1, 0);

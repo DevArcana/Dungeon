@@ -26,16 +26,22 @@ namespace EntityLogic.Abilities
       var turnManager = TurnManager.instance;
       var turnTaker = turnManager.CurrentTurnTaker;
       startingPosition ??= turnTaker.GridPos;
-
+      
       var maxCost = TurnManager.instance.ActionPoints.ActionPoints;
       var world = World.World.instance;
-      
+
       var pathFinding = new Pathfinding();
-      var tiles = pathFinding.GetShortestPathTree(startingPosition.Value, maxCost);
-      var filteredTiles = new List<GridPos>();
-      foreach (var tile in tiles)
+      var tiles = turnTaker.pathTree;
+      if (tiles == null)
       {
-        var currentPos = GridPos.At(tile.x, tile.y);
+        var tree = pathFinding.GetDictShortestPathTree(startingPosition.Value, maxCost);
+        turnTaker.pathTree = tree;
+        tiles = tree;
+      }
+      var filteredTiles = new List<GridPos>();
+      foreach (var element in tiles)
+      {
+        var (currentPos, tile) = (element.Key, element.Value);
         if (currentPos == turnTaker.GridPos) continue;
         var occupant = world.GetOccupant(currentPos);
         if (occupant is EnemyEntity && turnTaker is PlayerEntity ||
@@ -57,14 +63,20 @@ namespace EntityLogic.Abilities
 
     public override IEnumerable<GridPos> GetEffectiveRange(GridPos atPosition)
     {
-      var pathfinding = new Pathfinding();
-      return pathfinding.FindPath(TurnManager.instance.CurrentTurnTaker.GridPos, atPosition).Item1;
+      // var pathfinding = new Pathfinding();
+      // return pathfinding.FindPath(TurnManager.instance.CurrentTurnTaker.GridPos, atPosition).Item1;
+      var turnManager = TurnManager.instance;
+      var turnTaker = turnManager.CurrentTurnTaker;
+      return Pathfinding.GetPath(turnTaker.pathTree[atPosition]).Select(node => GridPos.At(node.x, node.y));
     }
 
     public override int GetEffectiveCost(GridPos atPosition)
     {
-      var pathfinding = new Pathfinding();
-      return pathfinding.FindPath(TurnManager.instance.CurrentTurnTaker.GridPos, atPosition).Item2 + (World.World.instance.IsOccupied(atPosition) ? 1 : 0);
+      // var pathfinding = new Pathfinding();
+      // return pathfinding.FindPath(TurnManager.instance.CurrentTurnTaker.GridPos, atPosition).Item2 + (World.World.instance.IsOccupied(atPosition) ? 1 : 0);
+      var turnManager = TurnManager.instance;
+      var turnTaker = turnManager.CurrentTurnTaker;
+      return (int) turnTaker.pathTree[atPosition].gCost + (World.World.instance.IsOccupied(atPosition) ? 1 : 0);
     }
 
     public override int GetMinimumPossibleCost()
@@ -78,8 +90,7 @@ namespace EntityLogic.Abilities
       var turnTaker = turnManager.CurrentTurnTaker;
       var occupant = World.World.instance.GetOccupant(atPosition);
       
-      var pathfinding = new Pathfinding();
-      var path = pathfinding.FindPath(turnTaker.GridPos, atPosition).Item1;
+      var path = Pathfinding.GetPath(turnTaker.pathTree[atPosition]).Select(node => GridPos.At(node.x, node.y)).ToList();
 
       foreach (var segment in path.Take(path.Count - 1))
       {

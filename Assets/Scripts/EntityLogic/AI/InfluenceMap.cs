@@ -63,13 +63,14 @@ namespace EntityLogic.AI
                 : ActionPointsProcessor.MaxActionPoints;
             var pathFinding = new Pathfinding();
             var shortestPathTree =
-                pathFinding.GetShortestPathTree(entity.GridPos, maxDistance);
-
+                pathFinding.GetDictShortestPathTree(entity.GridPos, maxDistance);
+            entity.pathTree = shortestPathTree;
+            
             var pointsOfInfluence = new List<GridPos>();
             
-            foreach (var pathNode in shortestPathTree)
+            foreach (var element in shortestPathTree)
             {
-                var pos = GridPos.At(pathNode.x, pathNode.y);
+                var (pos, pathNode) = (element.Key, element.Value);
                 pointsOfInfluence.Add(pos);
                 if (!_influencedPoints.ContainsKey(pos))
                 {
@@ -116,10 +117,21 @@ namespace EntityLogic.AI
         private void TurnEntityRemoved(object sender, TurnManager.TurnEventArgs e)
         {
             RemoveEntityInfluence(e.Entity);
+            var influencers = GetInfluencersOnPos(e.Entity.GridPos);
+            foreach (var influencer in influencers)
+            {
+                AddEntityInfluence(influencer);
+            }
         }
 
         private void TurnEntityAdded(object sender, TurnManager.TurnEventArgs e)
         {
+            var influencers = GetInfluencersOnPos(e.Entity.GridPos);
+            influencers.Add(e.Entity);
+            foreach (var influencer in influencers)
+            {
+                AddEntityInfluence(influencer);
+            }
             AddEntityInfluence(e.Entity);
         }
         

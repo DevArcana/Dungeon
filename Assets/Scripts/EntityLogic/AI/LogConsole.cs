@@ -37,7 +37,16 @@ namespace EntityLogic.AI
         {
             if (_instance != null)
             {
-                _instance._tmp.text += text + Environment.NewLine;
+                var consoleText = _instance._tmp.text;
+                var length = consoleText.Length;
+                if (length > 2000)
+                {
+                    _instance._tmp.text = consoleText.Substring(length - 1000) + text + Environment.NewLine;
+                }
+                else
+                {
+                    _instance._tmp.text += text + Environment.NewLine;
+                }
                 Canvas.ForceUpdateCanvases();
                 _instance._scrollRect.verticalNormalizedPosition = 0.0f;
             }

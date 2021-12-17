@@ -9,27 +9,29 @@ namespace EntityLogic.AI
     {
         private readonly Dictionary<GridPos, CoverType> _coverMap;
 
-        public CoverMap(GridLivingEntity entity, List<GridPos> influencedPositions, List<GridLivingEntity> players)
+        public CoverMap(List<GridPos> influencedPositions, List<GridLivingEntity> players)
         {
             _coverMap = new Dictionary<GridPos, CoverType>();
             var softCovers = new List<GridPos>();
             var mediumCovers = new List<GridPos>();
-            
+
             const int distance = 7;
+            var playersInRangeOnPos = new Dictionary<GridPos, List<GridLivingEntity>>();
+            
             foreach (var pos in influencedPositions)
             {
-                var consideredPositions = players
-                    .Select(player => player.GridPos)
-                    .Where(playerPos => playerPos.TwoDimDistance(pos) <= distance)
+                var consideredPlayers = players
+                    .Where(playerPos => playerPos.GridPos.TwoDimDistance(pos) <= distance)
                     .ToList();
+                playersInRangeOnPos[pos] = consideredPlayers;
 
-                if (!consideredPositions.Any())
+                if (!consideredPlayers.Any())
                 {
                     _coverMap.Add(pos, CoverType.OutOfRange);
                     continue;
                 }
 
-                var isVisible = consideredPositions.Any(playerPos => IsEntityVisible(playerPos, pos));
+                var isVisible = consideredPlayers.Any(player => IsEntityVisible(player.GridPos, pos));
 
                 _coverMap.Add(pos, isVisible ? CoverType.NoCover : CoverType.SoftCover);
                 if (!isVisible)
@@ -43,12 +45,7 @@ namespace EntityLogic.AI
             
             foreach (var softCoverPos in softCovers)
             {
-                var consideredPlayers = new List<GridLivingEntity>();
-                foreach (var player in players)
-                {
-                    if (entity.GridPos.TwoDimDistance(player.GridPos) <= distance) consideredPlayers.Add(player); 
-                }
-
+                var consideredPlayers = playersInRangeOnPos[softCoverPos];
                 var positionsToCheck = new HashSet<GridPos>();
 
                 foreach (var player in consideredPlayers)
@@ -57,7 +54,7 @@ namespace EntityLogic.AI
                 }
                 
                 var isVisible = positionsToCheck
-                    .Where(pos => pos.TwoDimDistance(softCoverPos) <= 5)
+                    .Where(pos => pos.TwoDimDistance(softCoverPos) <= distance)
                     .Any(pos => IsEntityVisible(pos, softCoverPos));
 
                 if (isVisible) continue;
@@ -67,12 +64,7 @@ namespace EntityLogic.AI
             
             foreach (var mediumCoverPos in mediumCovers)
             {
-                var consideredPlayers = new List<GridLivingEntity>();
-                foreach (var player in players)
-                {
-                    if (entity.GridPos.TwoDimDistance(player.GridPos) <= distance) consideredPlayers.Add(player); 
-                }
-
+                var consideredPlayers = playersInRangeOnPos[mediumCoverPos];
                 var positionsToCheck = new HashSet<GridPos>();
 
                 foreach (var player in consideredPlayers)
@@ -81,12 +73,14 @@ namespace EntityLogic.AI
                 }
 
                 var isVisible = positionsToCheck
-                    .Where(pos => pos.TwoDimDistance(mediumCoverPos) <= 5)
+                    .Where(pos => pos.TwoDimDistance(mediumCoverPos) <= distance)
                     .Any(pos => IsEntityVisible(pos, mediumCoverPos));
 
                 if (isVisible) continue;
                 _coverMap[mediumCoverPos] = CoverType.HardCover;
             }
+
+            var a = 1;
         }
 
         private bool IsEntityVisible(GridPos observerGridPos, GridPos entityGridPos)

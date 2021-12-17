@@ -1,6 +1,7 @@
 ﻿using System;
 using EntityLogic;
 using EntityLogic.AI;
+using UnityEngine;
 
 namespace TurnSystem.Transactions
 {
@@ -22,7 +23,7 @@ namespace TurnSystem.Transactions
       entityHealth?.Heal(_healAmount);
       if (_entity is PlayerEntity)
       {
-        LogConsole.Log($"Healed from {startHealthAmount} to {_entity.health.Health}!" + Environment.NewLine);
+        LogConsole.Log($"Healed from {Mathf.Ceil(startHealthAmount)} to {Mathf.Ceil(_entity.health.Health)}!" + Environment.NewLine);
       }
       Finish();
     }

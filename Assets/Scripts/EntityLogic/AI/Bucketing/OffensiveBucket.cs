@@ -38,15 +38,12 @@ namespace EntityLogic.AI.Bucketing
         public (ActionType, GridPos?) EvaluateBucketActions(EnemyEntity entity)
         {
             var targetEntity = Pathfinding.FindClosestPlayer(entity.GridPos);
-            var entities = TurnManager.instance.PeekQueue();
-            var players = entities.Where(x => x is PlayerEntity).ToList();
-            var coverMap = new CoverMap(entity, InfluenceMap.instance.GetEntityInfluencedPos(entity), players).GetCoverMap();
-            
+
             var utilities = new List<(ActionType, float)>
             {
                 (ActionType.ChargePlayer, UtilityFunctions.ChargePlayerUtility(entity, targetEntity, out var chargeTarget)),
                 (ActionType.Fireball, UtilityFunctions.FireballUtility(entity, out var fireballTarget)),
-                (ActionType.TacticalMovement, UtilityFunctions.TacticalMovementUtility(entity, targetEntity, coverMap, out var tacticalMoveTarget)),
+                (ActionType.TacticalMovement, UtilityFunctions.TacticalMovementUtility(entity, targetEntity, out var tacticalMoveTarget)),
                 (ActionType.Pass, UtilityFunctions.PassTurnUtility())
             }.Where(x => x.Item2 > 0.04f).OrderByDescending(x => x.Item2).ToList();
 

@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using EntityLogic.Abilities;
+using EntityLogic.AI;
 using EntityLogic.Attributes;
 using Equipment;
 using TurnSystem;
 using UnityEngine;
 using World;
+using World.Common;
 
 namespace EntityLogic
 {
@@ -24,6 +26,8 @@ namespace EntityLogic
 
     public List<AbilityBase> abilities;
     public List<int> AbilityCooldowns { get; private set; }
+
+    public Dictionary<GridPos, PathNode> pathTree;
 
     private void Awake()
     {

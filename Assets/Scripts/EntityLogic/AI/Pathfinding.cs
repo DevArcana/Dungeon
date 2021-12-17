@@ -183,6 +183,57 @@ namespace EntityLogic.AI
             return resultSet.Keys;
         }
         
+        public Dictionary<GridPos, PathNode> GetDictShortestPathTree(GridPos start, int maxCost = ActionPointsProcessor.MaxActionPoints)
+        {
+            var map = World.World.instance;
+            var startNode = new PathNode(start.x, start.y, map.GetHeightAt(start), !map.IsOccupied(start));
+
+            var openSet = new HashSet<PathNode> { startNode };
+            var resultSet = new Dictionary<PathNode, PathNode> { {startNode, startNode} };
+            var closedSet = new HashSet<PathNode>();
+            
+            startNode.gCost = startNode.fCost = 0;
+            
+            while (openSet.Any())
+            {
+                var currentNode = GetLowestFCostNode(openSet);
+                openSet.Remove(currentNode);
+                closedSet.Add(currentNode);
+                
+                foreach (var neighbour in GetNeighbourNodes(currentNode))
+                {
+                    if (closedSet.Contains(neighbour)) continue;
+                    var neighbourNode = resultSet.ContainsKey(neighbour) ? resultSet[neighbour] : neighbour;
+                    var isOccupied = !(map.GetOccupant(GridPos.At(neighbourNode.x, neighbourNode.y)) is null);
+                    if (!neighbourNode.isWalkable && !isOccupied)
+                    {
+                        closedSet.Add(neighbourNode);
+                        continue;
+                    }
+                    var tempGCost = currentNode.gCost + CalculateDistanceCost(currentNode, neighbourNode);
+                    if (tempGCost >= neighbourNode.gCost
+                        || Mathf.Abs(currentNode.height - neighbourNode.height) > 1
+                        || Mathf.Floor(tempGCost) > maxCost) continue;
+                    neighbourNode.previousNode = currentNode;
+                    neighbourNode.gCost = neighbourNode.fCost = tempGCost;
+
+                    if (!isOccupied) openSet.Add(neighbourNode);
+                    resultSet[neighbourNode] = neighbourNode;
+                }
+                
+            }
+
+            var output = new Dictionary<GridPos, PathNode>();
+            
+            foreach (var pathNode in resultSet.Keys)
+            {
+                pathNode.gCost = Mathf.FloorToInt(pathNode.gCost);
+                output[GridPos.At(pathNode.x, pathNode.y)] = pathNode;
+            }
+
+            return output;
+        }
+        
         private static float CalculateDistanceCost(PathNode a, PathNode b)
         {
             var xDistance = Mathf.Abs(a.x - b.x);
@@ -212,7 +263,7 @@ namespace EntityLogic.AI
             return lowestFCostNode;
         }
         
-        private static List<PathNode> GetPath(PathNode endNode)
+        public static List<PathNode> GetPath(PathNode endNode)
         {
             var path = new List<PathNode> { endNode };
             var currentNode = endNode;

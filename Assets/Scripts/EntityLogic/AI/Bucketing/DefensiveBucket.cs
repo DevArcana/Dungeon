@@ -39,7 +39,7 @@ namespace EntityLogic.AI.Bucketing
         {
             var entities = TurnManager.instance.PeekQueue();
             var players = entities.OfType<PlayerEntity>().Select(queueEntity => entity).Cast<GridLivingEntity>().ToList();
-            var coverMap = new CoverMap(entity, InfluenceMap.instance.GetEntityInfluencedPos(entity), players).GetCoverMap();
+            var coverMap = new CoverMap(InfluenceMap.instance.GetEntityInfluencedPos(entity), players).GetCoverMap();
 
             var utilities = new List<(ActionType, float)>
             {
