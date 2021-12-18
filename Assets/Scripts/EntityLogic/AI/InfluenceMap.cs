@@ -132,7 +132,6 @@ namespace EntityLogic.AI
             {
                 AddEntityInfluence(influencer);
             }
-            AddEntityInfluence(e.Entity);
         }
         
         private void TurnChanged(object sender, TurnManager.TurnEventArgs e)

@@ -25,18 +25,15 @@ namespace EntityLogic.Abilities
     {
       var turnManager = TurnManager.instance;
       var turnTaker = turnManager.CurrentTurnTaker;
-      startingPosition ??= turnTaker.GridPos;
       
       var maxCost = TurnManager.instance.ActionPoints.ActionPoints;
       var world = World.World.instance;
 
-      var pathFinding = new Pathfinding();
       var tiles = turnTaker.pathTree;
       if (tiles == null)
       {
-        var tree = pathFinding.GetDictShortestPathTree(startingPosition.Value, maxCost);
-        turnTaker.pathTree = tree;
-        tiles = tree;
+        InfluenceMap.instance.AddEntityInfluence(turnTaker);
+        tiles = turnTaker.pathTree;
       }
       var filteredTiles = new List<GridPos>();
       foreach (var element in tiles)
